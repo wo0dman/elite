@@ -171,6 +171,14 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
  .yawbtns{right:128px;bottom:26px;gap:6px}.yawbtns button{width:50px;padding:14px 2px;font-size:9px}
  .yaw-lab{right:128px;bottom:82px;width:106px}
 }
+/* ===== NEWS TICKER ===== */
+.newsbar{flex:none;height:26px;background:#070b12;border-bottom:1px solid var(--line);display:flex;align-items:center;overflow:hidden;font-family:var(--f-mono);font-size:11px;position:relative}
+.news-label{flex:none;padding:0 12px;height:100%;display:flex;align-items:center;background:#0a1018;border-right:1px solid var(--line);color:var(--grn);font-weight:600;font-size:10px;letter-spacing:.1em;z-index:2;text-shadow:0 0 8px #8cff6a55}
+.news-view{flex:1;min-width:0;height:100%;overflow:hidden;position:relative}
+.newsticker{display:inline-block;white-space:nowrap;padding-left:100%;will-change:transform;color:var(--mut);line-height:26px}
+@keyframes scroll-news{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+#st-bounty{color:var(--mut)}
+#st-bounty b{color:var(--rd)}
 </style>
 </head>
 <body>
@@ -185,6 +193,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
     <span class="rd hide-sm">ТРЮМ <b id="st-cargo">0/20</b></span>
     <span class="rd hide-sm">ЭНЕРГИЯ <b class="g" id="st-en">100%</b></span>
     <span class="rd hide-sm">РАНГ <b id="st-rank">—</b></span>
+    <span class="rd hide-sm" id="st-bounty" style="display:none">НАГРАДА <b id="st-bounty-val">0</b></span>
     <span class="rd hide-sm">FPS <b class="c" id="st-fps">—</b></span>
     <div class="tb">
       <button id="b-chart">КАРТА (M)</button>
@@ -196,6 +205,13 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
       <button id="b-full" title="Полноэкранный режим">⛶ ЭКРАН</button>
       <button id="b-pause">ПАУЗА</button>
       <button id="b-help" title="Справка [N]">?</button>
+    </div>
+  </div>
+
+  <div class="newsbar">
+    <div class="news-label">▸ НОВОСТИ</div>
+    <div class="news-view">
+      <div class="newsticker" id="newsticker">загрузка эфира…</div>
     </div>
   </div>
 
@@ -307,6 +323,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
           <span class="st">ПРАВИТЕЛЬСТВО: <b id="mk-gov">—</b></span>
           <span class="st">КРЕДИТЫ: <b id="mk-cash">—</b></span>
           <span class="st">КОРАБЛЬ: <b id="mk-ship">—</b></span>
+          <span class="st" style="color:var(--cy);flex-basis:100%;font-size:10.5px;line-height:1.4;margin-top:4px" id="mk-rumor">📻 —</span>
         </div>
         <div class="mktcols">
           <div class="mktleft">
@@ -451,6 +468,184 @@ var QQ23=[[19,-2,'t',6,0x01],[20,-1,'t',10,0x03],[65,-3,'t',2,0x07],[40,-5,'t',2
  [32,-1,'t',53,0x03],[97,-1,'k',66,0x07],[171,-2,'k',55,0x1F],[45,-1,'g',250,0x0F],
  [53,15,'t',192,0x07]];
 var GOODS_RU=['Продовольствие','Текстиль','Радиоактивы','Робы','Алкоголь/вина','Роскошь','Наркотики','Компьютеры','Механизмы','Сплавы','Огнестрел','Меха','Минералы','Золото','Платина','Драгкамни','Иноплан. товар'];
+
+/* ============================================================
+   БЕГУЩАЯ СТРОКА · ~160 новостей до 20 слов каждая
+   ============================================================ */
+var NEWS = [
+  'Цены на текстиль в LAVE выросли на 15% после закрытия фабрики.',
+  'Спрос на продовольствие в аграрных системах достиг сезонного пика.',
+  'Фременские торговцы предлагают скидки на воду в обмен на металл.',
+  'Дефицит компьютеров отмечен в промышленных системах квадранта 3.',
+  'Золото подорожало: слухи о находке жилы в ZAONCE не подтвердились.',
+  'Пираты блокировали торговый путь — текстиль подорожал вдвое.',
+  'Алкоголь с окраин поступил в продажу: цены упали на треть.',
+  'В системе DISO зафиксирован рекордный урожай зерна.',
+  'Механизмы дешевеют: новая фабрика открылась на орбите LAVE.',
+  'Радиоактивы: спрос упал после ужесточения имперских норм.',
+  'Минералы из пояса астероидов затопили рынок — цены на дне.',
+  'Роскошь стала доступнее: конвой с грузом прибыл в систему XEEN.',
+  'Платина дорожает третью неделю подряд — аналитики в недоумении.',
+  'Огнестрел: контрабанда выросла, легальные цены стабильны.',
+  'Драгкамни: аукцион в системе REORTE установил рекорд.',
+  'Инопланетный товар появился в продаже — происхождение неизвестно.',
+  'Меха подорожали вдвое после запрета на охоту в системе ORERVE.',
+  'Наркотики: полиция перехватила крупную партию в системе ARUSA.',
+  'Компьютеры: новая модель сбила цены на старые.',
+  'Рабы: галактический совет обсуждает полный запрет торговли.',
+  'Цены на топливо выросли: буря повредила солнечные заборники.',
+  'Спрос на оружие: колонии на окраине требуют защиты от пиратов.',
+  'Ремонт в доках LAVE подешевел — конкуренция среди механиков.',
+  'Аукцион в ZAONCE: неизвестный купил всю партию драгкамней.',
+  'Империя объявила о снижении налогов на дальние перевозки.',
+  'Федерация и Империя подписали торговое соглашение — цены выравниваются.',
+  'Анархия в системе ZAONCE: патрули отозваны.',
+  'Диктатура в системе BIEDRE: новые правила для пилотов.',
+  'Корпоративное государство повысило пошлины на ввоз оружия.',
+  'Коммунистическая система ввела госмонополию на золото.',
+  'Феодальная система просит защиты от пиратских набегов.',
+  'Мультиправительство не может договориться о тарифах — нестабильность.',
+  'Демократия LAVE: выборы назначены на следующий цикл.',
+  'Конфедерация расширяется: принята новая система.',
+  'Анархистские группировки угрожают торговым путям в квадранте 7.',
+  'Империя посылает флот в систему THAIED — подробности скрыты.',
+  'Федерация ужесточает контроль над гиперпространственными прыжками.',
+  'Корпорация DISO скупает акции — готовится поглощение.',
+  'Правительство LAVE объявило амнистию для должников.',
+  'Розыск: пилот по кличке «Кобра» подозревается в атаках на торговцев.',
+  'Полиция LAVE усилила патрули после серии инцидентов.',
+  'Награда за голову пирата выросла до 5000 кредитов.',
+  'Вайперы перехватили контрабанду наркотиков — трое задержаны.',
+  'Пират «Кракен» снова атаковал конвой в системе ARUSA.',
+  'Станция Кориолис LAVE объявила амнистию для правонарушителей.',
+  'Легализация оружия обсуждается в системе DISO.',
+  'Тюрьма на орбите XEEN переполнена — новых заключённых отправляют в другие системы.',
+  'Полицейский перехватчик пропал без вести у границы анархии.',
+  'Судебный процесс над пиратским капитаном начнётся на следующей неделе.',
+  'Патрули LAVE задержали торговца с незарегистрированным оружием.',
+  'Вайперы открыли огонь по неизвестному кораблю у границы сектора.',
+  'Таргоид-матка замечена в системе QUQUVE — все корабли в опасности.',
+  'Гиперпространственный разлом зафиксирован у границы галактики.',
+  'Фремены отрицают контакты с Таргоидами.',
+  'Клингоны объявили охоту на Таргоидов — награда за матку.',
+  'Вулканцы изучают обломки таргоидского корабля.',
+  'Сайлоны замечены в системе ZAONCE — цель неизвестна.',
+  'Далеки атаковали торговый конвой — выживших нет.',
+  'Мандалорцы предлагают контракт на убийство таргоидского командира.',
+  'Вуки-механики починили гиперпривод повреждённого корабля.',
+  'Триссоляры передают сигнал из системы, считавшейся необитаемой.',
+  'Моти замечены в аномальной зоне — исследователи в недоумении.',
+  'Тлейлаксу открыли клинику на орбите — цены кусаются.',
+  'Пилот Культуры заявил о контакте с неизвестной расой.',
+  'Сканеры зафиксировали движение в системе, считавшейся пустой.',
+  'Джава-торговцы появились в системе LAVE с «лучшей ценой».',
+  'Нарны передают предупреждение: «Гиперпространство нестабильно».',
+  'Минбари строят станцию в стратегической точке квадранта 2.',
+  'Повелители Времени: официально не существуют, но легенды живут.',
+  'Таргон-разведчик сбит полицией в системе XEEN.',
+  'Реликвия древней расы выставлена на аукцион в LAVE.',
+  'Пилот-исследователь вернулся из дальней системы с картой новых миров.',
+  'Найдена планета с признаками разумной жизни — контакт не установлен.',
+  'Гиперпривод нового поколения проходит испытания в системе BIEDRE.',
+  'Астрономы LAVE обнаружили аномалию в созвездии.',
+  'Сигнал бедствия получен из неисследованной системы — экспедиция отправлена.',
+  'Корабль-призрак дрейфует у границы сектора.',
+  'Новая планета с океанами открыта — колонизация начнётся в следующем цикле.',
+  'Учёные LAVE обнаружили следы древней цивилизации на луне.',
+  'Гиперпространственный тоннель открыт — сокращает путь на 3 св.лет.',
+  'Тёмная материя: физики подтвердили существование.',
+  'Свадьба дочери губернатора LAVE — фейерверк будет виден с орбиты.',
+  'Юбилей станции Кориолис: 200 лет со дня постройки.',
+  'Пилот года объявлен в LAVE — награда вручена лично командиру.',
+  'Похороны легендарного пилота собрали тысячи кораблей у станции.',
+  'Бар «У Кракена» на станции LAVE закрыт на ремонт.',
+  'Новый ресторан открылся в доке 3 — рекомендуем.',
+  'Слух: губернатор LAVE тайно торгует наркотиками.',
+  'Пиратская легенда: сокровища Империи спрятаны в системе, которой нет на карте.',
+  'Радиостанция LAVE отметила 50-летие — музыка в эфире всю ночь.',
+  'Праздник урожая в аграрной системе — цены на еду падают.',
+  'Конкурс красоты среди пилотов — победитель получит бесплатный ремонт.',
+  'Скандал: пилот-полицейский оказался пиратом.',
+  'Мода: пилоты носят шарфы цветов фракций.',
+  'Кулинарный фестиваль на станции — лучший повар получил лицензию.',
+  'Пилоты жалуются на качество топлива в системе ZAONCE.',
+  'Солнечная буря приближается — гиперприводы могут сбоить.',
+  'Метеорный поток ожидается в квадранте 4.',
+  'Радиационный фон в системе THAIED повышен.',
+  'Пылевая буря на планете — видимость нулевая.',
+  'Атмосферные аномалии мешают стыковке в системе DISO.',
+  'Солнечная вспышка вывела из строя спутники связи.',
+  'Гравитационная аномалия зафиксирована у планеты REORTE.',
+  'Ледяной шторм на орбите — трафик задерживается.',
+  'Станция Кориолис LAVE расширяется — новые доки открыты.',
+  'Док 7 на станции XEEN закрыт на ремонт.',
+  'Крупнейший аукцион года пройдёт на станции LAVE.',
+  'Станция в системе DISO запрашивает помощь с продовольствием.',
+  'Станция BIEDRE объявила набор пилотов для дальнего рейса.',
+  'На станции ZAONCE сбой в системе жизнеобеспечения — эвакуация.',
+  'Станция ARUSA увеличила доковые сборы на 20%.',
+  'Станция LAVE предлагает скидку 10% на ремонт для новых пилотов.',
+  'Слухи о пиратском флоте в системе QUQUVE подтверждаются.',
+  'Контрабандист пойман с поличным — груз конфискован.',
+  'Пилот выиграл в карты корабль — теперь летает на «Питоне».',
+  'Юрист LAVE разыскивает владельца потерянного контейнера.',
+  'Древний корабль найден в поясе астероидов — экипаж не найден.',
+  'Гиперпространственный шторм прогнозируется в секторе 6.',
+  'Биржа LAVE: акции добывающих компаний выросли.',
+  'Пиратский кодекс: новые правила для «честных» грабителей.',
+  'Кофейня на станции LAVE стала местом встречи ветеранов.',
+  'Анонимный донор оплатил ремонт всем кораблям в доке LAVE.',
+  'Слух: Император жив и скрывается в 8-й галактике.',
+  'Слух: Таргоиды строят флот вторжения.',
+  'Слух: гиперпривод можно улучшить до 10 св.лет.',
+  'Слух: в системе ZAONCE есть проход в другую галактику.',
+  'Слух: пиратский король платит за головы полицейских.',
+  'Легенда: «Кобра» Джеймсона всё ещё бороздит космос.',
+  'Конвой прибыл в LAVE.',
+  'Пираты атакуют окраины.',
+  'Станция LAVE открыта для стыковки.',
+  'Гиперпривод испытан — успешно.',
+  'Розыск: пилот «Роршах».',
+  'Награда за голову: 1000 Cr.',
+  'Таргоид замечен в секторе 7.',
+  'Патрули усилены.',
+  'Цены на продовольствие выросли.',
+  'В LAVE всё спокойно.',
+  'Сигнал бедствия из системы DISO.',
+  'Требуется эскорт для конвоя.',
+  'Свободные доки на LAVE.',
+  '⠁⠃⠇ ⨀◈⬡ — сигнал с окраины, расшифровка невозможна.',
+  '◈◉◊⨁◐ — передача без отправителя, частота 121.5.',
+  '⨀⨁⨂ ⏣⌬ — надпись на обломках корабля.',
+  '⠿⠷⠾ ⨄⨅⨆ — код доступа к неизвестной станции.',
+  '⨀⨁ ⏣ ⨂◈ — приветствие на языке, не встречавшемся ранее.',
+  '⨄⨅⨆ ⌬⏣◈ — повторяющийся сигнал из системы QUQUVE.',
+  '◈◈◈ ⨀⨁⨂ — троекратный сигнал бедствия, расшифровка невозможна.',
+  '⬡⏣◈ ⏃⏄ — запрос на стыковку от неизвестного корабля.',
+  '⨀◈◉ — источник не найден. Не отвечайте.',
+  '⨁⨂⨃ ⨄⨅ — передача из системы, которой нет на карте.',
+  '⠁⠃⠇⠇⨀ ⨁⨂ — сигнал на частоте, официально не используемой.',
+  '◈⬡⏣ ⨙⨚ — сообщение без отправителя.',
+  '⨀⨁⨂◈ ⌬⏣ — данные переданы. Ждите.',
+  '⨄⨅⨆⨇ ⨈◈ — координаты в системе счисления, не встречавшейся ранее.'
+];
+
+var newsTickerEl = null;
+function initNewsTicker(){
+  newsTickerEl = document.getElementById('newsticker');
+  if(!newsTickerEl) return;
+  newsTickerEl.addEventListener('animationend', nextNewsItem);
+  nextNewsItem();
+}
+function nextNewsItem(){
+  if(!newsTickerEl) return;
+  var n = NEWS[Math.floor(Math.random()*NEWS.length)];
+  newsTickerEl.textContent = '▸ ' + n;
+  newsTickerEl.style.animation = 'none';
+  void newsTickerEl.offsetWidth;
+  var dur = Math.max(12, newsTickerEl.offsetWidth / 65);
+  newsTickerEl.style.animation = 'scroll-news ' + dur + 's linear 1';
+}
 
 var PLANET_TYPES=['earth','ocean','desert','ice','volcanic','toxic'];
 var PLANET_NAMES={earth:'землеподобная',ocean:'океаническая',desert:'пустынная',ice:'ледяная',volcanic:'вулканическая',toxic:'токсичная'};
@@ -634,8 +829,291 @@ var SND={ac:null,on:true,
  hyper:function(){this.tone(90,1400,1.5,'sawtooth',0.06);},
  buy:function(){this.tone(520,1040,0.16,'square',0.06);},
  beep:function(){this.tone(880,880,0.05,'square',0.04);},
- scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);}
+ scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);},
+ hum:null,humGain:null,dockAmb:null,
+ startHum:function(){if(!this.ac||this.hum||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='sawtooth';o.frequency.value=55;g.gain.value=0;o.connect(g);g.connect(this.ac.destination);o.start();this.hum=o;this.humGain=g;}catch(e){}},
+ setHum:function(freq,vol){if(!this.hum)return;if(!this.on)vol=0;try{this.hum.frequency.setTargetAtTime(freq,this.ac.currentTime,0.1);this.humGain.gain.setTargetAtTime(vol,this.ac.currentTime,0.1);}catch(e){}},
+ stopHum:function(){if(!this.hum)return;try{this.hum.stop();}catch(e){}this.hum=null;this.humGain=null;},
+ startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
+ stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
+ chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
+ sonar:function(){this.tone(1400,700,0.15,'sine',0.025);},
+ alarm:function(){var s=this;this.tone(600,900,0.3,'square',0.07);setTimeout(function(){s.tone(900,600,0.3,'square',0.07);},320);}
 };
+
+/* ============================================================
+   РАДИОЭФИР · реплики NPC
+   ============================================================ */
+var CHATTER = {
+  traderGreet: ['Держись подальше, пилот.','Хорошего полёта.','Видел пиратов у планеты.','Куда летишь?','Осторожно, тут неспокойно.','Груз везу, не задерживай.'],
+  traderHit: ['Помогите!','Пираты!','Ты пожалеешь!','Вайперы уже летят!','Не стреляй, я мирный!','Что тебе надо?!'],
+  pirateGreet: ['Кошелёк или жизнь.','Груз — мой.','Ты далеко от дома.','Станция не поможет.','Сдавайся или умри.','Одинокий пилот? Как удачно.'],
+  pirateHit: ['Ты силён...','Я вернусь!','Не в этот раз...','Атакуй, атакуй!','Ты заплатишь!','Кто ты такой?!'],
+  policeGreet: ['Гражданин, остановитесь для досмотра.','Вы в розыске.','Сопротивление бесполезно.','Немедленно отключите двигатели.','Именем закона!','Приготовьтесь к досмотру.'],
+  policeHit: ['Открываю огонь.','Подкрепление вызвано.','Вы окружены.','Сдавайтесь!','Мы найдём вас.'],
+  station: ['Кориолис, приём.','Свободный док.','Добро пожаловать, пилот.','Осторожно, трафик.','Док 3 свободен.'],
+  greeting: ['С возвращением, командир.','Хорошей охоты.','Снова вы?','С возвращением, странник.'],
+  distress: [
+    'Mayday, mayday! Пираты атакуют!',
+    'Требую помощи! Атакован!',
+    'Конвой в опасности!',
+    'Помогите, двигатель повреждён!',
+    'Пираты, прошу помощи!',
+    'Кто-нибудь, ответьте!'
+  ],
+  thargon: ['⨀◈⬡ ⨁⨂ ⨄','⌬⏣ ⨀⨁⨂','⨅⨆ ◈◉⏣']
+};
+function pickChatter(kind){
+  var arr = CHATTER[kind];
+  if(!arr || !arr.length) return null;
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+function say(o, text, color){
+  if(!text) return;
+  var nm = o.pname ? '«'+o.pname+'»' : (o.name || '?');
+  msg(nm + ': ' + text, color || '#3fdcff');
+  if(SND.chatterBlip) SND.chatterBlip();
+}
+
+/* ============================================================
+   ЛИЧНОСТИ NPC
+   ============================================================ */
+var NPC_NAMES = ['Кракен','Скайлер','Морган','Веспер','Роршах','Тень','Саргон','Немезида','Блэкджек','Гарпия','Ворон','Пиранья','Кобальт','Феникс','Кровавый','Скайлар','Дарт','Молот','Скиталец','Призрак'];
+var TRAITS = [
+  {id:'agg',  name:'агрессивный', aggr:1.3, fleeAt:0.05, aimNoise:0.020, hpMul:1.0},
+  {id:'caut', name:'осторожный',  aggr:0.6, fleeAt:0.40, aimNoise:0.040, hpMul:1.0},
+  {id:'greed',name:'жадный',      aggr:0.9, fleeAt:0.15, aimNoise:0.060, hpMul:1.0},
+  {id:'cow',  name:'трус',        aggr:0.4, fleeAt:0.60, aimNoise:0.050, hpMul:1.0},
+  {id:'vet',  name:'ветеран',     aggr:1.2, fleeAt:0.10, aimNoise:0.008, hpMul:1.3},
+  {id:'nov',  name:'новичок',     aggr:0.7, fleeAt:0.30, aimNoise:0.100, hpMul:0.8}
+];
+function applyPersonality(o){
+  if(o.ship === 'thargon'){
+    o.aimNoise = 0.05;
+    o.fleeThreshold = 0.0;
+    o.sonarDone = false;
+    return o;
+  }
+  var t = TRAITS[Math.floor(Math.random()*TRAITS.length)];
+  o.trait = t;
+  o.pname = NPC_NAMES[Math.floor(Math.random()*NPC_NAMES.length)];
+  o.maxEnergy = Math.round(o.maxEnergy * t.hpMul);
+  o.energy = o.maxEnergy;
+  o.aggr = t.aggr;
+  o.fleeThreshold = t.fleeAt;
+  o.aimNoise = t.aimNoise;
+  o.sonarDone = false;
+  o.name = o.name + ' «' + o.pname + '»';
+  return o;
+}
+
+/* ============================================================
+   ПАМЯТЬ МИРА
+   ============================================================ */
+var MEMORY = {
+  knownPirates: {},
+  factions: { traders:0, pirates:0, police:0, thargoids:0 },
+  bounty: 0
+};
+function rememberEncounter(o){
+  if(!o.pname) return;
+  if(o.kind !== 'pirate' && o.kind !== 'police') return;
+  if(!MEMORY.knownPirates[o.pname]) MEMORY.knownPirates[o.pname] = {count:0, kills:0};
+  MEMORY.knownPirates[o.pname].count++;
+}
+
+/* ============================================================
+   AMBIENT EVENTS · жизнь вокруг игрока
+   ============================================================ */
+var ambientTimer = 25;
+function spawnShipAt(type, hostile, police, pos){
+  var sp = SHIP[type];
+  var o = {kind:police?'police':(hostile?'pirate':'trader'), ship:type, bp:sp.bp, pos:pos,
+    b:basisFrom(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), speed:sp.speed*24*0.7,
+    energy:sp.energy, maxEnergy:sp.energy, cool:rnd(0.6,2.4),
+    hostile:!!hostile, police:!!police, radius:BP[sp.bp].radius*0.85,
+    name:sp.ru+(police?' (полиция)':''),
+    aggr:hostile?rnd(0.6,1):0.15, flee:false, hitT:0, laser:sp.laser,
+    wanderT:rnd(2,5), wanderDir:V(0,0,1), ambient:true, chattered:false};
+  applyPersonality(o);
+  rememberEncounter(o);
+  objects.push(o);
+  return o;
+}
+function ambientTick(dt){
+  if(state !== 'flight') return;
+  ambientTimer -= dt;
+  if(ambientTimer > 0) return;
+  ambientTimer = rnd(30, 80);
+  var r = Math.random();
+  if(r < 0.32) triggerAmbientBattle();
+  else if(r < 0.62) triggerDistress();
+  else if(r < 0.88) triggerLandingTraffic();
+  else triggerDriftingContainer();
+}
+function triggerAmbientBattle(){
+  var ships = [];
+  for(var i=0;i<objects.length;i++){
+    var k=objects[i].kind;
+    if((k==='pirate'||k==='trader') && !objects[i].ambient && ln(sub(objects[i].pos,P.pos))<22000) ships.push(objects[i]);
+  }
+  if(ships.length < 2) return;
+  var a = ships[0];
+  var d = rnd(800, 1600);
+  var dir = nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)));
+  var pos = add(a.pos, mul(dir, d));
+  spawnShipAt('pirate', true, false, pos);
+  msg('Вдалеке: бой между кораблями', '#ffd426');
+}
+function triggerDistress(){
+  var near = null;
+  for(var i=0;i<objects.length;i++){
+    var o=objects[i];
+    if(o.kind==='trader' && !o.hostile && ln(sub(o.pos,P.pos))<18000){near=o;break;}
+  }
+  if(!near){
+    var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 16000)));
+    near = spawnShipAt('trader', false, false, pos);
+  }
+  say(near, pickChatter('distress'), '#ff4b3e');
+  SND.tone(800, 400, 0.3, 'square', 0.06);
+  if(SND.alarm) SND.alarm();
+  near.distress = true;
+  var ppos = add(near.pos, V(rnd(-500,500), rnd(-500,500), rnd(-500,500)));
+  var p = spawnShipAt('sidewinder', true, false, ppos);
+  p.distressVictim = near;
+  msg('Сигнал бедствия: ' + near.name, '#ff4b3e');
+}
+function triggerLandingTraffic(){
+  if(!station) return;
+  var axis = nrm(station.b.f);
+  var startPos = add(station.pos, mul(axis, rnd(8000, 14000)));
+  var side = perpTo(axis);
+  startPos = add(startPos, mul(side, rnd(-3000, 3000)));
+  var o = spawnShipAt(Math.random()<0.5?'cobra':'adder', false, false, startPos);
+  o.landing = true;
+  o.slotTarget = add(station.pos, mul(axis, STATION_SLOT_FACE));
+  msg('Корабль заходит на посадку', '#3fdcff');
+}
+function triggerDriftingContainer(){
+  var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(2000, 6000)));
+  spawnCanister(pos, Math.floor(Math.random()*QQ23.length));
+  msg('Дрейфующий контейнер рядом', '#ffd426');
+}
+
+/* ============================================================
+   ЖИВАЯ СТАНЦИЯ · огни, окна, приветствие
+   ============================================================ */
+var stationLights = [];
+var stationGreeted = false;
+function buildStationLights(){
+  stationLights = [];
+  if(!station) return;
+  for(var i=0;i<BP.coriolis.v.length && i<14;i++){
+    stationLights.push({
+      p: BP.coriolis.v[i],
+      col: i%3===0?'#ff4b3e':(i%3===1?'#8cff6a':'#3fdcff'),
+      phase: Math.random()*6.283
+    });
+  }
+}
+function drawStationLights(vb, o){
+  if(!stationLights.length) return;
+  var t = performance.now()/1000;
+  var br = toLocal(vb, o.b.r), bu = toLocal(vb, o.b.u), bf = toLocal(vb, o.b.f);
+  var c = toLocal(vb, sub(o.pos, P.pos));
+  if(c.z < NEAR) return;
+  for(var i=0;i<stationLights.length;i++){
+    var L = stationLights[i];
+    var pulse = 0.5 + 0.5*Math.sin(t*2 + L.phase);
+    var x = c.x + L.p[0]*br.x + L.p[1]*bu.x + L.p[2]*bf.x;
+    var y = c.y + L.p[0]*br.y + L.p[1]*bu.y + L.p[2]*bf.y;
+    var z = c.z + L.p[0]*br.z + L.p[1]*bu.z + L.p[2]*bf.z;
+    if(z < NEAR) continue;
+    var s = FOCAL / z;
+    var px = W/2 + x*s, py = H/2 - y*s;
+    if(px<-10||px>W+10||py<-10||py>H+10) continue;
+    ctx.globalAlpha = 0.3 + 0.6*pulse;
+    ctx.fillStyle = L.col;
+    ctx.beginPath();
+    ctx.arc(px, py, Math.max(1.5, s*3), 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+function checkStationGreeting(){
+  if(!station || stationGreeted) return;
+  if(ln(sub(station.pos, P.pos)) < 5500){
+    stationGreeted = true;
+    say(station, pickChatter('station'), '#3fdcff');
+    if(SND.chatterBlip) SND.chatterBlip();
+  }
+}
+
+/* ============================================================
+   ВИЗУАЛЬНАЯ АТМОСФЕРА
+   ============================================================ */
+var dust = [];
+(function(){
+  for(var i=0;i<80;i++) dust.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)))});
+})();
+var brightStars = [];
+(function(){
+  for(var i=0;i<14;i++) brightStars.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), m:rnd(0.5,1)});
+})();
+function drawDust(vb){
+  if(P.speed < 80) return;
+  var alpha = clamp((P.speed/P.maxSpeed)*0.35, 0, 0.35);
+  ctx.fillStyle = '#6a8a9a';
+  ctx.globalAlpha = alpha;
+  for(var i=0;i<dust.length;i++){
+    var l = toLocal(vb, dust[i].d);
+    if(l.z < 0.15) continue;
+    var px = W/2 + (l.x/l.z)*FOCAL*2;
+    var py = H/2 - (l.y/l.z)*FOCAL*2;
+    if(px<-5||px>W+5||py<-5||py>H+5) continue;
+    ctx.fillRect(px, py, 1.2, 1.2);
+  }
+  ctx.globalAlpha = 1;
+}
+function drawEngineTrail(vb){
+  if(P.speed < 100 || P.rear) return;
+  var inten = clamp(P.speed/P.maxSpeed, 0, 1);
+  var cx = W/2, cy = H*0.94;
+  var hue = inten > 0.6 ? 'rgba(63,220,255,'+(0.4+inten*0.4)+')' : 'rgba(140,255,106,'+(0.4+inten*0.4)+')';
+  ctx.fillStyle = hue;
+  ctx.beginPath();
+  ctx.ellipse(cx, cy+8, 8+inten*14, 2+inten*3, 0, 0, Math.PI*2);
+  ctx.fill();
+}
+function drawBrightStars(vb){
+  for(var i=0;i<brightStars.length;i++){
+    var s = brightStars[i];
+    var l = toLocal(vb, s.d);
+    if(l.z < 0.06) continue;
+    var px = W/2 + (l.x/l.z)*FOCAL;
+    var py = H/2 - (l.y/l.z)*FOCAL;
+    if(px<-20||px>W+20||py<-20||py>H+20) continue;
+    var coreR = 1.2 + s.m*1.6;
+    var glowR = coreR * (3 + s.m*2);
+    // Мягкое свечение
+    try{
+      var g = ctx.createRadialGradient(px, py, 0, px, py, glowR);
+      g.addColorStop(0, 'rgba(235,245,255,'+(0.35+s.m*0.35)+')');
+      g.addColorStop(0.4, 'rgba(200,220,255,0.12)');
+      g.addColorStop(1, 'rgba(180,200,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(px, py, glowR, 0, Math.PI*2);
+      ctx.fill();
+    }catch(e){}
+    // Ядро
+    ctx.fillStyle = 'rgba(250,252,255,'+(0.85+s.m*0.15)+')';
+    ctx.beginPath();
+    ctx.arc(px, py, coreR, 0, Math.PI*2);
+    ctx.fill();
+  }
+}
 
 function twist(s){var tmp=(s[0]+s[1])&0xFFFF;return [s[1],s[2],(tmp+s[2])&0xFFFF];}
 function rol8(b){return((b<<1)|(b>>7))&0xFF;}
@@ -672,9 +1150,29 @@ function marketOf(sys){
   var it=QQ23[i];
   var price=((it[0]+(r&it[4])+e*it[1])&0xFF)*4;
   var raw=it[3]+(r&it[4])-e*it[1];
-  out.push({price:price,qty:raw<0?0:(raw&63)});
+  var qty = raw<0?0:(raw&63);
+  out.push({price:price,qty:qty});
  }
  return out;
+}
+/* ============================================================
+   ЖИВАЯ ЭКОНОМИКА · тренды
+   ============================================================ */
+function driftMarket(){
+  if(!CMD.market) return;
+  for(var i=0;i<CMD.market.length;i++){
+    var prev = CMD.market[i].price;
+    var drift = (Math.random()-0.5)*0.18;
+    var np = Math.max(1, Math.min(5000, Math.round(prev*(1+drift))));
+    CMD.market[i].price = np;
+  }
+  if(Math.random() < 0.25){
+    var g = Math.floor(Math.random()*QQ23.length);
+    var delta = Math.random()<0.55 ? 1.4 : 0.65;
+    CMD.market[g].price = Math.max(1, Math.round(CMD.market[g].price*delta));
+    return GOODS_RU[g] + (delta>1?' подорожал':' подешевел') + ' в ' + (curSys?curSys.name:'—');
+  }
+  return null;
 }
 function planetDir(sys,legalBit){
  var v=(((sys.s0>>8)&7)+6+legalBit),c=v&1,zv=v>>1;
@@ -791,11 +1289,10 @@ function placeOrbit(sys, legalBit){
  var side = perpTo(pdir);
  planet = {pos: C, r: pR, rot: rnd(0, 6.283), spin: rnd(0.006, 0.016) * (Math.random() < 0.5 ? -1 : 1), tilt: rnd(-0.45, 0.45)};
  buildTerrain((sys.s0 ^ sys.s1 ^ sys.s2) >>> 0, pinfo.type);
- /* ПУНКТ 4: станция смотрит окном ОТ планеты */
  station = {kind: 'station', ship: 'coriolis', bp: 'coriolis', pos: S, b: basisFrom(mul(pdir, -1)), speed: 0,
   energy: SHIP.coriolis.energy, maxEnergy: SHIP.coriolis.energy, radius: BP.coriolis.radius * 0.9,
   spin: STATION_SPIN, name: 'Кориолис', hitT: 0};
- /* Игрок спавнится на стороне окна (от планеты) */
+ buildStationLights();
  var forwardDist = STATION_SLOT_FACE + rnd(4000, 8000);
  var sideDist = rnd(-2500, 2500);
  P.pos = add(S, add(mul(pdir, -forwardDist), mul(side, sideDist)));
@@ -852,15 +1349,19 @@ function syncDockBtn(){
 }
 function spawnShip(type,hostile,police){
  var sp=SHIP[type];
+ var o;
  if(!station){
   var d=rnd(1600,4400),a=rnd(0,Math.PI*2),e=rnd(-0.45,0.45);
   var pos=add(P.pos,V(Math.cos(a)*Math.cos(e)*d,Math.sin(e)*d,Math.sin(a)*Math.cos(e)*d));
-  objects.push({kind:police?'police':(hostile?'pirate':'trader'),ship:type,bp:sp.bp,pos:pos,
+  o = {kind:police?'police':(hostile?'pirate':'trader'),ship:type,bp:sp.bp,pos:pos,
    b:basisFrom(sub(P.pos,pos)),speed:sp.speed*24*0.7,energy:sp.energy,maxEnergy:sp.energy,cool:rnd(0.6,2.4),
    hostile:!!hostile,police:!!police,radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
    aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
-   wanderT:rnd(2,5),wanderDir:basisFrom(sub(P.pos,pos)).f});
-  return;
+   wanderT:rnd(2,5),wanderDir:basisFrom(sub(P.pos,pos)).f,chattered:false};
+  applyPersonality(o);
+  rememberEncounter(o);
+  objects.push(o);
+  return o;
  }
  var axis = nrm(station.b.f);
  var slotCenter = add(station.pos, mul(axis, STATION_SLOT_FACE));
@@ -869,13 +1370,16 @@ function spawnShip(type,hostile,police){
  pos = add(pos, add(mul(perp1, rnd(-STATION_SLOT_HALF_W*0.7, STATION_SLOT_HALF_W*0.7)),mul(perp2, rnd(-STATION_SLOT_HALF_H*0.6, STATION_SLOT_HALF_H*0.6))));
  var perturb = mul(nrm(V(rnd(-1,1), rnd(-1,1), rnd(-1,1))), 0.25);
  var heading = nrm(add(axis, perturb));
- objects.push({kind:police?'police':(hostile?'pirate':'trader'),ship:type,bp:sp.bp,pos:pos,b:basisFrom(heading),
+ o = {kind:police?'police':(hostile?'pirate':'trader'),ship:type,bp:sp.bp,pos:pos,b:basisFrom(heading),
   speed:sp.speed*24*0.7,energy:sp.energy,maxEnergy:sp.energy,cool:rnd(0.6,2.4),hostile:!!hostile,police:!!police,
   radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
   aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
-  wanderT:rnd(2,5),wanderDir:heading});
+  wanderT:rnd(2,5),wanderDir:heading,chattered:false};
+ applyPersonality(o);
+ rememberEncounter(o);
+ objects.push(o);
+ return o;
 }
-/* ПУНКТ 2: астероид не спавнится в станции */
 function spawnAst(){
  for(var tries=0;tries<8;tries++){
   var d=rnd(2000,7000),a=rnd(0,Math.PI*2),e=rnd(-0.5,0.5);
@@ -1024,7 +1528,6 @@ function viewBasis(){
  if(!P.rear)return P.b;
  return{r:mul(P.b.r,-1),u:P.b.u,f:mul(P.b.f,-1)};
 }
-/* ПУНКТ 5: цель всегда доступна для радара, стрельба отдельно блокируется */
 function crosshairTarget(){
  var vb=viewBasis(),best=null,bestD=1e9,i;
  var tol=Math.max(0.026,32/(H||480));
@@ -1065,12 +1568,13 @@ function fireLaser(){
   best.energy-=power*6+rnd(0,4);
   best.hitT=0.18;P.hitFlash=0.14;SND.hit();
   if(best.kind==='station'){
-   if(CMD.legal<2){CMD.legal=2;msg('ОГОНЬ ПО СТАНЦИИ · розыск','#ff4b3e');spawnPoliceSoon();}
+   if(CMD.legal<2){CMD.legal=2;MEMORY.bounty+=500;msg('ОГОНЬ ПО СТАНЦИИ · розыск','#ff4b3e');spawnPoliceSoon();}
    best.energy=SHIP.coriolis.energy;
   }else if(best.kind==='trader'&&!best.hostile){
    best.hostile=true;best.aggr=0.85;
+   say(best, pickChatter('traderHit'), '#ffd426');
    if(CMD.legal<1){CMD.legal=1;msg('АТАКА НА ЧИСТЫЙ','#ffd426');spawnPoliceSoon();}
-  }else if(best.kind==='police'){CMD.legal=2;}
+  }else if(best.kind==='police'){CMD.legal=2;MEMORY.bounty+=500;}
   if(best.energy<=0&&best.kind!=='station')killObj(best);
  }
 }
@@ -1103,13 +1607,22 @@ function energyBomb(){
 function spawnPoliceSoon(){if(policeTimer<0)policeTimer=rnd(5,12);}
 function killObj(o){
  var idx=objects.indexOf(o);if(idx<0)return;
+ if(o.kind==='pirate'||o.kind==='police'){
+  say(o, pickChatter(o.kind==='pirate'?'pirateHit':'policeHit'), '#ff8b3e');
+ }
+ if(o.distressVictim && objects.indexOf(o.distressVictim) >= 0){
+  var rw = 200 + Math.floor(Math.random()*400);
+  CMD.cash += rw;
+  MEMORY.factions.traders = (MEMORY.factions.traders||0) + 1;
+  msg('Спасение подтверждено · +'+rw+' Cr', '#8cff6a');
+ }
  var sp=o.ship?SHIP[o.ship]:null;
  boom(o.pos,sp?sp.debris*2:10,o.kind==='ast'?'#d8a06a':'#ffd426');
  objects.splice(idx,1);SND.boom();vib(60);
  if(o.kind==='pirate'||o.kind==='police'||o.kind==='trader'){
   CMD.kills++;CMD.score++;
   var bn=sp?sp.bounty:0,i;
-  if(o.kind==='police'){CMD.legal=2;bn=0;msg('ПОЛИЦЕЙСКИЙ УНИЧТОЖЕН','#ff4b3e');}
+  if(o.kind==='police'){CMD.legal=2;MEMORY.bounty+=500;bn=0;msg('ПОЛИЦЕЙСКИЙ УНИЧТОЖЕН','#ff4b3e');}
   else if(bn>0){CMD.cash+=bn;msg(o.name+' · +'+bn+' Cr','#ffd426');}
   else msg(o.name+' уничтожен · '+rankName(CMD.score),'#ffd426');
   var cans=sp?sp.canisters:0;
@@ -1125,6 +1638,8 @@ function hurtPlayer(dmg,silent){
 }
 function die(){
  if(state==='dead')return;
+ SND.stopHum();
+ SND.stopDockAmb();
  if(CMD.eq.escape){
   CMD.eq.escape=0;
   boom(add(P.pos,mul(P.b.f,300)),20,'#ff8b3e');SND.boom();
@@ -1178,9 +1693,17 @@ function doDock(){
  CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();
  P.speed=0;bolts=[];P.laserHeat=0;P.laserOverheated=false;
  SND.dock();vib([30,40,80]);
+ SND.stopHum();
+ SND.startDockAmb();
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
  msg('СТЫКОВКА · '+curSys.name,'#8cff6a');
+ if(Math.random() < 0.5){
+  say(station, pickChatter('greeting') + ', ' + CMD.name, '#3fdcff');
+ }
+ msg('В доке: ' + (Math.floor(Math.random()*5)+1) + ' кораблей · ' + (Math.random()<0.5?'свободен':'занят') + ' док 3', '#8492a8');
+ var evNews = driftMarket();
+ if(evNews) msg('Рынок: ' + evNews, '#ffd426');
  CMD.energySaved=P.energy;saveGame(true);openMarket();
 }
 function launch(){
@@ -1201,6 +1724,9 @@ function launch(){
  P.energy = Math.min(P.maxEnergy, Math.max(P.energy, 80));
  P.rear = false;
  P.laserHeat = 0;P.laserOverheated = false;
+ stationGreeted = false;
+ SND.stopDockAmb();
+ SND.startHum();
  msg('Отстыковка выполнена · удачи, '+CMD.name,'#3fdcff');
  try{SND.dock();}catch(e){}
  updateBar();
@@ -1228,7 +1754,6 @@ function arrive(){
  if(!hyperGal&&hyperTo!==prev)CMD.visited++;
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
- /* ПУНКТ 4: спавн в полусфере окна (от планеты) */
  var outDir=station.b.f;
  var side=orbit.side;
  var cos_ang=rnd(0.3,1.0);
@@ -1238,6 +1763,7 @@ function arrive(){
  P.pos=add(station.pos,add(mul(outDir,cos_ang*dist),mul(side,sign*sin_ang*dist)));
  P.b=basisFrom(sub(station.pos,P.pos));
  P.speed=100;state='flight';prevState='flight';
+ stationGreeted = false;
  msg('Прибытие: '+curSys.name+' · '+curSys.planetTypeName,'#8cff6a');
  if(CMD.legal>=1)msg('Статус: '+(CMD.legal>=2?'в розыске':'правонарушитель'),'#ff4b3e');
 }
@@ -1252,7 +1778,9 @@ function steerTo(o,want,rate,dt){
 }
 
 function update(dt){
+ ambientTick(dt);
  CMD.time+=dt;burnT-=dt;warnT-=dt;scoopMsgT-=dt;
+ if(SND.setHum) SND.setHum(50 + P.speed*0.2, 0.008 + (P.speed/P.maxSpeed)*0.015);
  var inp=readInput(),pr=1.55*dt,rr=1.95*dt,yr=0.9*dt;
  if(inp.pitch){P.b.u=rotAxis(P.b.u,P.b.r,inp.pitch*pr);P.b.f=rotAxis(P.b.f,P.b.r,inp.pitch*pr);}
  if(inp.roll){var ra=-inp.roll*rr;P.b.r=rotAxis(P.b.r,P.b.f,ra);P.b.u=rotAxis(P.b.u,P.b.f,ra);}
@@ -1304,6 +1832,7 @@ function update(dt){
  P.cool=Math.max(0,P.cool-dt);P.missCool=Math.max(0,P.missCool-dt);
  P.hitFlash=Math.max(0,P.hitFlash-dt);P.dmgFlash=Math.max(0,P.dmgFlash-dt);
  P.energy=Math.min(P.maxEnergy,P.energy+4.5*dt);
+ checkStationGreeting();
  if(keys.Space||touch.fire)fireLaser();
  var dsu=ln(sub(sun.pos,P.pos));
  if(dsu<150000){
@@ -1334,7 +1863,6 @@ function update(dt){
    if(alive){steerTo(o,sub(o.target.pos,o.pos),3.2,dt);o.speed=Math.min(o.speed+3200*dt,6200);}
    else o.speed=Math.max(1200,o.speed-1800*dt);
    o.vel=mul(o.b.f,o.speed);o.pos=add(o.pos,mul(o.vel,dt));
-   /* ПУНКТ 3: ракета не наносит урона станции */
    if(alive&&ln(sub(o.target.pos,o.pos))<o.target.radius+60){
     var tg=o.target;
     if(tg.kind==='station'){
@@ -1375,7 +1903,6 @@ function update(dt){
    o.hitT=Math.max(0,(o.hitT||0)-dt);
    o.pos=add(o.pos,mul(o.vel,dt));
    o.b.f=rotAxis(o.b.f,o.b.u,o.spin.y*dt);o.b.u=rotAxis(o.b.u,o.b.f,o.spin.x*dt);o.b=ortho(o.b);
-   /* ПУНКТ 2: астероид разбивается о станцию */
    if(station){
     var relAst=sub(o.pos,station.pos);
     if(ln(relAst)<station.radius+2000 && stationCollision(relAst)){
@@ -1402,9 +1929,26 @@ function update(dt){
   }
   if(o.kind==='pirate'||o.kind==='trader'||o.kind==='police'){
    var rel=sub(P.pos,o.pos),d=ln(rel),dir=nrm(rel);
+   if(d < 6000 && !o.sonarDone){ o.sonarDone = true; if(SND.sonar) SND.sonar(); }
+   if(!o.chattered && d < 8000 && (o.kind==='pirate'||o.kind==='police')){
+     o.chattered = true;
+     var mem = MEMORY.knownPirates[o.pname];
+     var chatterKind = o.ship === 'thargon' ? 'thargon' : (o.kind==='pirate'?'pirateGreet':'policeGreet');
+     if(mem && mem.count > 1 && o.kind==='pirate' && o.ship !== 'thargon'){
+       say(o, 'Ты! Снова ты!', '#ff4b3e');
+       o.aggr = (o.aggr||1) * 1.4;
+     } else {
+       say(o, pickChatter(chatterKind), o.kind==='pirate'?'#ff5f4d':'#7fd0ff');
+     }
+   }
    o.cool-=dt;o.hitT=Math.max(0,(o.hitT||0)-dt);
    var aggro=o.hostile||(o.police&&CMD.legal>=1);
-   var needCombat = aggro && d < 6000 && !o.flee && o.energy > o.maxEnergy * 0.2;
+   var fleeTh = o.fleeThreshold || 0.2;
+   if(o.energy <= o.maxEnergy * fleeTh && !o.flee && aggro){
+     o.flee = true;
+     say(o, 'Я ухожу!', '#ffd426');
+   }
+   var needCombat = aggro && d < 6000 && !o.flee && o.energy > o.maxEnergy * fleeTh;
    if(needCombat){
     var standoffMin = Math.max(500, o.radius + 300);
     var standoffMax = standoffMin + 1800;
@@ -1418,7 +1962,8 @@ function update(dt){
     }
     if(dot(o.b.f, dir) > 0.97 && d < 5000 && o.cool <= 0){
      o.cool = rnd(0.9, 2.1) / (0.5 + o.aggr);
-     var aim = nrm(add(dir, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), 0.035 / (0.3 + o.aggr))));
+     var aimNoise = o.aimNoise || 0.035;
+     var aim = nrm(add(dir, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), aimNoise / (0.3 + o.aggr))));
      bolts.push({pos:add(o.pos,mul(o.b.f,80)),vel:mul(aim,4600),life:1.8,col:o.police?'#7fd0ff':'#ff6b5e',hostile:true,dmg:(o.laser||2)*5});
      if(d<3800)SND.tone(700,200,0.1,'square',0.03);
     }
@@ -1437,6 +1982,13 @@ function update(dt){
      steerTo(o, o.wanderDir || o.b.f, 0.4, dt);
      o.speed = Math.min(o.speed + 40*dt, SHIP[o.ship].speed * 24 * 0.65);
     }
+   }
+   if(o.landing && o.slotTarget){
+     var toSlot = sub(o.slotTarget, o.pos);
+     var ds = ln(toSlot);
+     if(ds < 800){ objects.splice(i,1); continue; }
+     steerTo(o, toSlot, 1.5, dt);
+     o.speed = 150;
    }
    o.pos = add(o.pos, mul(o.b.f, o.speed * dt));
    if(station){
@@ -1611,6 +2163,7 @@ function drawObj(o,vb){
  ctx.globalAlpha=alpha*0.16;ctx.lineWidth=lw*3.4;ctx.stroke();
  ctx.globalAlpha=alpha;ctx.lineWidth=lw;ctx.stroke();
  ctx.globalAlpha=1;
+ if(o.kind==='station') drawStationLights(vb, o);
 }
 function drawSun(){
  var vb=viewBasis(),rel=sub(sun.pos,P.pos),c=toLocal(vb,rel),d=ln(rel);
@@ -1716,6 +2269,17 @@ function surface(vb,c,sr,pl,d, pCtx){
  fill(BUCK[9],pal.ice[1],'rgba(255,255,255,.2)');
  fill(BUCK[10],pal.ice[1],'rgba(255,255,255,.22)');
  fill(BUCK[11],pal.ice[1],'rgba(255,255,255,.26)');
+ /* Огни городов на ночной стороне */
+ if(pCtx && sr > 60){
+  pCtx.fillStyle = 'rgba(255, 200, 100, 0.6)';
+  for(var gi=0; gi<verts.length; gi+=53){
+   if(!vis[gi]) continue;
+   if(lit[gi] > 0.05) continue;
+   if(hash2(gi, 0, 42) > 0.25) continue;
+   var gx = px[gi*2], gy = px[gi*2+1];
+   pCtx.fillRect(gx-1, gy-1, 2, 2);
+  }
+ }
 }
 function drawStars(vb){
  var i,s,l,p,sz;
@@ -1998,7 +2562,6 @@ function drawHUD(vb,dt,target){
    drawMarker(vb,slotW,'ОКНО','#8cff6a',fs*0.72);
   }
  }
- /* ПУНКТ 7: мёртвый блок "В ДОКЕ" убран (перенесён в loghint) */
  var hint='';
  if(state==='flight'){
   if(station){
@@ -2007,7 +2570,6 @@ function drawHUD(vb,dt,target){
    else if(dSl<station.radius*3){
     if(P.speed>320)hint='СЛИШКОМ БЫСТРО — [S] или [X]';
     else if(dSl<station.radius*1.5){
-     /* ПУНКТ 6: подсказка [C] только если куплен */
      if(CMD.eq.dockcomp) hint='[C] стык.комп · или в окно вручную';
      else hint='Стыковка: в окно вручную · стык.комп продаётся (1500 Cr)';
     }
@@ -2044,6 +2606,8 @@ function render(dt){
  ctx.fillStyle='#03050b';ctx.fillRect(0,0,W,H);
  if(state==='hyper'){drawHyper(hyperT);return;}
  drawStars(vb);
+ drawBrightStars(vb);
+ drawDust(vb);
  drawSun();
  drawPlanetBody(vb);
  var sorted=objects.slice().sort(function(a,b){return ln(sub(b.pos,P.pos))-ln(sub(a.pos,P.pos));});
@@ -2064,6 +2628,7 @@ function render(dt){
    ctx.beginPath();ctx.moveTo(W/2,H/2);ctx.lineTo(pc[0],pc[1]);ctx.stroke();
   }
  }
+ drawEngineTrail(vb);
  if(state==='title'){
   ctx.fillStyle='#8cff6a';ctx.font=Math.max(10,H/50)+'px "JetBrains Mono",monospace';ctx.textAlign='left';
   ctx.fillText('ЧЕРТЕЖИ И ВСЕЛЕННАЯ: ДАННЫЕ ELITE (bbcelite.com)',W*0.03,H*0.96);
@@ -2144,7 +2709,6 @@ function toggleChart(){
 }
 function closeChart(){restoreState();}
 
-/* ПУНКТ 7: подсказка «в доке» перенесена в loghint */
 function updateBar(){
  var el;
  el=$('#st-sys');if(el)el.textContent=curSys?curSys.name:'—';
@@ -2155,6 +2719,17 @@ function updateBar(){
  var eb=$('#st-en'),pc=P.energy/P.maxEnergy;
  if(eb){eb.textContent=Math.round(pc*100)+'%';eb.className=pc>0.5?'g':(pc>0.22?'y':'r');}
  el=$('#st-rank');if(el)el.textContent=rankName(CMD.score);
+
+ var bb = $('#st-bounty');
+ if(bb){
+  if(MEMORY.bounty > 0){
+   bb.style.display = 'inline';
+   var bv = $('#st-bounty-val');
+   if(bv) bv.textContent = MEMORY.bounty + ' Cr';
+  } else {
+   bb.style.display = 'none';
+  }
+ }
 
  var inDockForUI = (state==='docked') || (prevState==='docked') ||
                    (state==='pause' && prevState==='docked') ||
@@ -2209,6 +2784,11 @@ function openMarket(){
  $('#mk-gov').textContent=GOV[curSys.gov];
  $('#mk-ship').textContent=curShip().ru;
  CMD._bestPrices=computeBestPrices();
+ if(Math.random() < 0.7){
+  var rumor = NEWS[Math.floor(Math.random()*NEWS.length)];
+  var rEl = $('#mk-rumor');
+  if(rEl) rEl.textContent = '📻 ' + rumor;
+ }
  renderMarket();updateBar();
 }
 function renderMarket(){
@@ -2552,12 +3132,16 @@ function loadGame(){
   gal=clamp(s.galaxy||1,1,8);CMD.galaxy=gal;
   if((CMD.eq.missile||0)>missileMax())CMD.eq.missile=missileMax();
   buildSystem(clamp(s.sysIdx,0,255),true);
+  MEMORY.knownPirates = {};
+  MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
+  MEMORY.bounty = 0;
+  ambientTimer = 25;
+  stationGreeted = false;
   targetSys=null;state='flight';prevState='flight';show(null);
   msg('Загружено · '+curSys.name+' · '+curShip().ru,'#3fdcff');
   return true;
  }catch(e){return false;}
 }
-/* ПУНКТ 1: новая игра начинается в доке */
 function newGame(name){
  CMD={name:String(name||'JAMESON').toUpperCase().slice(0,12)||'JAMESON',cash:100,fuel:70,cargo:[],kills:0,score:0,
   legal:0,visited:1,galaxy:1,sysIdx:7,ship:'cobra',market:null,dockComp:false,time:0,energySaved:150,
@@ -2565,14 +3149,20 @@ function newGame(name){
   _bestPrices:null,tractorOn:false,visitedSystems:[7]};
  for(var i=0;i<QQ23.length;i++)CMD.cargo.push(0);
  gal=1;targetSys=null;msgs=[];bolts=[];policeTimer=-1;burnT=0;warnT=0;pvShip='cobra';radar.mode=0;
+ MEMORY.knownPirates = {};
+ MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
+ MEMORY.bounty = 0;
+ ambientTimer = 20;
+ stationGreeted = false;
  buildSystem(7,true);
- /* Сразу в доке — показываем рынок */
  state='docked';prevState='docked';
  layout();
  msg('Командир '+CMD.name+' · LAVE · «Кобра» · 100 Cr','#8cff6a');
  msg('Вы в доке станции «Кориолис» · нажмите «ОТСТЫКОВКА», когда будете готовы','#3fdcff');
  msg('Совет: начните с покупки товаров · цель для первого рейса — ZAONCE','#ffd426');
  SND.init();SND.beep();saveGame(true);
+ SND.stopHum();
+ SND.startDockAmb();
  openMarket();
 }
 function toTitle(){state='title';prevState='title';show('ov-title');$('#btn-cont').disabled=!hasSave();demoWorld();layout();}
@@ -2607,6 +3197,7 @@ setTimeout(layout,400);
 $('#btn-cont').disabled=!hasSave();
 $('#cmdr').value='JAMESON';
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
+initNewsTicker();
 requestAnimationFrame(loop);
 })();
 </script>
