@@ -22,7 +22,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);ov
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='1.6' fill='%238cff6a'/><path d='M14 3 L14 9 M14 19 L14 25 M3 14 L9 14 M19 14 L25 14' stroke='%238cff6a' stroke-width='1.6' stroke-linecap='round' fill='none'/><circle cx='14' cy='14' r='11' fill='none' stroke='%238cff6a' stroke-width='0.7' opacity='0.45'/></svg>") 14 14, default;
 }
 #game,.gbox canvas{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='1.6' fill='%238cff6a'/><path d='M14 3 L14 9 M14 19 L14 25 M3 14 L9 14 M19 14 L25 14' stroke='%238cff6a' stroke-width='1.6' stroke-linecap='round' fill='none'/><circle cx='14' cy='14' r='11' fill='none' stroke='%238cff6a' stroke-width='0.7' opacity='0.45'/></svg>") 14 14, crosshair}
-button,.penta,.stick,.shiprow,.gbtns button,.yawbtns button{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='3' fill='%238cff6a'/><circle cx='14' cy='14' r='9' fill='none' stroke='%238cff6a' stroke-width='1.3'/><circle cx='14' cy='14' r='13' fill='none' stroke='%238cff6a' stroke-width='0.6' opacity='0.5'/></svg>") 14 14, pointer}
+button,.penta,.stick,.shiprow,.gbtns button{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='3' fill='%238cff6a'/><circle cx='14' cy='14' r='9' fill='none' stroke='%238cff6a' stroke-width='1.3'/><circle cx='14' cy='14' r='13' fill='none' stroke='%238cff6a' stroke-width='0.6' opacity='0.5'/></svg>") 14 14, pointer}
 .gbox canvas:active{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='4' fill='%23ffd426'/><circle cx='14' cy='14' r='9' fill='none' stroke='%23ffd426' stroke-width='1.5'/><circle cx='14' cy='14' r='13' fill='none' stroke='%23ffd426' stroke-width='0.7' opacity='0.5'/></svg>") 14 14, grabbing}
 input[type=text],textarea{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='24' viewBox='0 0 16 24'><line x1='8' y1='2' x2='8' y2='22' stroke='%238cff6a' stroke-width='2' stroke-linecap='round'/><line x1='4' y1='4' x2='12' y2='4' stroke='%238cff6a' stroke-width='1.4'/><line x1='4' y1='20' x2='12' y2='20' stroke='%238cff6a' stroke-width='1.4'/></svg>") 8 12, text}
 .app{height:100vh;height:100dvh;display:flex;flex-direction:column}
@@ -136,7 +136,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 #logtext{color:var(--grn);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #loghint{margin-left:auto;color:var(--dim);white-space:nowrap;font-size:10.5px}
 .stick{position:absolute;right:16px;bottom:16px;width:132px;height:132px;border:1px solid #2f4a33;border-radius:50%;
- background:radial-gradient(circle at 50% 50%,#0d1a10dd,#050a06dd);z-index:6;touch-action:none;opacity:.9;transition:opacity .2s;
+ background:radial-gradient(circle at 50% 50%,#0d1a10dd,#050a06dd);z-index:6;touch-action:none;opacity:.9;transition:opacity .2s,border-color .2s,box-shadow .2s;
  box-shadow:0 0 0 1px #0006,inset 0 0 26px #0009}
 .stick:hover,.stick.act{opacity:1;border-color:var(--grn)}
 .stick::before,.stick::after{content:"";position:absolute;background:#2f4a33}
@@ -156,10 +156,6 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .penta.fire:hover svg,.penta.fire:active svg{filter:drop-shadow(0 0 12px rgba(255,107,94,1))}
 .penta.on svg{color:#d8ffc9}
 .penta.on .lbl{color:#8cff6a}
-.yawbtns{position:absolute;right:164px;bottom:40px;display:flex;gap:8px;z-index:6}
-.yawbtns button{width:62px;padding:17px 4px;font-family:var(--f-pixel);font-size:10px;touch-action:none;background:#0d1520ee;border-color:#26384a;color:#cfe0f5;opacity:.9}
-.yawbtns button:hover,.yawbtns button:active,.yawbtns button.on{opacity:1;border-color:var(--grn);color:#fff;background:#152a1a}
-.yaw-lab{position:absolute;right:164px;bottom:100px;width:132px;text-align:center;font-family:var(--f-mono);font-size:9px;color:#4d6b52;letter-spacing:.1em;z-index:6;pointer-events:none}
 @media(max-width:820px){
  .rd.hide-sm{display:none}.ginfo dl{grid-template-columns:1fr;gap:2px}.ginfo dd{margin-bottom:5px}
  .stick{width:108px;height:108px;right:10px;bottom:10px}.knob{left:33px;top:33px}.stick-lab{bottom:124px;right:10px}
@@ -168,8 +164,6 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
  .penta svg{width:32px;height:32px}
  .penta .lbl{font-size:6.5px}
  .penta-lab{left:8px;bottom:calc(8px + 2 * 56px + 4px)}
- .yawbtns{right:128px;bottom:26px;gap:6px}.yawbtns button{width:50px;padding:14px 2px;font-size:9px}
- .yaw-lab{right:128px;bottom:82px;width:106px}
 }
 /* ===== NEWS TICKER ===== */
 .newsbar{flex:none;height:26px;background:#070b12;border-bottom:1px solid var(--line);display:flex;align-items:center;overflow:hidden;font-family:var(--f-mono);font-size:11px;position:relative}
@@ -179,6 +173,76 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 @keyframes scroll-news{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 #st-bounty{color:var(--mut)}
 #st-bounty b{color:var(--rd)}
+/* ===== ONBOARD COMPUTER ===== */
+.bordcomp{
+  position:absolute;
+  right:150px;
+  bottom:30px;
+  width:220px;
+  font-family:var(--f-mono);
+  font-size:10px;
+  color:var(--grn);
+  background:transparent;
+  border:1px solid rgba(140,255,106,0.55);
+  border-radius:8px;
+  padding:8px 10px;
+  z-index:6;
+  text-shadow:0 0 4px #8cff6a55;
+  min-height:80px;
+  max-height:160px;
+  overflow:hidden;
+  display:none;
+}
+.bc-title{
+  font-size:9px;
+  letter-spacing:.15em;
+  color:var(--cy);
+  margin-bottom:4px;
+  text-transform:uppercase;
+}
+.bc-body{
+  font-size:10.5px;
+  color:var(--grn);
+  line-height:1.4;
+  margin-bottom:6px;
+  word-wrap:break-word;
+  max-height:100px;
+  overflow-y:auto;
+}
+.bc-buttons{
+  display:flex;
+  gap:4px;
+}
+.bc-buttons button{
+  padding:4px 8px;
+  font-size:10px;
+  flex:1;
+}
+.bc-buttons button.pri{
+  background:#16301a;
+  border-color:#3a7a3c;
+  color:#d8ffc9;
+}
+/* ===== STICK CAPTURED ===== */
+.stick.captured{
+  border-color:#ffd426;
+  box-shadow:0 0 0 1px #0006,inset 0 0 26px #0009,0 0 16px #ffd42666;
+}
+.stick.captured .knob{
+  border-color:#ffd426;
+  box-shadow:0 0 16px #ffd42688;
+}
+@media(max-width:820px){
+  .bordcomp{
+    right:120px;
+    bottom:16px;
+    width:150px;
+    max-height:130px;
+    padding:6px 8px;
+  }
+  .bc-body{font-size:9.5px;max-height:70px;}
+  .bc-buttons button{padding:3px 6px;font-size:9px;}
+}
 </style>
 </head>
 <body>
@@ -231,13 +295,14 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
         <button class="penta" data-t="up"><svg viewBox="0 0 50 50"><polygon points="25,6 40,24 31,24 31,44 19,44 19,24 10,24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg><span class="lbl">ТЯГА+</span></button>
         <button class="penta" data-t="down"><svg viewBox="0 0 50 50"><polygon points="25,44 40,26 31,26 31,6 19,6 19,26 10,26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/></svg><span class="lbl">ТЯГА−</span></button>
       </div>
-      <div class="yaw-lab">РЫСКАНИЕ (A / D)</div>
-      <div class="yawbtns" id="yawbtns">
-        <button data-t="yawl">◀</button>
-        <button data-t="yawr">▶</button>
-      </div>
       <div class="stick-lab">ДЖОЙСТИК</div>
       <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+
+      <div class="bordcomp" id="bordcomp">
+        <div class="bc-title">БОРТ.КОМП</div>
+        <div class="bc-body" id="bc-body">— НЕТ СООБЩЕНИЙ —</div>
+        <div class="bc-buttons" id="bc-buttons"></div>
+      </div>
 
       <div class="ov show" id="ov-title">
         <div class="title-wrap">
@@ -398,7 +463,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
       <div class="ov" id="ov-help">
         <h2>УПРАВЛЕНИЕ</h2>
         <div class="keys">
-          <span><kbd>Джойстик</kbd></span><span>самолётный стиль: тянешь — нос вверх, толкаешь — вниз; вправо/влево — крен</span>
+          <span><kbd>Джойстик</kbd></span><span>клик — захват, движение мыши — тангаж/крен, клик — отпустить</span>
           <span><kbd>Пиктограммы</kbd></span><span>ОГОНЬ, РАКЕТА, БОМБА, ГИПЕР, СТЫК, ТРАКТОР, ТЯГА+/−</span>
           <span><kbd>↑↓←→</kbd></span><span>тангаж и крен</span>
           <span><kbd>A / D</kbd></span><span>рыскание</span>
@@ -418,7 +483,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
           <span><kbd>P / Esc</kbd></span><span>пауза</span>
           <span><kbd>L / Esc в доке</kbd></span><span>отстыковка от станции</span>
         </div>
-        <div class="note">Гиперпрыжок только из космоса. Корабли появляются из окна станции. Столкновение с корпусом — урон. В окно можно влетать только через слот. Из кормового вида стрельба невозможна. Новая игра начинается сразу в доке — нажмите «ОТСТЫКОВКА», когда будете готовы.</div>
+        <div class="note">Гиперпрыжок только из космоса. Корабли появляются из окна станции. Столкновение с корпусом — урон. В окно можно влетать только через слот. Из кормового вида стрельба невозможна. Новая игра начинается сразу в доке — нажмите «ОТСТЫКОВКА», когда будете готовы. Бортовой компьютер (в полёте, между радаром и джойстиком) принимает заказы на курьерские доставки, VIP-пассажиров и уничтожение целей.</div>
         <div class="btnrow" style="justify-content:flex-start">
           <button id="btn-help-guide">ХРОНИКИ ГАЛАКТИК</button>
           <button class="pri" id="btn-help-close">ЗАКРЫТЬ</button>
@@ -469,9 +534,6 @@ var QQ23=[[19,-2,'t',6,0x01],[20,-1,'t',10,0x03],[65,-3,'t',2,0x07],[40,-5,'t',2
  [53,15,'t',192,0x07]];
 var GOODS_RU=['Продовольствие','Текстиль','Радиоактивы','Робы','Алкоголь/вина','Роскошь','Наркотики','Компьютеры','Механизмы','Сплавы','Огнестрел','Меха','Минералы','Золото','Платина','Драгкамни','Иноплан. товар'];
 
-/* ============================================================
-   БЕГУЩАЯ СТРОКА · ~160 новостей до 20 слов каждая
-   ============================================================ */
 var NEWS = [
   'Цены на текстиль в LAVE выросли на 15% после закрытия фабрики.',
   'Спрос на продовольствие в аграрных системах достиг сезонного пика.',
@@ -838,12 +900,64 @@ var SND={ac:null,on:true,
  stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
  chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
  sonar:function(){this.tone(1400,700,0.15,'sine',0.025);},
- alarm:function(){var s=this;this.tone(600,900,0.3,'square',0.07);setTimeout(function(){s.tone(900,600,0.3,'square',0.07);},320);}
+ alarm:function(){var s=this;this.tone(600,900,0.3,'square',0.07);setTimeout(function(){s.tone(900,600,0.3,'square',0.07);},320);},
+ radioStatic:function(){
+  if(!this.on||!this.ac)return false;
+  try{
+   var dur=3+Math.random()*7;
+   var t=this.ac.currentTime;
+   var n=Math.max(1,Math.floor(this.ac.sampleRate*dur));
+   var b=this.ac.createBuffer(1,n,this.ac.sampleRate);
+   var d=b.getChannelData(0);
+   for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
+   var s=this.ac.createBufferSource();s.buffer=b;
+   var f=this.ac.createBiquadFilter();f.type='bandpass';f.Q.value=4;
+   var steps=8;
+   for(var k=0;k<=steps;k++){
+    f.frequency.setValueAtTime(400+Math.random()*2000, t+(k/steps)*dur);
+   }
+   var g=this.ac.createGain();
+   g.gain.setValueAtTime(0.0001,t);
+   g.gain.linearRampToValueAtTime(0.035,t+0.3);
+   g.gain.setValueAtTime(0.035,t+dur-0.5);
+   g.gain.linearRampToValueAtTime(0.0001,t+dur);
+   s.connect(f);f.connect(g);g.connect(this.ac.destination);
+   s.start(t);s.stop(t+dur+0.1);
+   return true;
+  }catch(e){return false;}
+ },
+ morse:function(){
+  if(!this.on||!this.ac)return;
+  var s=this;
+  var len=4+Math.floor(Math.random()*6);
+  var pattern=[];
+  for(var i=0;i<len;i++)pattern.push(Math.random()<0.5?0:1);
+  var delay=0;
+  for(var j=0;j<pattern.length;j++){
+   (function(dur,delay){
+    setTimeout(function(){s.tone(900,900,dur,'sine',0.025);},delay*1000);
+   })(pattern[j]===0?0.06:0.18, delay);
+   delay += (pattern[j]===0?0.06:0.18) + 0.08;
+  }
+ },
+ r2d2:function(){
+  if(!this.on||!this.ac)return;
+  var s=this;
+  var count=3+Math.floor(Math.random()*4);
+  var delay=0;
+  for(var i=0;i<count;i++){
+   var f1=800+Math.random()*1400;
+   var f2=600+Math.random()*1800;
+   var dur=0.05+Math.random()*0.15;
+   (function(f1,f2,dur,delay){
+    setTimeout(function(){s.tone(f1,f2,dur,'square',0.03);}, delay*1000);
+   })(f1,f2,dur,delay);
+   delay += dur + 0.03 + Math.random()*0.1;
+  }
+ }
 };
 
-/* ============================================================
-   РАДИОЭФИР · реплики NPC
-   ============================================================ */
+/* Радиоэфир */
 var CHATTER = {
   traderGreet: ['Держись подальше, пилот.','Хорошего полёта.','Видел пиратов у планеты.','Куда летишь?','Осторожно, тут неспокойно.','Груз везу, не задерживай.'],
   traderHit: ['Помогите!','Пираты!','Ты пожалеешь!','Вайперы уже летят!','Не стреляй, я мирный!','Что тебе надо?!'],
@@ -875,9 +989,7 @@ function say(o, text, color){
   if(SND.chatterBlip) SND.chatterBlip();
 }
 
-/* ============================================================
-   ЛИЧНОСТИ NPC
-   ============================================================ */
+/* Личности NPC */
 var NPC_NAMES = ['Кракен','Скайлер','Морган','Веспер','Роршах','Тень','Саргон','Немезида','Блэкджек','Гарпия','Ворон','Пиранья','Кобальт','Феникс','Кровавый','Скайлар','Дарт','Молот','Скиталец','Призрак'];
 var TRAITS = [
   {id:'agg',  name:'агрессивный', aggr:1.3, fleeAt:0.05, aimNoise:0.020, hpMul:1.0},
@@ -907,9 +1019,7 @@ function applyPersonality(o){
   return o;
 }
 
-/* ============================================================
-   ПАМЯТЬ МИРА
-   ============================================================ */
+/* Память мира */
 var MEMORY = {
   knownPirates: {},
   factions: { traders:0, pirates:0, police:0, thargoids:0 },
@@ -922,9 +1032,7 @@ function rememberEncounter(o){
   MEMORY.knownPirates[o.pname].count++;
 }
 
-/* ============================================================
-   AMBIENT EVENTS · жизнь вокруг игрока
-   ============================================================ */
+/* Ambient events */
 var ambientTimer = 25;
 function spawnShipAt(type, hostile, police, pos){
   var sp = SHIP[type];
@@ -1001,9 +1109,7 @@ function triggerDriftingContainer(){
   msg('Дрейфующий контейнер рядом', '#ffd426');
 }
 
-/* ============================================================
-   ЖИВАЯ СТАНЦИЯ · огни, окна, приветствие
-   ============================================================ */
+/* Живая станция */
 var stationLights = [];
 var stationGreeted = false;
 function buildStationLights(){
@@ -1050,9 +1156,7 @@ function checkStationGreeting(){
   }
 }
 
-/* ============================================================
-   ВИЗУАЛЬНАЯ АТМОСФЕРА
-   ============================================================ */
+/* Визуальная атмосфера */
 var dust = [];
 (function(){
   for(var i=0;i<80;i++) dust.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)))});
@@ -1086,6 +1190,7 @@ function drawEngineTrail(vb){
   ctx.ellipse(cx, cy+8, 8+inten*14, 2+inten*3, 0, 0, Math.PI*2);
   ctx.fill();
 }
+/* ВАРИАНТ 3 — короткие едва заметные лучи */
 function drawBrightStars(vb){
   for(var i=0;i<brightStars.length;i++){
     var s = brightStars[i];
@@ -1094,18 +1199,37 @@ function drawBrightStars(vb){
     var px = W/2 + (l.x/l.z)*FOCAL;
     var py = H/2 - (l.y/l.z)*FOCAL;
     if(px<-20||px>W+20||py<-20||py>H+20) continue;
-    var sz = 1.5 + s.m*2.5;   // ← короче (было 3–7, стало 1.5–4)
-    // Лучи — очень тусклые
-    ctx.strokeStyle = 'rgba(200,220,255,'+(0.12+s.m*0.15)+')';  // ← было 0.6+0.4, стало 0.12+0.15
-    ctx.lineWidth = 0.7;        // ← тоньше
+    var sz = 1.5 + s.m*2.5;
+    ctx.strokeStyle = 'rgba(200,220,255,'+(0.12+s.m*0.15)+')';
+    ctx.lineWidth = 0.7;
     ctx.beginPath();
     ctx.moveTo(px-sz, py); ctx.lineTo(px+sz, py);
     ctx.moveTo(px, py-sz); ctx.lineTo(px, py+sz);
     ctx.stroke();
-    // Ядро
     ctx.fillStyle = 'rgba(255,255,255,'+(0.7+s.m*0.3)+')';
     ctx.fillRect(px-1, py-1, 2, 2);
   }
+}
+
+/* Звуковой эфир */
+var bgSoundTimer = 12;
+var bgSoundAlien = ['⨀◈⬡ ⨁⨂ ⨄','⌬⏣ ⨀⨁⨂','⨅⨆ ◈◉⏣','◈◈◈ ⨀⨁⨂ ⏣','⠁⠃⠇ ⨀◈⬡'];
+function bgSoundTick(dt){
+  bgSoundTimer -= dt;
+  if(bgSoundTimer > 0) return;
+  bgSoundTimer = 20 + Math.random()*10;
+  if(!SND.on) return;
+  var r = Math.random();
+  if(r < 0.4){
+    var ok = SND.radioStatic();
+    if(ok && Math.random() < 0.3){
+      setTimeout(function(){
+        msg(bgSoundAlien[Math.floor(Math.random()*bgSoundAlien.length)] + ' (шёпот в эфире)', '#3fdcff');
+      }, 1500);
+    }
+  }
+  else if(r < 0.7) SND.morse();
+  else SND.r2d2();
 }
 
 function twist(s){var tmp=(s[0]+s[1])&0xFFFF;return [s[1],s[2],(tmp+s[2])&0xFFFF];}
@@ -1148,9 +1272,6 @@ function marketOf(sys){
  }
  return out;
 }
-/* ============================================================
-   ЖИВАЯ ЭКОНОМИКА · тренды
-   ============================================================ */
 function driftMarket(){
   if(!CMD.market) return;
   for(var i=0;i<CMD.market.length;i++){
@@ -1213,6 +1334,9 @@ function buildTerrain(seed,ptype){
 var cv=$('#game'),ctx=cv.getContext('2d',{alpha:false}),screenEl=$('#screen'),stageEl=$('#stage'),gbox=$('#gbox');
 var W=960,H=600,FOCAL=570,RS=1;
 var state='title',prevState='title';
+var mission = null;
+var missionSpawnTimer = 45;
+var vipPirateTimer = 0;
 var objects=[],bolts=[],msgs=[],stars=[];
 var P={pos:V(0,0,0),b:identB(),speed:200,energy:150,maxEnergy:150,maxSpeed:28*24,cool:0,missCool:0,rear:false,hitFlash:0,dmgFlash:0,laserHeat:0,laserHeatMax:1,laserHeatPerShot:0.15,laserCoolRate:0.12,laserOverheated:false};
 var station=null,planet={pos:V(0,0,145000),r:125000,rot:0,spin:0.012,tilt:0.3},sun={pos:V(90000,60000,-160000),r:14000};
@@ -1253,6 +1377,244 @@ function bearingText(b){
  else side='справа';
  var vert=b.el>7?'выше':(b.el<-7?'ниже':'в плоскости');
  return fmtDist(b.d)+' · '+side+' · '+vert;
+}
+
+/* ============================================================
+   БОРТОВОЙ КОМПЬЮТЕР · МИССИИ
+   ============================================================ */
+function pickMissionTargetSys(minJumps, maxJumps){
+  var sys = galaxy(gal);
+  var cur = sys[CMD.sysIdx];
+  var minLy = (minJumps - 0.5) * 7;
+  var maxLy = (maxJumps + 0.5) * 7;
+  var candidates = [];
+  for(var i=0;i<sys.length;i++){
+    if(i === CMD.sysIdx) continue;
+    var d = lyBetween(cur, sys[i]);
+    if(d >= minLy && d <= maxLy){
+      var jumps = Math.max(minJumps, Math.min(maxJumps, Math.ceil(d / 7)));
+      candidates.push({idx:i, sys:sys[i], d:d, jumps:jumps});
+    }
+  }
+  if(candidates.length === 0){
+    for(var j=0;j<sys.length;j++){
+      if(j === CMD.sysIdx) continue;
+      var dj = lyBetween(cur, sys[j]);
+      if(dj >= 5 && dj <= 40){
+        candidates.push({idx:j, sys:sys[j], d:dj, jumps:3});
+      }
+    }
+  }
+  if(candidates.length === 0) return null;
+  return candidates[Math.floor(Math.random()*candidates.length)];
+}
+
+function makeCourierMission(){
+  var t = pickMissionTargetSys(2, 5);
+  if(!t) return null;
+  var reward = 800 + 400 * t.jumps;
+  return {
+    type: 'courier',
+    targetSys: t.idx,
+    targetSysName: t.sys.name,
+    jumps: t.jumps,
+    reward: reward,
+    stage: 'pending',
+    hasContainer: false,
+    message: 'СЕКРЕТНЫЙ ЗАКАЗ · заберите контейнер (отмечен на радаре) и доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Награда: ' + reward + ' Cr.'
+  };
+}
+
+function makeVipMission(){
+  var t = pickMissionTargetSys(2, 4);
+  if(!t) return null;
+  var reward = 1200 + 500 * t.jumps;
+  return {
+    type: 'vip',
+    targetSys: t.idx,
+    targetSysName: t.sys.name,
+    jumps: t.jumps,
+    reward: reward,
+    stage: 'pending',
+    message: 'VIP-ПАССАЖИР · доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Осторожно — за ним охотятся пираты. Награда: ' + reward + ' Cr.'
+  };
+}
+
+function makeKillMission(){
+  var types = ['pirate', 'trader', 'police', 'thargon'];
+  var weights = [0.5, 0.2, 0.2, 0.1];
+  var r = Math.random();
+  var cum = 0;
+  var type = 'pirate';
+  for(var i=0;i<types.length;i++){
+    cum += weights[i];
+    if(r < cum){ type = types[i]; break; }
+  }
+  var name = '', reward = 0;
+  if(type === 'pirate'){ name = 'пирата'; reward = 800 + Math.floor(Math.random()*700); }
+  else if(type === 'trader'){ name = 'торговца'; reward = 500 + Math.floor(Math.random()*500); }
+  else if(type === 'police'){ name = 'полицейского'; reward = 1500 + Math.floor(Math.random()*1000); }
+  else if(type === 'thargon'){ name = 'Таргона'; reward = 2500 + Math.floor(Math.random()*1500); }
+  return {
+    type: 'kill_' + type,
+    targetSys: CMD.sysIdx,
+    targetSysName: curSys ? curSys.name : '',
+    jumps: 0,
+    reward: reward,
+    killType: type,
+    spawnSysIdx: CMD.sysIdx,
+    stage: 'pending',
+    message: 'КОНТРАКТ · уничтожьте ' + name + ' в системе ' + (curSys ? curSys.name : '—') + '. Награда: ' + reward + ' Cr.'
+  };
+}
+
+function spawnMission(){
+  if(mission) return;
+  var r = Math.random();
+  var m = null;
+  if(r < 0.4) m = makeCourierMission();
+  else if(r < 0.6) m = makeVipMission();
+  else m = makeKillMission();
+  if(!m) return;
+  mission = m;
+  renderBordComp();
+  SND.beep();
+  msg('БОРТ.КОМП: входящее сообщение', '#3fdcff');
+}
+
+function spawnCourierContainer(){
+  if(!station) return null;
+  var angle = Math.random() * Math.PI * 2;
+  var elevation = (Math.random() - 0.5) * 1.0;
+  var dist = rnd(40000, 100000);
+  var offset = V(
+    Math.cos(angle) * Math.cos(elevation) * dist,
+    Math.sin(elevation) * dist,
+    Math.sin(angle) * Math.cos(elevation) * dist
+  );
+  var pos = add(station.pos, offset);
+  var good = Math.floor(Math.random() * QQ23.length);
+  var c = spawnCanister(pos, good);
+  c.isMissionContainer = true;
+  return c;
+}
+
+function spawnMissionTarget(type){
+  var shipType, hostile, police;
+  if(type === 'pirate'){
+    shipType = pickPirate(curSys.tech);
+    hostile = true; police = false;
+  } else if(type === 'trader'){
+    shipType = pickTrader(curSys.tech);
+    hostile = false; police = false;
+  } else if(type === 'police'){
+    shipType = 'viper';
+    hostile = false; police = true;
+  } else {
+    shipType = 'thargon';
+    hostile = true; police = false;
+  }
+  var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
+  var o = spawnShipAt(shipType, hostile, police, pos);
+  o.isMissionTarget = true;
+  o.missionType = type;
+  o.name = 'ЦЕЛЬ: ' + o.name;
+  return o;
+}
+
+function acceptMission(){
+  if(!mission || mission.stage !== 'pending') return;
+  mission.stage = 'accepted';
+  if(mission.type === 'courier'){
+    var c = spawnCourierContainer();
+    mission.container = c;
+    mission.message = 'МИССИЯ · найдите контейнер (двойной круг на радаре) и доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
+    targetSys = mission.targetSys;
+  } else if(mission.type === 'vip'){
+    mission.message = 'МИССИЯ · доставьте пассажира в ' + mission.targetSysName + '. Осторожно: пираты. Награда: ' + mission.reward + ' Cr.';
+    targetSys = mission.targetSys;
+    vipPirateTimer = 25;
+  } else if(mission.type && mission.type.indexOf('kill_') === 0){
+    var o = spawnMissionTarget(mission.killType);
+    mission.targetObj = o;
+    mission.message = 'МИССИЯ · уничтожьте цель (отмечена на радаре). Награда: ' + mission.reward + ' Cr.';
+  }
+  SND.buy();
+  msg('МИССИЯ ПРИНЯТА', '#8cff6a');
+  renderBordComp();
+}
+
+function rejectMission(){
+  if(!mission || mission.stage !== 'pending') return;
+  mission = null;
+  missionSpawnTimer = 30 + Math.random()*40;
+  SND.beep();
+  msg('Заказ отклонён', '#8492a8');
+  renderBordComp();
+}
+
+function completeMission(){
+  if(!mission) return;
+  var rw = mission.reward;
+  CMD.cash += rw;
+  msg('МИССИЯ ВЫПОЛНЕНА · +' + rw + ' Cr', '#8cff6a');
+  SND.buy();
+  mission = null;
+  missionSpawnTimer = 45 + Math.random()*45;
+  renderBordComp();
+}
+
+function vipTick(dt){
+  if(!mission || mission.type !== 'vip' || mission.stage !== 'accepted') return;
+  vipPirateTimer -= dt;
+  if(vipPirateTimer > 0) return;
+  vipPirateTimer = 40 + Math.random()*40;
+  var tech = curSys ? curSys.tech : 6;
+  var type = pickPirate(tech);
+  var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
+  spawnShipAt(type, true, false, pos);
+  msg('Пираты охотятся за пассажиром!', '#ff4b3e');
+}
+
+function missionTick(dt){
+  if(mission){
+    if(mission.type === 'vip') vipTick(dt);
+    return;
+  }
+  missionSpawnTimer -= dt;
+  if(missionSpawnTimer <= 0){
+    missionSpawnTimer = 60 + Math.random()*60;
+    spawnMission();
+  }
+}
+
+function renderBordComp(){
+  var body = $('#bc-body');
+  var btns = $('#bc-buttons');
+  if(!body || !btns) return;
+  if(!mission){
+    body.textContent = '— НЕТ СООБЩЕНИЙ —';
+    btns.innerHTML = '';
+    return;
+  }
+  body.textContent = mission.message;
+  if(mission.stage === 'pending'){
+    btns.innerHTML =
+      '<button data-action="accept" class="pri">ПРИНЯТЬ</button>' +
+      '<button data-action="reject">ОТКЛОНИТЬ</button>';
+  } else {
+    btns.innerHTML = '';
+  }
+}
+
+var bcBtnsEl = document.getElementById('bc-buttons');
+if(bcBtnsEl){
+  bcBtnsEl.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('button') : null;
+    if(!btn) return;
+    if(btn.dataset.action === 'accept') acceptMission();
+    else if(btn.dataset.action === 'reject') rejectMission();
+  });
 }
 
 function stationCollision(rel){
@@ -1390,9 +1752,11 @@ function spawnAst(){
  }
 }
 function spawnCanister(pos,good){
- objects.push({kind:'cargo',ship:'canister',bp:'canister',pos:pos,b:identB(),speed:0,
+ var c = {kind:'cargo',ship:'canister',bp:'canister',pos:pos,b:identB(),speed:0,
   vel:mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))),rnd(15,70)),energy:1,maxEnergy:1,hostile:false,
-  radius:BP.canister.radius*0.9,name:'Контейнер',good:good,life:180,hitT:0,spin:{x:0.3,y:0.6}});
+  radius:BP.canister.radius*0.9,name:'Контейнер',good:good,life:180,hitT:0,spin:{x:0.3,y:0.6}};
+ objects.push(c);
+ return c;
 }
 function boom(pos,n,col){
  for(var i=0;i<n;i++){var d=nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)));
@@ -1437,22 +1801,89 @@ window.addEventListener('keydown',function(e){
  }
 });
 window.addEventListener('keyup',function(e){keys[e.code]=false;});
-window.addEventListener('blur',function(){keys={};touch.up=false;touch.down=false;touch.fire=false;touch.yawL=false;touch.yawR=false;resetStick();});
-var stickEl=$('#stick'),knobEl=$('#knob'),stickActive=null;
-function resetStick(){touch.x=0;touch.y=0;knobEl.style.transform='translate(0,0)';stickEl.classList.remove('act');}
-function stickMove(e){
- var r=stickEl.getBoundingClientRect();
- if(r.width<2)return;
- var cx=r.left+r.width/2,cy=r.top+r.height/2;
- var dx=clamp((e.clientX-cx)/(r.width/2),-1,1),dy=clamp((e.clientY-cy)/(r.height/2),-1,1);
- touch.x=dx;touch.y=dy;
- knobEl.style.transform='translate('+(dx*(r.width/2-21))+'px,'+(dy*(r.height/2-21))+'px)';
+window.addEventListener('blur',function(){
+  keys={};touch.up=false;touch.down=false;touch.fire=false;touch.yawL=false;touch.yawR=false;
+  if(stickCaptured){ stickCaptured=false; stickEl.classList.remove('captured'); }
+  if(stickReturnAnim){ cancelAnimationFrame(stickReturnAnim); stickReturnAnim=null; }
+  resetStick();
+});
+
+/* ============================================================
+   ДЖОЙСТИК · toggle-захват
+   ============================================================ */
+var stickEl=$('#stick'),knobEl=$('#knob');
+var stickCaptured = false;
+var stickReturnAnim = null;
+
+function updateKnobVisual(){
+  var r = stickEl.getBoundingClientRect();
+  if(r.width < 2) return;
+  var maxOff = r.width/2 - 21;
+  if(maxOff <= 0) return;
+  knobEl.style.transform = 'translate(' + (touch.x*maxOff) + 'px,' + (touch.y*maxOff) + 'px)';
 }
-stickEl.addEventListener('pointerdown',function(e){e.preventDefault();SND.init();stickActive=e.pointerId;stickEl.classList.add('act');
- try{stickEl.setPointerCapture(e.pointerId);}catch(x){}stickMove(e);});
-stickEl.addEventListener('pointermove',function(e){if(stickActive===e.pointerId)stickMove(e);});
-stickEl.addEventListener('pointerup',function(){stickActive=null;resetStick();});
-stickEl.addEventListener('pointercancel',function(){stickActive=null;resetStick();});
+
+function resetStick(){
+  touch.x = 0; touch.y = 0;
+  knobEl.style.transform = 'translate(0,0)';
+  stickEl.classList.remove('act');
+}
+
+function stickMove(e){
+  var r = stickEl.getBoundingClientRect();
+  if(r.width < 2) return;
+  var cx = r.left + r.width/2;
+  var cy = r.top + r.height/2;
+  var dx = (e.clientX - cx) / (r.width/2);
+  var dy = (e.clientY - cy) / (r.height/2);
+  var mag = Math.sqrt(dx*dx + dy*dy);
+  if(mag > 1){ dx /= mag; dy /= mag; }
+  touch.x = dx;
+  touch.y = dy;
+  updateKnobVisual();
+}
+
+function smoothReturnStick(){
+  var startX = touch.x, startY = touch.y;
+  var startT = performance.now();
+  var dur = 220;
+  function anim(){
+    var t = Math.min(1, (performance.now() - startT) / dur);
+    var e = 1 - Math.pow(1-t, 3);
+    touch.x = startX * (1-e);
+    touch.y = startY * (1-e);
+    updateKnobVisual();
+    if(t < 1){
+      stickReturnAnim = requestAnimationFrame(anim);
+    } else {
+      touch.x = 0; touch.y = 0;
+      stickEl.classList.remove('act');
+      stickReturnAnim = null;
+    }
+  }
+  stickReturnAnim = requestAnimationFrame(anim);
+}
+
+stickEl.addEventListener('pointerdown', function(e){
+  if(e.button !== 0 && e.pointerType === 'mouse') return;
+  e.preventDefault();
+  SND.init();
+  if(stickReturnAnim){ cancelAnimationFrame(stickReturnAnim); stickReturnAnim = null; }
+  if(stickCaptured){
+    stickCaptured = false;
+    stickEl.classList.remove('captured');
+    smoothReturnStick();
+  } else {
+    stickCaptured = true;
+    stickEl.classList.add('captured', 'act');
+    stickMove(e);
+  }
+});
+
+window.addEventListener('pointermove', function(e){
+  if(stickCaptured) stickMove(e);
+});
+
 function bindBtns(sel){
  Array.prototype.forEach.call(document.querySelectorAll(sel+' button'),function(b){
   var k=b.dataset.t;
@@ -1464,20 +1895,16 @@ function bindBtns(sel){
    else if(k==='dockc')toggleDockComp();
    else if(k==='tractor')toggleTractor();
    else if(k==='up')touch.up=true;
-   else if(k==='down')touch.down=true;
-   else if(k==='yawl')touch.yawL=true;
-   else if(k==='yawr')touch.yawR=true;}
+   else if(k==='down')touch.down=true;}
   function up(){b.classList.remove('on');
    if(k==='fire')touch.fire=false;
    else if(k==='up')touch.up=false;
-   else if(k==='down')touch.down=false;
-   else if(k==='yawl')touch.yawL=false;
-   else if(k==='yawr')touch.yawR=false;}
+   else if(k==='down')touch.down=false;}
   b.addEventListener('pointerdown',dn);b.addEventListener('pointerup',up);
   b.addEventListener('pointercancel',up);b.addEventListener('pointerleave',up);
  });
 }
-bindBtns('#penta');bindBtns('#yawbtns');
+bindBtns('#penta');
 
 function curve(v){var a=Math.abs(v);return a<0.09?0:(v<0?-1:1)*Math.pow(a,1.25);}
 function readInput(){
@@ -1488,7 +1915,6 @@ function readInput(){
  if(keys.KeyW||keys.ShiftLeft||keys.ShiftRight)thr+=1;if(keys.KeyS)thr-=1;
  pitch+=curve(-touch.y);roll+=curve(touch.x);
  if(touch.up)thr+=1;if(touch.down)thr-=1;
- if(touch.yawL)yaw-=1;if(touch.yawR)yaw+=1;
  return{pitch:clamp(pitch,-1,1),roll:clamp(roll,-1,1),yaw:clamp(yaw,-1,1),thr:clamp(thr,-1,1)};
 }
 cv.addEventListener('click',function(e){
@@ -1600,6 +2026,7 @@ function energyBomb(){
 function spawnPoliceSoon(){if(policeTimer<0)policeTimer=rnd(5,12);}
 function killObj(o){
  var idx=objects.indexOf(o);if(idx<0)return;
+ var missionKill = o.isMissionTarget && mission && mission.stage === 'accepted';
  if(o.kind==='pirate'||o.kind==='police'){
   say(o, pickChatter(o.kind==='pirate'?'pirateHit':'policeHit'), '#ff8b3e');
  }
@@ -1622,6 +2049,7 @@ function killObj(o){
   for(i=0;i<cans;i++)spawnCanister(add(o.pos,V(rnd(-90,90),rnd(-90,90),rnd(-90,90))),Math.floor(Math.random()*QQ23.length));
   if(sp&&sp.scoop!==undefined)spawnCanister(add(o.pos,V(rnd(-70,70),rnd(-70,70),rnd(-70,70))),sp.scoop);
  }else if(o.kind==='ast'){CMD.score++;CMD.cash+=5;msg('Астероид · +5 Cr','#d8a06a');}
+ if(missionKill) completeMission();
 }
 function hurtPlayer(dmg,silent){
  P.energy-=dmg;P.dmgFlash=0.3;if(!silent)SND.hurt();
@@ -1631,8 +2059,10 @@ function hurtPlayer(dmg,silent){
 }
 function die(){
  if(state==='dead')return;
- SND.stopHum();
+ 
  SND.stopDockAmb();
+ mission = null;
+ renderBordComp();
  if(CMD.eq.escape){
   CMD.eq.escape=0;
   boom(add(P.pos,mul(P.b.f,300)),20,'#ff8b3e');SND.boom();
@@ -1681,12 +2111,19 @@ function toggleTractor(){
  msg(CMD.tractorOn?'ТРАКТОР: ЗАХВАТ (500 м)':'Трактор выкл',CMD.tractorOn?'#3fdcff':'#8492a8');
  SND.beep();
 }
+function checkMissionDelivery(){
+ if(!mission) return;
+ if(CMD.sysIdx !== mission.targetSys) return;
+ if(mission.type === 'courier' && mission.stage !== 'delivering') return;
+ if(mission.type === 'vip' && mission.stage !== 'accepted') return;
+ completeMission();
+}
 function doDock(){
  state='docked';prevState='docked';
  CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();
  P.speed=0;bolts=[];P.laserHeat=0;P.laserOverheated=false;
  SND.dock();vib([30,40,80]);
- SND.stopHum();
+ 
  SND.startDockAmb();
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
@@ -1695,6 +2132,7 @@ function doDock(){
   say(station, pickChatter('greeting') + ', ' + CMD.name, '#3fdcff');
  }
  msg('В доке: ' + (Math.floor(Math.random()*5)+1) + ' кораблей · ' + (Math.random()<0.5?'свободен':'занят') + ' док 3', '#8492a8');
+ checkMissionDelivery();
  var evNews = driftMarket();
  if(evNews) msg('Рынок: ' + evNews, '#ffd426');
  CMD.energySaved=P.energy;saveGame(true);openMarket();
@@ -1719,7 +2157,7 @@ function launch(){
  P.laserHeat = 0;P.laserOverheated = false;
  stationGreeted = false;
  SND.stopDockAmb();
- SND.startHum();
+ 
  msg('Отстыковка выполнена · удачи, '+CMD.name,'#3fdcff');
  try{SND.dock();}catch(e){}
  updateBar();
@@ -1747,6 +2185,18 @@ function arrive(){
  if(!hyperGal&&hyperTo!==prev)CMD.visited++;
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
+ /* Проверка миссии */
+ if(mission){
+  if(mission.type === 'courier' && mission.stage === 'accepted' && !mission.hasContainer){
+   msg('МИССИЯ ПРОВАЛЕНА: контейнер потерян', '#ff4b3e');
+   mission = null;
+   renderBordComp();
+  } else if(mission.type && mission.type.indexOf('kill_') === 0 && CMD.sysIdx !== mission.spawnSysIdx){
+   msg('МИССИЯ ПРОВАЛЕНА: цель недоступна', '#ff4b3e');
+   mission = null;
+   renderBordComp();
+  }
+ }
  var outDir=station.b.f;
  var side=orbit.side;
  var cos_ang=rnd(0.3,1.0);
@@ -1772,8 +2222,9 @@ function steerTo(o,want,rate,dt){
 
 function update(dt){
  ambientTick(dt);
+ missionTick(dt);
  CMD.time+=dt;burnT-=dt;warnT-=dt;scoopMsgT-=dt;
- if(SND.setHum) SND.setHum(50 + P.speed*0.2, 0.008 + (P.speed/P.maxSpeed)*0.015);
+
  var inp=readInput(),pr=1.55*dt,rr=1.95*dt,yr=0.9*dt;
  if(inp.pitch){P.b.u=rotAxis(P.b.u,P.b.r,inp.pitch*pr);P.b.f=rotAxis(P.b.f,P.b.r,inp.pitch*pr);}
  if(inp.roll){var ra=-inp.roll*rr;P.b.r=rotAxis(P.b.r,P.b.f,ra);P.b.u=rotAxis(P.b.u,P.b.f,ra);}
@@ -1878,18 +2329,36 @@ function update(dt){
     var pull=320*(1-dc/500);
     o.vel=add(o.vel,mul(pullDir,pull*dt));
     if(dc<170){
+     if(o.isMissionContainer && mission && mission.type === 'courier'){
+      mission.hasContainer = true;
+      mission.stage = 'delivering';
+      mission.message = 'МИССИЯ · контейнер на борту. Доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
+      msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');
+      SND.scoop();
+      renderBordComp();
+      objects.splice(i,1); continue;
+     }
      if(cargoCount()>=cargoMax())msg('Трюм полон','#ff4b3e');
      else{CMD.cargo[o.good]++;msg('Захвачено: '+GOODS_RU[o.good],'#ffd426');SND.scoop();}
      objects.splice(i,1);continue;
     }
    }
    if(dc<170){
+    if(o.isMissionContainer && mission && mission.type === 'courier'){
+     mission.hasContainer = true;
+     mission.stage = 'delivering';
+     mission.message = 'МИССИЯ · контейнер на борту. Доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
+     msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');
+     SND.scoop();
+     renderBordComp();
+     objects.splice(i,1);continue;
+    }
     if(P.speed>=260)msg('Слишком быстро','#ff4b3e');
     else if(cargoCount()>=cargoMax())msg('Трюм полон','#ff4b3e');
     else{CMD.cargo[o.good]++;msg('Захвачено: '+GOODS_RU[o.good],'#ffd426');SND.scoop();}
     objects.splice(i,1);continue;
    }
-   if(o.life<=0||dc>200000)objects.splice(i,1);
+    if(!o.isMissionContainer && (o.life<=0||dc>200000))objects.splice(i,1);
    continue;
   }
   if(o.kind==='ast'){
@@ -2148,9 +2617,10 @@ function drawObj(o,vb){
  else if(o.kind==='pirate')col='#ffb0a0';
  else if(o.kind==='police')col='#9fd6ff';
  else if(o.kind==='station')col='#7fa8d0';
- else if(o.kind==='cargo')col='#ffe9a0';
+ else if(o.kind==='cargo')col=o.isMissionContainer?'#ffd426':'#ffe9a0';
  else if(o.kind==='ast')col='#d8c39a';
  else col='#c9ffbe';
+ if(o.isMissionTarget) col = '#ff4b3e';
  alpha=o.kind==='debris'?clamp(o.life/o.maxLife,0,1):0.6+bright*0.4;
  ctx.strokeStyle=col;ctx.lineJoin='round';ctx.lineCap='round';
  ctx.globalAlpha=alpha*0.16;ctx.lineWidth=lw*3.4;ctx.stroke();
@@ -2262,7 +2732,6 @@ function surface(vb,c,sr,pl,d, pCtx){
  fill(BUCK[9],pal.ice[1],'rgba(255,255,255,.2)');
  fill(BUCK[10],pal.ice[1],'rgba(255,255,255,.22)');
  fill(BUCK[11],pal.ice[1],'rgba(255,255,255,.26)');
- /* Огни городов на ночной стороне */
  if(pCtx && sr > 60){
   pCtx.fillStyle = 'rgba(255, 200, 100, 0.6)';
   for(var gi=0; gi<verts.length; gi+=53){
@@ -2338,6 +2807,7 @@ function radarRange(){
   if(o.kind==='debris'||o.kind==='ast')continue;
   var d=ln(sub(o.pos,P.pos));
   if(d<26000)need=Math.max(need,d*1.05);
+  if(o.isMissionContainer||o.isMissionTarget)need=Math.max(need,d*1.05);
  }
  for(i=0;i<RANGES.length;i++)if(RANGES[i]>=need)return RANGES[i];
  return RANGES[RANGES.length-1];
@@ -2397,18 +2867,39 @@ function drawRadar(vb,dt,target){
   if(rr>R*0.96){var sc=(R*0.96)/Math.max(1e-6,rr);X*=sc;Y*=sc;out=true;}
   var x=cx+X,y=cy+Y;
   var sz=Math.max(2.6,3.6*u),col='#8cff6a',shape='dot',ang=0;
-  if(o.kind==='station'){col='#3fdcff';shape='sq';sz=Math.max(4,5.4*u);}
-  else if(o.kind==='cargo'){col='#ffd426';shape='dia';}
-  else if(o.kind==='ast'){col='#c9a06a';shape='dot';}
-  else if(o.kind==='missile'){col='#ff9d4b';shape='dot';}
-  else{
-   var f=toLocal(vb,o.b.f);ang=Math.atan2(f.x,f.z);shape='tri';
-   if(o.kind==='pirate')col=o.hostile?'#ff5f4d':'#8cff6a';
-   else if(o.kind==='police')col=(CMD.legal>=1)?'#ff5f4d':'#7fd0ff';
-   else col='#8cff6a';
-   if(o.kind==='pirate'||o.kind==='police')col=o.police?'#7fd0ff':'#ff5f4d';
+  /* Спец. отрисовка миссий */
+  if(o.isMissionContainer || o.isMissionTarget){
+   ctx.globalAlpha = out ? 0.6 : 1;
+   if(o.isMissionContainer){
+    ctx.strokeStyle='#ffd426'; ctx.lineWidth=Math.max(1.5,1.8*u);
+    ctx.beginPath(); ctx.arc(x,y,sz*1.9,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x,y,sz*1.15,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#ffd426'; ctx.beginPath(); ctx.arc(x,y,sz*0.4,0,Math.PI*2); ctx.fill();
+   } else {
+    ctx.strokeStyle='#ff4b3e'; ctx.lineWidth=Math.max(1.5,1.8*u);
+    ctx.beginPath(); ctx.arc(x,y,sz*1.6,0,Math.PI*2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x-sz*0.75,y-sz*0.75); ctx.lineTo(x+sz*0.75,y+sz*0.75);
+    ctx.moveTo(x+sz*0.75,y-sz*0.75); ctx.lineTo(x-sz*0.75,y+sz*0.75);
+    ctx.stroke();
+    var f2 = toLocal(vb, o.b.f);
+    radarBlip(x,y,'#ff4b3e','tri',sz*0.7,Math.atan2(f2.x,f2.z));
+   }
+   ctx.globalAlpha = 1;
+  } else {
+   if(o.kind==='station'){col='#3fdcff';shape='sq';sz=Math.max(4,5.4*u);}
+   else if(o.kind==='cargo'){col='#ffd426';shape='dia';}
+   else if(o.kind==='ast'){col='#c9a06a';shape='dot';}
+   else if(o.kind==='missile'){col='#ff9d4b';shape='dot';}
+   else{
+    var f=toLocal(vb,o.b.f);ang=Math.atan2(f.x,f.z);shape='tri';
+    if(o.kind==='pirate')col=o.hostile?'#ff5f4d':'#8cff6a';
+    else if(o.kind==='police')col=(CMD.legal>=1)?'#ff5f4d':'#7fd0ff';
+    else col='#8cff6a';
+    if(o.kind==='pirate'||o.kind==='police')col=o.police?'#7fd0ff':'#ff5f4d';
+   }
+   ctx.globalAlpha=out?0.6:1;radarBlip(x,y,col,shape,sz,ang);ctx.globalAlpha=1;
   }
-  ctx.globalAlpha=out?0.6:1;radarBlip(x,y,col,shape,sz,ang);ctx.globalAlpha=1;
   var el=Math.atan2(l.y,Math.max(1,hp));
   if(Math.abs(el)>0.10){
    var dirr=el>0?-1:1,len=Math.min(R*0.16,Math.abs(el)*R*0.55);
@@ -2498,15 +2989,47 @@ function drawHUD(vb,dt,target){
  ctx.fillStyle=en>0.5?'#8cff6a':(en>0.22?'#ffd426':'#ff4b3e');
  ctx.fillRect(ex-3*u,ey+eh-eh*en,6*u,Math.max(1,eh*en));
  for(i=0;i<=4;i++){var y2=ey+eh-eh*(i/4);ctx.strokeStyle=g;ctx.beginPath();ctx.moveTo(ex-(i%2===0?10:6)*u,y2);ctx.lineTo(ex,y2);ctx.stroke();}
+ /* ПРИБОР КРЕНА (круглый) — заменяет прямоугольный */
  var R=clamp(Math.min(W,H)*0.175,62,152);
- var rx=Math.max(70,W/2-R-70),ry=H-R-Math.max(12,H*0.028),rw=Math.min(52,W*0.045);
- ctx.strokeStyle=g;ctx.strokeRect(rx-rw,ry-13*u,rw*2,26*u);
- ctx.beginPath();ctx.moveTo(rx-rw,ry);ctx.lineTo(rx-rw+6*u,ry);ctx.moveTo(rx+rw-6*u,ry);ctx.lineTo(rx+rw,ry);ctx.stroke();
- var rra=Math.atan2(P.b.r.y,Math.max(1e-6,Math.hypot(P.b.r.x,P.b.r.z)))*(P.rear?-1:1);
- ctx.save();ctx.translate(rx,ry+clamp(P.b.f.y,-1,1)*11*u);ctx.rotate(rra);
- ctx.strokeStyle='#eaffea';ctx.lineWidth=Math.max(1.4,2*u);ctx.beginPath();ctx.moveTo(-rw*0.82,0);ctx.lineTo(rw*0.82,0);ctx.stroke();ctx.restore();
+ var rcx=Math.max(80,W/2-R-80),rcy=H-R-Math.max(12,H*0.028);
+ var rollR=Math.min(42,W*0.045);
+ var rra=Math.atan2(P.b.r.y,Math.max(1e-6,Math.hypot(P.b.r.x,P.b.r.z)));
+ if(P.rear) rra = -rra;
+ // Внешний круг
+ ctx.strokeStyle=g;ctx.lineWidth=Math.max(1.2,1.5*u);
+ ctx.beginPath();ctx.arc(rcx,rcy,rollR,0,Math.PI*2);ctx.stroke();
+ // Внутренний круг (фон)
+ ctx.fillStyle='rgba(8,16,8,0.5)';
+ ctx.beginPath();ctx.arc(rcx,rcy,rollR-1,0,Math.PI*2);ctx.fill();
+ // Горизонт, поворачивается на rra
+ ctx.save();ctx.translate(rcx,rcy);ctx.rotate(rra);
+ ctx.strokeStyle='rgba(140,255,106,0.5)';ctx.lineWidth=Math.max(0.8,1*u);
+ ctx.beginPath();ctx.arc(0,0,rollR*0.7,0,Math.PI*2);ctx.stroke();
+ ctx.strokeStyle='#eaffea';ctx.lineWidth=Math.max(1.4,2*u);
+ ctx.beginPath();ctx.moveTo(-rollR*0.85,0);ctx.lineTo(rollR*0.85,0);ctx.stroke();
+ // Метки крена
+ var marks=[-60,-45,-30,-15,0,15,30,45,60];
+ ctx.strokeStyle='rgba(140,255,106,0.65)';ctx.lineWidth=Math.max(0.8,1.1*u);
+ for(var mi=0;mi<marks.length;mi++){
+  var ma=marks[mi]*Math.PI/180;
+  var mr1=rollR*0.85, mr2=rollR*(mi===4?0.72:0.78);
+  ctx.beginPath();
+  ctx.moveTo(Math.sin(ma)*mr1,-Math.cos(ma)*mr1);
+  ctx.lineTo(Math.sin(ma)*mr2,-Math.cos(ma)*mr2);
+  ctx.stroke();
+ }
+ ctx.restore();
+ // Фиксированный символ самолёта (треугольник) в центре
+ ctx.fillStyle='#ffd426';
+ ctx.beginPath();
+ ctx.moveTo(rcx,rcy-rollR*0.13);
+ ctx.lineTo(rcx-rollR*0.13,rcy+rollR*0.15);
+ ctx.lineTo(rcx+rollR*0.13,rcy+rollR*0.15);
+ ctx.closePath();ctx.fill();
+ // Подпись
  ctx.fillStyle='rgba(140,255,106,.6)';ctx.font=Math.round(fs*0.72)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
- ctx.fillText('КРЕН/ТАНГАЖ',rx,ry+26*u);ctx.textAlign='left';
+ ctx.fillText('КРЕН',rcx,rcy+rollR+fs*0.9);ctx.textAlign='left';
+ /* конец прибора крена */
  ctx.font=Math.round(fs*0.82)+'px "JetBrains Mono",monospace';ctx.fillStyle=g;
  var ty=H*0.07;
  ctx.fillText('СКОРОСТЬ '+(P.speed/P.maxSpeed*0.35).toFixed(2)+' LM',W*0.022,ty);
@@ -2634,6 +3157,7 @@ function loop(ts){
  var dt=Math.min(0.05,raw);
  if(firstFrame){firstFrame=false;layout();}
  try{
+  bgSoundTick(dt);
   planet.rot+=planet.spin*dt;
   if(state==='flight')update(dt);
   else if(state==='hyper'){hyperT+=dt;if(hyperT>2.1)arrive();}
@@ -2723,6 +3247,9 @@ function updateBar(){
    bb.style.display = 'none';
   }
  }
+
+ var bcomp = $('#bordcomp');
+ if(bcomp){ bcomp.style.display = (state === 'flight') ? 'block' : 'none'; }
 
  var inDockForUI = (state==='docked') || (prevState==='docked') ||
                    (state==='pause' && prevState==='docked') ||
@@ -2995,15 +3522,17 @@ function drawChart(){
   if(p.x<-40||p.x>GW+40||p.y<-40||p.y>GH+40)continue;
   if(p.z<0)continue;
   var dist=lyBetween(ref,p.sys);var inRange=dist<=fuel;var visited=visitedArr.indexOf(p.idx)>=0;
+  var isMissionTgt = mission && (mission.type === 'courier' || mission.type === 'vip') && p.idx === mission.targetSys;
   var col,r,rLab;
   if(p.idx===CMD.sysIdx){col='#ffd426';r=5.5;rLab=true;currentP=p;}
+  else if(isMissionTgt){col='#ff8b3e';r=5.5;rLab=true;}
   else if(p.idx===targetSys){col='#ffffff';r=4.5;rLab=true;targetP=p;}
   else if(visited){col=inRange?'#8cff6a':'#5a8a5f';r=3;rLab=inRange;}
   else{col=inRange?'#6fa8ff':'#3a5060';r=2.2;rLab=inRange;}
   gctx.globalAlpha=0.35+0.65*clamp(p.z*1.5,0,1);
   gctx.fillStyle=col;gctx.beginPath();gctx.arc(p.x,p.y,r,0,Math.PI*2);gctx.fill();
   gctx.globalAlpha=1;
-  if(rLab)labelQueue.push({p:p,color:col,big:(p.idx===CMD.sysIdx||p.idx===targetSys)});
+  if(rLab)labelQueue.push({p:p,color:col,big:(p.idx===CMD.sysIdx||p.idx===targetSys||isMissionTgt)});
  }
  if(targetP&&currentP){gctx.strokeStyle='rgba(255,255,255,0.55)';gctx.lineWidth=1.5;gctx.setLineDash([5,5]);gctx.beginPath();gctx.moveTo(currentP.x,currentP.y);gctx.lineTo(targetP.x,targetP.y);gctx.stroke();gctx.setLineDash([]);}
  gctx.textAlign='left';
@@ -3039,7 +3568,11 @@ function updateChartInfo(){
  var pinfo=planetInfoFor(s);
  $('#ch-planet').textContent=pinfo.name+' · r='+pinfo.radius.toLocaleString('ru-RU')+' км';
  $('#ch-jump').disabled=!(d>0.05&&ok)||(prevState==='docked');
- $('#ch-note').textContent=(i===CMD.sysIdx)?'Вы здесь.':(!ok?'Мало топлива.':(prevState==='docked'?'Отстыкуйтесь от станции.':'Прыжок доступен.'));
+ var note = (i===CMD.sysIdx)?'Вы здесь.':(!ok?'Мало топлива.':(prevState==='docked'?'Отстыкуйтесь от станции.':'Прыжок доступен.'));
+ if(mission && (mission.type === 'courier' || mission.type === 'vip') && i === mission.targetSys){
+  note = 'МИССИЯ · награда: ' + mission.reward + ' Cr';
+ }
+ $('#ch-note').textContent = note;
 }
 var chartDrag=null;
 gc.addEventListener('pointerdown',function(e){chartDrag={x:e.clientX,y:e.clientY,rx:CVT.rotX,ry:CVT.rotY,moved:0};try{gc.setPointerCapture(e.pointerId);}catch(x){}});
@@ -3129,7 +3662,12 @@ function loadGame(){
   MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
   MEMORY.bounty = 0;
   ambientTimer = 25;
+  bgSoundTimer = 12;
+  missionSpawnTimer = 45;
+  vipPirateTimer = 0;
+  mission = null;
   stationGreeted = false;
+  renderBordComp();
   targetSys=null;state='flight';prevState='flight';show(null);
   msg('Загружено · '+curSys.name+' · '+curShip().ru,'#3fdcff');
   return true;
@@ -3146,6 +3684,10 @@ function newGame(name){
  MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
  MEMORY.bounty = 0;
  ambientTimer = 20;
+ bgSoundTimer = 12;
+ missionSpawnTimer = 45;
+ vipPirateTimer = 0;
+ mission = null;
  stationGreeted = false;
  buildSystem(7,true);
  state='docked';prevState='docked';
@@ -3154,8 +3696,9 @@ function newGame(name){
  msg('Вы в доке станции «Кориолис» · нажмите «ОТСТЫКОВКА», когда будете готовы','#3fdcff');
  msg('Совет: начните с покупки товаров · цель для первого рейса — ZAONCE','#ffd426');
  SND.init();SND.beep();saveGame(true);
- SND.stopHum();
+ 
  SND.startDockAmb();
+ renderBordComp();
  openMarket();
 }
 function toTitle(){state='title';prevState='title';show('ov-title');$('#btn-cont').disabled=!hasSave();demoWorld();layout();}
@@ -3189,6 +3732,7 @@ setTimeout(layout,60);
 setTimeout(layout,400);
 $('#btn-cont').disabled=!hasSave();
 $('#cmdr').value='JAMESON';
+renderBordComp();
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
 initNewsTicker();
 requestAnimationFrame(loop);
