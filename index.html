@@ -1094,24 +1094,17 @@ function drawBrightStars(vb){
     var px = W/2 + (l.x/l.z)*FOCAL;
     var py = H/2 - (l.y/l.z)*FOCAL;
     if(px<-20||px>W+20||py<-20||py>H+20) continue;
-    var coreR = 1.2 + s.m*1.6;
-    var glowR = coreR * (3 + s.m*2);
-    // Мягкое свечение
-    try{
-      var g = ctx.createRadialGradient(px, py, 0, px, py, glowR);
-      g.addColorStop(0, 'rgba(235,245,255,'+(0.35+s.m*0.35)+')');
-      g.addColorStop(0.4, 'rgba(200,220,255,0.12)');
-      g.addColorStop(1, 'rgba(180,200,255,0)');
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(px, py, glowR, 0, Math.PI*2);
-      ctx.fill();
-    }catch(e){}
-    // Ядро
-    ctx.fillStyle = 'rgba(250,252,255,'+(0.85+s.m*0.15)+')';
+    var sz = 1.5 + s.m*2.5;   // ← короче (было 3–7, стало 1.5–4)
+    // Лучи — очень тусклые
+    ctx.strokeStyle = 'rgba(200,220,255,'+(0.12+s.m*0.15)+')';  // ← было 0.6+0.4, стало 0.12+0.15
+    ctx.lineWidth = 0.7;        // ← тоньше
     ctx.beginPath();
-    ctx.arc(px, py, coreR, 0, Math.PI*2);
-    ctx.fill();
+    ctx.moveTo(px-sz, py); ctx.lineTo(px+sz, py);
+    ctx.moveTo(px, py-sz); ctx.lineTo(px, py+sz);
+    ctx.stroke();
+    // Ядро
+    ctx.fillStyle = 'rgba(255,255,255,'+(0.7+s.m*0.3)+')';
+    ctx.fillRect(px-1, py-1, 2, 2);
   }
 }
 
