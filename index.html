@@ -165,83 +165,30 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
  .penta .lbl{font-size:6.5px}
  .penta-lab{left:8px;bottom:calc(8px + 2 * 56px + 4px)}
 }
-/* ===== NEWS TICKER ===== */
 .newsbar{flex:none;height:26px;background:#070b12;border-bottom:1px solid var(--line);display:flex;align-items:center;overflow:hidden;font-family:var(--f-mono);font-size:11px;position:relative}
 .news-label{flex:none;padding:0 12px;height:100%;display:flex;align-items:center;background:#0a1018;border-right:1px solid var(--line);color:var(--grn);font-weight:600;font-size:10px;letter-spacing:.1em;z-index:2;text-shadow:0 0 8px #8cff6a55}
 .news-view{flex:1;min-width:0;height:100%;overflow:hidden;position:relative}
 .newsticker{display:inline-block;white-space:nowrap;padding-left:100%;will-change:transform;color:var(--mut);line-height:26px}
 @keyframes scroll-news{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+/* Вторая строка — рынок */
+.newsbar.market{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0a0812}
+.newsbar.market .news-label{color:var(--yl);background:#120e08;text-shadow:0 0 8px #ffd42655;border-right-color:#2a1f10}
+.newsbar.market .newsticker{padding-left:0;color:var(--yl)}
+@keyframes scroll-market{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 #st-bounty{color:var(--mut)}
 #st-bounty b{color:var(--rd)}
-/* ===== ONBOARD COMPUTER ===== */
-.bordcomp{
-  position:absolute;
-  right:150px;
-  bottom:30px;
-  width:220px;
-  font-family:var(--f-mono);
-  font-size:10px;
-  color:var(--grn);
-  background:transparent;
-  border:1px solid rgba(140,255,106,0.55);
-  border-radius:8px;
-  padding:8px 10px;
-  z-index:6;
-  text-shadow:0 0 4px #8cff6a55;
-  min-height:80px;
-  max-height:160px;
-  overflow:hidden;
-  display:none;
-}
-.bc-title{
-  font-size:9px;
-  letter-spacing:.15em;
-  color:var(--cy);
-  margin-bottom:4px;
-  text-transform:uppercase;
-}
-.bc-body{
-  font-size:10.5px;
-  color:var(--grn);
-  line-height:1.4;
-  margin-bottom:6px;
-  word-wrap:break-word;
-  max-height:100px;
-  overflow-y:auto;
-}
-.bc-buttons{
-  display:flex;
-  gap:4px;
-}
-.bc-buttons button{
-  padding:4px 8px;
-  font-size:10px;
-  flex:1;
-}
-.bc-buttons button.pri{
-  background:#16301a;
-  border-color:#3a7a3c;
-  color:#d8ffc9;
-}
-/* ===== STICK CAPTURED ===== */
-.stick.captured{
-  border-color:#ffd426;
-  box-shadow:0 0 0 1px #0006,inset 0 0 26px #0009,0 0 16px #ffd42666;
-}
-.stick.captured .knob{
-  border-color:#ffd426;
-  box-shadow:0 0 16px #ffd42688;
-}
+.bordcomp{position:absolute;right:150px;bottom:30px;width:220px;font-family:var(--f-mono);font-size:10px;color:var(--grn);background:transparent;border:1px solid rgba(140,255,106,0.55);border-radius:8px;padding:8px 10px;z-index:6;text-shadow:0 0 4px #8cff6a55;min-height:80px;max-height:160px;overflow:hidden;display:none}
+.bc-title{font-size:9px;letter-spacing:.15em;color:var(--cy);margin-bottom:4px;text-transform:uppercase}
+.bc-body{font-size:10.5px;color:var(--grn);line-height:1.4;margin-bottom:6px;word-wrap:break-word;max-height:100px;overflow-y:auto}
+.bc-buttons{display:flex;gap:4px}
+.bc-buttons button{padding:4px 8px;font-size:10px;flex:1}
+.bc-buttons button.pri{background:#16301a;border-color:#3a7a3c;color:#d8ffc9}
+.stick.captured{border-color:#ffd426;box-shadow:0 0 0 1px #0006,inset 0 0 26px #0009,0 0 16px #ffd42666}
+.stick.captured .knob{border-color:#ffd426;box-shadow:0 0 16px #ffd42688}
 @media(max-width:820px){
-  .bordcomp{
-    right:120px;
-    bottom:16px;
-    width:150px;
-    max-height:130px;
-    padding:6px 8px;
-  }
-  .bc-body{font-size:9.5px;max-height:70px;}
-  .bc-buttons button{padding:3px 6px;font-size:9px;}
+  .bordcomp{right:120px;bottom:16px;width:150px;max-height:130px;padding:6px 8px}
+  .bc-body{font-size:9.5px;max-height:70px}
+  .bc-buttons button{padding:3px 6px;font-size:9px}
 }
 </style>
 </head>
@@ -272,12 +219,21 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
     </div>
   </div>
 
+  <div class="newsbar market">
+    <div class="news-label">▸ РЫНОК</div>
+    <div class="news-view">
+      <div class="newsticker" id="marketsticker">сбор данных…</div>
+    </div>
+  </div>
+
+
   <div class="newsbar">
     <div class="news-label">▸ НОВОСТИ</div>
     <div class="news-view">
       <div class="newsticker" id="newsticker">загрузка эфира…</div>
     </div>
   </div>
+
 
   <div class="stage" id="stage">
     <div class="screen" id="screen">
@@ -483,7 +439,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
           <span><kbd>P / Esc</kbd></span><span>пауза</span>
           <span><kbd>L / Esc в доке</kbd></span><span>отстыковка от станции</span>
         </div>
-        <div class="note">Гиперпрыжок только из космоса. Корабли появляются из окна станции. Столкновение с корпусом — урон. В окно можно влетать только через слот. Из кормового вида стрельба невозможна. Новая игра начинается сразу в доке — нажмите «ОТСТЫКОВКА», когда будете готовы. Бортовой компьютер (в полёте, между радаром и джойстиком) принимает заказы на курьерские доставки, VIP-пассажиров и уничтожение целей.</div>
+        <div class="note">Гиперпрыжок только из космоса. Корабли появляются из окна станции. Столкновение с корпусом — урон. В окно можно влетать только через слот. Из кормового вида стрельба невозможна. Новая игра начинается сразу в доке. Вторая строка сверху — рыночная сводка по посещённым системам в радиусе 7 св. лет (разница в кредитах относительно текущей станции).</div>
         <div class="btnrow" style="justify-content:flex-start">
           <button id="btn-help-guide">ХРОНИКИ ГАЛАКТИК</button>
           <button class="pri" id="btn-help-close">ЗАКРЫТЬ</button>
@@ -709,6 +665,74 @@ function nextNewsItem(){
   newsTickerEl.style.animation = 'scroll-news ' + dur + 's linear 1';
 }
 
+/* ============================================================
+   ВТОРАЯ БЕГУЩАЯ СТРОКА · РЫНОК
+   ============================================================ */
+function abbrGood(name){
+  if(name === 'Механизмы') return 'Мех';
+  if(name === 'Иноплан. товар') return 'Иноп';
+  if(name === 'Алкоголь/вина') return 'Алко';
+  return name.slice(0, 4);
+}
+
+var marketTickerEl = null;
+function rebuildMarketTicker(){
+  if(!marketTickerEl){
+    marketTickerEl = document.getElementById('marketsticker');
+  }
+  if(!marketTickerEl) return;
+
+  if(!curSys || !CMD.market || !CMD.visitedSystems){
+    marketTickerEl.textContent = '<< НЕТ ДАННЫХ О РЫНКАХ В РАДИУСЕ 7 СВ. ЛЕТ >>';
+    marketTickerEl.style.animation = 'none';
+    return;
+  }
+
+  var sys = galaxy(gal);
+  var visited = CMD.visitedSystems || [];
+  var blocks = [];
+
+  for(var i = 0; i < sys.length; i++){
+    if(i === CMD.sysIdx) continue;
+    if(visited.indexOf(i) < 0) continue;
+    var d = lyBetween(curSys, sys[i]);
+    if(d > 7) continue;
+
+    var m = marketOf(sys[i]);
+    var parts = [];
+
+    for(var g = 0; g < GOODS_RU.length; g++){
+      var baseCr = CMD.market[g].price / 10;
+      var otherCr = m[g].price / 10;
+      var delta = otherCr - baseCr;
+      var threshold = Math.max(1, Math.abs(baseCr) * 0.05);
+      if(Math.abs(delta) < threshold) continue;
+      var sign = delta > 0 ? '+' : '';
+      var color = delta > 0 ? 'var(--grn)' : 'var(--rd)';
+      parts.push(abbrGood(GOODS_RU[g]) + ' <span style="color:' + color + ';font-weight:600">' + sign + Math.round(delta) + '</span>');
+    }
+
+    if(parts.length === 0) continue;
+    blocks.push('<< ' + sys[i].name + ' * ' + parts.join(' * ') + ' >>');
+  }
+
+  if(blocks.length === 0){
+    marketTickerEl.textContent = '<< НЕТ ДАННЫХ О РЫНКАХ В РАДИУСЕ 7 СВ. ЛЕТ >>';
+    marketTickerEl.style.animation = 'none';
+    return;
+  }
+
+  var txt = blocks.join('      ·      ');
+  var gap = '      ·      ';
+  marketTickerEl.innerHTML = txt + gap + txt + gap;
+  marketTickerEl.style.animation = 'none';
+  void marketTickerEl.offsetWidth;
+  var totalW = marketTickerEl.offsetWidth;
+  if(totalW < 50) return;
+  var dur = Math.max(25, totalW / 130);
+  marketTickerEl.style.animation = 'scroll-market ' + dur + 's linear infinite';
+}
+
 var PLANET_TYPES=['earth','ocean','desert','ice','volcanic','toxic'];
 var PLANET_NAMES={earth:'землеподобная',ocean:'океаническая',desert:'пустынная',ice:'ледяная',volcanic:'вулканическая',toxic:'токсичная'};
 var PLANET_PALETTES={
@@ -892,10 +916,7 @@ var SND={ac:null,on:true,
  buy:function(){this.tone(520,1040,0.16,'square',0.06);},
  beep:function(){this.tone(880,880,0.05,'square',0.04);},
  scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);},
- hum:null,humGain:null,dockAmb:null,
- startHum:function(){if(!this.ac||this.hum||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='sawtooth';o.frequency.value=55;g.gain.value=0;o.connect(g);g.connect(this.ac.destination);o.start();this.hum=o;this.humGain=g;}catch(e){}},
- setHum:function(freq,vol){if(!this.hum)return;if(!this.on)vol=0;try{this.hum.frequency.setTargetAtTime(freq,this.ac.currentTime,0.1);this.humGain.gain.setTargetAtTime(vol,this.ac.currentTime,0.1);}catch(e){}},
- stopHum:function(){if(!this.hum)return;try{this.hum.stop();}catch(e){}this.hum=null;this.humGain=null;},
+ dockAmb:null,
  startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
  stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
  chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
@@ -913,9 +934,7 @@ var SND={ac:null,on:true,
    var s=this.ac.createBufferSource();s.buffer=b;
    var f=this.ac.createBiquadFilter();f.type='bandpass';f.Q.value=4;
    var steps=8;
-   for(var k=0;k<=steps;k++){
-    f.frequency.setValueAtTime(400+Math.random()*2000, t+(k/steps)*dur);
-   }
+   for(var k=0;k<=steps;k++){f.frequency.setValueAtTime(400+Math.random()*2000, t+(k/steps)*dur);}
    var g=this.ac.createGain();
    g.gain.setValueAtTime(0.0001,t);
    g.gain.linearRampToValueAtTime(0.035,t+0.3);
@@ -934,9 +953,7 @@ var SND={ac:null,on:true,
   for(var i=0;i<len;i++)pattern.push(Math.random()<0.5?0:1);
   var delay=0;
   for(var j=0;j<pattern.length;j++){
-   (function(dur,delay){
-    setTimeout(function(){s.tone(900,900,dur,'sine',0.025);},delay*1000);
-   })(pattern[j]===0?0.06:0.18, delay);
+   (function(dur,delay){setTimeout(function(){s.tone(900,900,dur,'sine',0.025);},delay*1000);})(pattern[j]===0?0.06:0.18, delay);
    delay += (pattern[j]===0?0.06:0.18) + 0.08;
   }
  },
@@ -949,15 +966,12 @@ var SND={ac:null,on:true,
    var f1=800+Math.random()*1400;
    var f2=600+Math.random()*1800;
    var dur=0.05+Math.random()*0.15;
-   (function(f1,f2,dur,delay){
-    setTimeout(function(){s.tone(f1,f2,dur,'square',0.03);}, delay*1000);
-   })(f1,f2,dur,delay);
+   (function(f1,f2,dur,delay){setTimeout(function(){s.tone(f1,f2,dur,'square',0.03);}, delay*1000);})(f1,f2,dur,delay);
    delay += dur + 0.03 + Math.random()*0.1;
   }
  }
 };
 
-/* Радиоэфир */
 var CHATTER = {
   traderGreet: ['Держись подальше, пилот.','Хорошего полёта.','Видел пиратов у планеты.','Куда летишь?','Осторожно, тут неспокойно.','Груз везу, не задерживай.'],
   traderHit: ['Помогите!','Пираты!','Ты пожалеешь!','Вайперы уже летят!','Не стреляй, я мирный!','Что тебе надо?!'],
@@ -967,21 +981,10 @@ var CHATTER = {
   policeHit: ['Открываю огонь.','Подкрепление вызвано.','Вы окружены.','Сдавайтесь!','Мы найдём вас.'],
   station: ['Кориолис, приём.','Свободный док.','Добро пожаловать, пилот.','Осторожно, трафик.','Док 3 свободен.'],
   greeting: ['С возвращением, командир.','Хорошей охоты.','Снова вы?','С возвращением, странник.'],
-  distress: [
-    'Mayday, mayday! Пираты атакуют!',
-    'Требую помощи! Атакован!',
-    'Конвой в опасности!',
-    'Помогите, двигатель повреждён!',
-    'Пираты, прошу помощи!',
-    'Кто-нибудь, ответьте!'
-  ],
+  distress: ['Mayday, mayday! Пираты атакуют!','Требую помощи! Атакован!','Конвой в опасности!','Помогите, двигатель повреждён!','Пираты, прошу помощи!','Кто-нибудь, ответьте!'],
   thargon: ['⨀◈⬡ ⨁⨂ ⨄','⌬⏣ ⨀⨁⨂','⨅⨆ ◈◉⏣']
 };
-function pickChatter(kind){
-  var arr = CHATTER[kind];
-  if(!arr || !arr.length) return null;
-  return arr[Math.floor(Math.random()*arr.length)];
-}
+function pickChatter(kind){var arr = CHATTER[kind];if(!arr || !arr.length) return null;return arr[Math.floor(Math.random()*arr.length)];}
 function say(o, text, color){
   if(!text) return;
   var nm = o.pname ? '«'+o.pname+'»' : (o.name || '?');
@@ -989,7 +992,6 @@ function say(o, text, color){
   if(SND.chatterBlip) SND.chatterBlip();
 }
 
-/* Личности NPC */
 var NPC_NAMES = ['Кракен','Скайлер','Морган','Веспер','Роршах','Тень','Саргон','Немезида','Блэкджек','Гарпия','Ворон','Пиранья','Кобальт','Феникс','Кровавый','Скайлар','Дарт','Молот','Скиталец','Призрак'];
 var TRAITS = [
   {id:'agg',  name:'агрессивный', aggr:1.3, fleeAt:0.05, aimNoise:0.020, hpMul:1.0},
@@ -1000,31 +1002,16 @@ var TRAITS = [
   {id:'nov',  name:'новичок',     aggr:0.7, fleeAt:0.30, aimNoise:0.100, hpMul:0.8}
 ];
 function applyPersonality(o){
-  if(o.ship === 'thargon'){
-    o.aimNoise = 0.05;
-    o.fleeThreshold = 0.0;
-    o.sonarDone = false;
-    return o;
-  }
+  if(o.ship === 'thargon'){o.aimNoise = 0.05;o.fleeThreshold = 0.0;o.sonarDone = false;return o;}
   var t = TRAITS[Math.floor(Math.random()*TRAITS.length)];
-  o.trait = t;
-  o.pname = NPC_NAMES[Math.floor(Math.random()*NPC_NAMES.length)];
-  o.maxEnergy = Math.round(o.maxEnergy * t.hpMul);
-  o.energy = o.maxEnergy;
-  o.aggr = t.aggr;
-  o.fleeThreshold = t.fleeAt;
-  o.aimNoise = t.aimNoise;
-  o.sonarDone = false;
+  o.trait = t;o.pname = NPC_NAMES[Math.floor(Math.random()*NPC_NAMES.length)];
+  o.maxEnergy = Math.round(o.maxEnergy * t.hpMul);o.energy = o.maxEnergy;
+  o.aggr = t.aggr;o.fleeThreshold = t.fleeAt;o.aimNoise = t.aimNoise;o.sonarDone = false;
   o.name = o.name + ' «' + o.pname + '»';
   return o;
 }
 
-/* Память мира */
-var MEMORY = {
-  knownPirates: {},
-  factions: { traders:0, pirates:0, police:0, thargoids:0 },
-  bounty: 0
-};
+var MEMORY = {knownPirates: {},factions: { traders:0, pirates:0, police:0, thargoids:0 },bounty: 0};
 function rememberEncounter(o){
   if(!o.pname) return;
   if(o.kind !== 'pirate' && o.kind !== 'police') return;
@@ -1032,7 +1019,6 @@ function rememberEncounter(o){
   MEMORY.knownPirates[o.pname].count++;
 }
 
-/* Ambient events */
 var ambientTimer = 25;
 function spawnShipAt(type, hostile, police, pos){
   var sp = SHIP[type];
@@ -1043,9 +1029,7 @@ function spawnShipAt(type, hostile, police, pos){
     name:sp.ru+(police?' (полиция)':''),
     aggr:hostile?rnd(0.6,1):0.15, flee:false, hitT:0, laser:sp.laser,
     wanderT:rnd(2,5), wanderDir:V(0,0,1), ambient:true, chattered:false};
-  applyPersonality(o);
-  rememberEncounter(o);
-  objects.push(o);
+  applyPersonality(o);rememberEncounter(o);objects.push(o);
   return o;
 }
 function ambientTick(dt){
@@ -1061,46 +1045,34 @@ function ambientTick(dt){
 }
 function triggerAmbientBattle(){
   var ships = [];
-  for(var i=0;i<objects.length;i++){
-    var k=objects[i].kind;
-    if((k==='pirate'||k==='trader') && !objects[i].ambient && ln(sub(objects[i].pos,P.pos))<22000) ships.push(objects[i]);
-  }
+  for(var i=0;i<objects.length;i++){var k=objects[i].kind;
+    if((k==='pirate'||k==='trader') && !objects[i].ambient && ln(sub(objects[i].pos,P.pos))<22000) ships.push(objects[i]);}
   if(ships.length < 2) return;
   var a = ships[0];
-  var d = rnd(800, 1600);
-  var dir = nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)));
+  var d = rnd(800, 1600);var dir = nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)));
   var pos = add(a.pos, mul(dir, d));
   spawnShipAt('pirate', true, false, pos);
   msg('Вдалеке: бой между кораблями', '#ffd426');
 }
 function triggerDistress(){
   var near = null;
-  for(var i=0;i<objects.length;i++){
-    var o=objects[i];
-    if(o.kind==='trader' && !o.hostile && ln(sub(o.pos,P.pos))<18000){near=o;break;}
-  }
-  if(!near){
-    var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 16000)));
-    near = spawnShipAt('trader', false, false, pos);
-  }
+  for(var i=0;i<objects.length;i++){var o=objects[i];
+    if(o.kind==='trader' && !o.hostile && ln(sub(o.pos,P.pos))<18000){near=o;break;}}
+  if(!near){var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 16000)));near = spawnShipAt('trader', false, false, pos);}
   say(near, pickChatter('distress'), '#ff4b3e');
-  SND.tone(800, 400, 0.3, 'square', 0.06);
-  if(SND.alarm) SND.alarm();
+  SND.tone(800, 400, 0.3, 'square', 0.06);if(SND.alarm) SND.alarm();
   near.distress = true;
   var ppos = add(near.pos, V(rnd(-500,500), rnd(-500,500), rnd(-500,500)));
-  var p = spawnShipAt('sidewinder', true, false, ppos);
-  p.distressVictim = near;
+  var p = spawnShipAt('sidewinder', true, false, ppos);p.distressVictim = near;
   msg('Сигнал бедствия: ' + near.name, '#ff4b3e');
 }
 function triggerLandingTraffic(){
   if(!station) return;
   var axis = nrm(station.b.f);
   var startPos = add(station.pos, mul(axis, rnd(8000, 14000)));
-  var side = perpTo(axis);
-  startPos = add(startPos, mul(side, rnd(-3000, 3000)));
+  var side = perpTo(axis);startPos = add(startPos, mul(side, rnd(-3000, 3000)));
   var o = spawnShipAt(Math.random()<0.5?'cobra':'adder', false, false, startPos);
-  o.landing = true;
-  o.slotTarget = add(station.pos, mul(axis, STATION_SLOT_FACE));
+  o.landing = true;o.slotTarget = add(station.pos, mul(axis, STATION_SLOT_FACE));
   msg('Корабль заходит на посадку', '#3fdcff');
 }
 function triggerDriftingContainer(){
@@ -1109,18 +1081,13 @@ function triggerDriftingContainer(){
   msg('Дрейфующий контейнер рядом', '#ffd426');
 }
 
-/* Живая станция */
 var stationLights = [];
 var stationGreeted = false;
 function buildStationLights(){
   stationLights = [];
   if(!station) return;
   for(var i=0;i<BP.coriolis.v.length && i<14;i++){
-    stationLights.push({
-      p: BP.coriolis.v[i],
-      col: i%3===0?'#ff4b3e':(i%3===1?'#8cff6a':'#3fdcff'),
-      phase: Math.random()*6.283
-    });
+    stationLights.push({p: BP.coriolis.v[i],col: i%3===0?'#ff4b3e':(i%3===1?'#8cff6a':'#3fdcff'),phase: Math.random()*6.283});
   }
 }
 function drawStationLights(vb, o){
@@ -1130,46 +1097,34 @@ function drawStationLights(vb, o){
   var c = toLocal(vb, sub(o.pos, P.pos));
   if(c.z < NEAR) return;
   for(var i=0;i<stationLights.length;i++){
-    var L = stationLights[i];
-    var pulse = 0.5 + 0.5*Math.sin(t*2 + L.phase);
+    var L = stationLights[i];var pulse = 0.5 + 0.5*Math.sin(t*2 + L.phase);
     var x = c.x + L.p[0]*br.x + L.p[1]*bu.x + L.p[2]*bf.x;
     var y = c.y + L.p[0]*br.y + L.p[1]*bu.y + L.p[2]*bf.y;
     var z = c.z + L.p[0]*br.z + L.p[1]*bu.z + L.p[2]*bf.z;
     if(z < NEAR) continue;
-    var s = FOCAL / z;
-    var px = W/2 + x*s, py = H/2 - y*s;
+    var s = FOCAL / z;var px = W/2 + x*s, py = H/2 - y*s;
     if(px<-10||px>W+10||py<-10||py>H+10) continue;
-    ctx.globalAlpha = 0.3 + 0.6*pulse;
-    ctx.fillStyle = L.col;
-    ctx.beginPath();
-    ctx.arc(px, py, Math.max(1.5, s*3), 0, Math.PI*2);
-    ctx.fill();
+    ctx.globalAlpha = 0.3 + 0.6*pulse;ctx.fillStyle = L.col;
+    ctx.beginPath();ctx.arc(px, py, Math.max(1.5, s*3), 0, Math.PI*2);ctx.fill();
   }
   ctx.globalAlpha = 1;
 }
 function checkStationGreeting(){
   if(!station || stationGreeted) return;
   if(ln(sub(station.pos, P.pos)) < 5500){
-    stationGreeted = true;
-    say(station, pickChatter('station'), '#3fdcff');
+    stationGreeted = true;say(station, pickChatter('station'), '#3fdcff');
     if(SND.chatterBlip) SND.chatterBlip();
   }
 }
 
-/* Визуальная атмосфера */
 var dust = [];
-(function(){
-  for(var i=0;i<80;i++) dust.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)))});
-})();
+(function(){for(var i=0;i<80;i++) dust.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1)))});})();
 var brightStars = [];
-(function(){
-  for(var i=0;i<14;i++) brightStars.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), m:rnd(0.5,1)});
-})();
+(function(){for(var i=0;i<14;i++) brightStars.push({d:nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), m:rnd(0.5,1)});})();
 function drawDust(vb){
   if(P.speed < 80) return;
   var alpha = clamp((P.speed/P.maxSpeed)*0.35, 0, 0.35);
-  ctx.fillStyle = '#6a8a9a';
-  ctx.globalAlpha = alpha;
+  ctx.fillStyle = '#6a8a9a';ctx.globalAlpha = alpha;
   for(var i=0;i<dust.length;i++){
     var l = toLocal(vb, dust[i].d);
     if(l.z < 0.15) continue;
@@ -1185,12 +1140,10 @@ function drawEngineTrail(vb){
   var inten = clamp(P.speed/P.maxSpeed, 0, 1);
   var cx = W/2, cy = H*0.94;
   var hue = inten > 0.6 ? 'rgba(63,220,255,'+(0.4+inten*0.4)+')' : 'rgba(140,255,106,'+(0.4+inten*0.4)+')';
-  ctx.fillStyle = hue;
-  ctx.beginPath();
-  ctx.ellipse(cx, cy+8, 8+inten*14, 2+inten*3, 0, 0, Math.PI*2);
-  ctx.fill();
+  ctx.fillStyle = hue;ctx.beginPath();
+  ctx.ellipse(cx, cy+8, 8+inten*14, 2+inten*3, 0, 0, Math.PI*2);ctx.fill();
 }
-/* ВАРИАНТ 3 — короткие едва заметные лучи */
+/* ЯРКИЕ ЗВЁЗДЫ — только точки, без крестиков */
 function drawBrightStars(vb){
   for(var i=0;i<brightStars.length;i++){
     var s = brightStars[i];
@@ -1199,19 +1152,12 @@ function drawBrightStars(vb){
     var px = W/2 + (l.x/l.z)*FOCAL;
     var py = H/2 - (l.y/l.z)*FOCAL;
     if(px<-20||px>W+20||py<-20||py>H+20) continue;
-    var sz = 1.5 + s.m*2.5;
-    ctx.strokeStyle = 'rgba(200,220,255,'+(0.12+s.m*0.15)+')';
-    ctx.lineWidth = 0.7;
-    ctx.beginPath();
-    ctx.moveTo(px-sz, py); ctx.lineTo(px+sz, py);
-    ctx.moveTo(px, py-sz); ctx.lineTo(px, py+sz);
-    ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,'+(0.7+s.m*0.3)+')';
-    ctx.fillRect(px-1, py-1, 2, 2);
+    var r = 1 + s.m*1.2;
+    ctx.fillStyle = 'rgba(235,245,255,'+(0.7+s.m*0.3)+')';
+    ctx.beginPath();ctx.arc(px, py, r, 0, Math.PI*2);ctx.fill();
   }
 }
 
-/* Звуковой эфир */
 var bgSoundTimer = 12;
 var bgSoundAlien = ['⨀◈⬡ ⨁⨂ ⨄','⌬⏣ ⨀⨁⨂','⨅⨆ ◈◉⏣','◈◈◈ ⨀⨁⨂ ⏣','⠁⠃⠇ ⨀◈⬡'];
 function bgSoundTick(dt){
@@ -1223,9 +1169,7 @@ function bgSoundTick(dt){
   if(r < 0.4){
     var ok = SND.radioStatic();
     if(ok && Math.random() < 0.3){
-      setTimeout(function(){
-        msg(bgSoundAlien[Math.floor(Math.random()*bgSoundAlien.length)] + ' (шёпот в эфире)', '#3fdcff');
-      }, 1500);
+      setTimeout(function(){msg(bgSoundAlien[Math.floor(Math.random()*bgSoundAlien.length)] + ' (шёпот в эфире)', '#3fdcff');}, 1500);
     }
   }
   else if(r < 0.7) SND.morse();
@@ -1307,8 +1251,7 @@ function vnoiseP(u,v,F,seed,nlat){
  return (a*(1-su)+b*su)*(1-sv)+(c*(1-su)+d*su)*sv;
 }
 function buildTerrain(seed,ptype){
- ptype=ptype||'earth';
- PL.type=ptype;
+ ptype=ptype||'earth';PL.type=ptype;
  PL.palette=PLANET_PALETTES[ptype]||PLANET_PALETTES.earth;
  var SEA_TH={earth:0.545,ocean:0.40,desert:0.65,ice:0.545,volcanic:0.55,toxic:0.50}[ptype];
  var ICE_LAT={earth:79,ocean:85,desert:88,ice:0,volcanic:88,toxic:78}[ptype];
@@ -1379,14 +1322,9 @@ function bearingText(b){
  return fmtDist(b.d)+' · '+side+' · '+vert;
 }
 
-/* ============================================================
-   БОРТОВОЙ КОМПЬЮТЕР · МИССИИ
-   ============================================================ */
 function pickMissionTargetSys(minJumps, maxJumps){
-  var sys = galaxy(gal);
-  var cur = sys[CMD.sysIdx];
-  var minLy = (minJumps - 0.5) * 7;
-  var maxLy = (maxJumps + 0.5) * 7;
+  var sys = galaxy(gal);var cur = sys[CMD.sysIdx];
+  var minLy = (minJumps - 0.5) * 7;var maxLy = (maxJumps + 0.5) * 7;
   var candidates = [];
   for(var i=0;i<sys.length;i++){
     if(i === CMD.sysIdx) continue;
@@ -1400,218 +1338,124 @@ function pickMissionTargetSys(minJumps, maxJumps){
     for(var j=0;j<sys.length;j++){
       if(j === CMD.sysIdx) continue;
       var dj = lyBetween(cur, sys[j]);
-      if(dj >= 5 && dj <= 40){
-        candidates.push({idx:j, sys:sys[j], d:dj, jumps:3});
-      }
+      if(dj >= 5 && dj <= 40){candidates.push({idx:j, sys:sys[j], d:dj, jumps:3});}
     }
   }
   if(candidates.length === 0) return null;
   return candidates[Math.floor(Math.random()*candidates.length)];
 }
-
 function makeCourierMission(){
-  var t = pickMissionTargetSys(2, 5);
-  if(!t) return null;
+  var t = pickMissionTargetSys(2, 5);if(!t) return null;
   var reward = 800 + 400 * t.jumps;
-  return {
-    type: 'courier',
-    targetSys: t.idx,
-    targetSysName: t.sys.name,
-    jumps: t.jumps,
-    reward: reward,
-    stage: 'pending',
-    hasContainer: false,
-    message: 'СЕКРЕТНЫЙ ЗАКАЗ · заберите контейнер (отмечен на радаре) и доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Награда: ' + reward + ' Cr.'
-  };
+  return {type:'courier',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,
+    stage:'pending',hasContainer:false,
+    message:'СЕКРЕТНЫЙ ЗАКАЗ · заберите контейнер (отмечен на радаре) и доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Награда: ' + reward + ' Cr.'};
 }
-
 function makeVipMission(){
-  var t = pickMissionTargetSys(2, 4);
-  if(!t) return null;
+  var t = pickMissionTargetSys(2, 4);if(!t) return null;
   var reward = 1200 + 500 * t.jumps;
-  return {
-    type: 'vip',
-    targetSys: t.idx,
-    targetSysName: t.sys.name,
-    jumps: t.jumps,
-    reward: reward,
-    stage: 'pending',
-    message: 'VIP-ПАССАЖИР · доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Осторожно — за ним охотятся пираты. Награда: ' + reward + ' Cr.'
-  };
+  return {type:'vip',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,stage:'pending',
+    message:'VIP-ПАССАЖИР · доставьте в ' + t.sys.name + ' (' + t.jumps + ' пр.). Осторожно — за ним охотятся пираты. Награда: ' + reward + ' Cr.'};
 }
-
 function makeKillMission(){
   var types = ['pirate', 'trader', 'police', 'thargon'];
   var weights = [0.5, 0.2, 0.2, 0.1];
-  var r = Math.random();
-  var cum = 0;
-  var type = 'pirate';
-  for(var i=0;i<types.length;i++){
-    cum += weights[i];
-    if(r < cum){ type = types[i]; break; }
-  }
+  var r = Math.random();var cum = 0;var type = 'pirate';
+  for(var i=0;i<types.length;i++){cum += weights[i];if(r < cum){ type = types[i]; break; }}
   var name = '', reward = 0;
   if(type === 'pirate'){ name = 'пирата'; reward = 800 + Math.floor(Math.random()*700); }
   else if(type === 'trader'){ name = 'торговца'; reward = 500 + Math.floor(Math.random()*500); }
   else if(type === 'police'){ name = 'полицейского'; reward = 1500 + Math.floor(Math.random()*1000); }
   else if(type === 'thargon'){ name = 'Таргона'; reward = 2500 + Math.floor(Math.random()*1500); }
-  return {
-    type: 'kill_' + type,
-    targetSys: CMD.sysIdx,
-    targetSysName: curSys ? curSys.name : '',
-    jumps: 0,
-    reward: reward,
-    killType: type,
-    spawnSysIdx: CMD.sysIdx,
-    stage: 'pending',
-    message: 'КОНТРАКТ · уничтожьте ' + name + ' в системе ' + (curSys ? curSys.name : '—') + '. Награда: ' + reward + ' Cr.'
-  };
+  return {type:'kill_'+type,targetSys:CMD.sysIdx,targetSysName:curSys?curSys.name:'',jumps:0,reward:reward,
+    killType:type,spawnSysIdx:CMD.sysIdx,stage:'pending',
+    message:'КОНТРАКТ · уничтожьте ' + name + ' в системе ' + (curSys?curSys.name:'—') + '. Награда: ' + reward + ' Cr.'};
 }
-
 function spawnMission(){
   if(mission) return;
-  var r = Math.random();
-  var m = null;
+  var r = Math.random();var m = null;
   if(r < 0.4) m = makeCourierMission();
   else if(r < 0.6) m = makeVipMission();
   else m = makeKillMission();
   if(!m) return;
-  mission = m;
-  renderBordComp();
-  SND.beep();
-  msg('БОРТ.КОМП: входящее сообщение', '#3fdcff');
+  mission = m;renderBordComp();SND.beep();msg('БОРТ.КОМП: входящее сообщение', '#3fdcff');
 }
-
 function spawnCourierContainer(){
   if(!station) return null;
   var angle = Math.random() * Math.PI * 2;
   var elevation = (Math.random() - 0.5) * 1.0;
   var dist = rnd(40000, 100000);
-  var offset = V(
-    Math.cos(angle) * Math.cos(elevation) * dist,
-    Math.sin(elevation) * dist,
-    Math.sin(angle) * Math.cos(elevation) * dist
-  );
+  var offset = V(Math.cos(angle)*Math.cos(elevation)*dist, Math.sin(elevation)*dist, Math.sin(angle)*Math.cos(elevation)*dist);
   var pos = add(station.pos, offset);
   var good = Math.floor(Math.random() * QQ23.length);
-  var c = spawnCanister(pos, good);
-  c.isMissionContainer = true;
+  var c = spawnCanister(pos, good);c.isMissionContainer = true;
   return c;
 }
-
 function spawnMissionTarget(type){
   var shipType, hostile, police;
-  if(type === 'pirate'){
-    shipType = pickPirate(curSys.tech);
-    hostile = true; police = false;
-  } else if(type === 'trader'){
-    shipType = pickTrader(curSys.tech);
-    hostile = false; police = false;
-  } else if(type === 'police'){
-    shipType = 'viper';
-    hostile = false; police = true;
-  } else {
-    shipType = 'thargon';
-    hostile = true; police = false;
-  }
+  if(type === 'pirate'){shipType = pickPirate(curSys.tech);hostile = true; police = false;}
+  else if(type === 'trader'){shipType = pickTrader(curSys.tech);hostile = false; police = false;}
+  else if(type === 'police'){shipType = 'viper';hostile = false; police = true;}
+  else {shipType = 'thargon';hostile = true; police = false;}
   var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
   var o = spawnShipAt(shipType, hostile, police, pos);
-  o.isMissionTarget = true;
-  o.missionType = type;
-  o.name = 'ЦЕЛЬ: ' + o.name;
+  o.isMissionTarget = true;o.missionType = type;o.name = 'ЦЕЛЬ: ' + o.name;
   return o;
 }
-
 function acceptMission(){
   if(!mission || mission.stage !== 'pending') return;
   mission.stage = 'accepted';
   if(mission.type === 'courier'){
-    var c = spawnCourierContainer();
-    mission.container = c;
+    var c = spawnCourierContainer();mission.container = c;
     mission.message = 'МИССИЯ · найдите контейнер (двойной круг на радаре) и доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
     targetSys = mission.targetSys;
   } else if(mission.type === 'vip'){
     mission.message = 'МИССИЯ · доставьте пассажира в ' + mission.targetSysName + '. Осторожно: пираты. Награда: ' + mission.reward + ' Cr.';
-    targetSys = mission.targetSys;
-    vipPirateTimer = 25;
+    targetSys = mission.targetSys;vipPirateTimer = 25;
   } else if(mission.type && mission.type.indexOf('kill_') === 0){
-    var o = spawnMissionTarget(mission.killType);
-    mission.targetObj = o;
+    var o = spawnMissionTarget(mission.killType);mission.targetObj = o;
     mission.message = 'МИССИЯ · уничтожьте цель (отмечена на радаре). Награда: ' + mission.reward + ' Cr.';
   }
-  SND.buy();
-  msg('МИССИЯ ПРИНЯТА', '#8cff6a');
-  renderBordComp();
+  SND.buy();msg('МИССИЯ ПРИНЯТА', '#8cff6a');renderBordComp();
 }
-
 function rejectMission(){
   if(!mission || mission.stage !== 'pending') return;
-  mission = null;
-  missionSpawnTimer = 30 + Math.random()*40;
-  SND.beep();
-  msg('Заказ отклонён', '#8492a8');
-  renderBordComp();
+  mission = null;missionSpawnTimer = 30 + Math.random()*40;
+  SND.beep();msg('Заказ отклонён', '#8492a8');renderBordComp();
 }
-
 function completeMission(){
   if(!mission) return;
-  var rw = mission.reward;
-  CMD.cash += rw;
-  msg('МИССИЯ ВЫПОЛНЕНА · +' + rw + ' Cr', '#8cff6a');
-  SND.buy();
-  mission = null;
-  missionSpawnTimer = 45 + Math.random()*45;
-  renderBordComp();
+  var rw = mission.reward;CMD.cash += rw;
+  msg('МИССИЯ ВЫПОЛНЕНА · +' + rw + ' Cr', '#8cff6a');SND.buy();
+  mission = null;missionSpawnTimer = 45 + Math.random()*45;renderBordComp();
 }
-
 function vipTick(dt){
   if(!mission || mission.type !== 'vip' || mission.stage !== 'accepted') return;
-  vipPirateTimer -= dt;
-  if(vipPirateTimer > 0) return;
+  vipPirateTimer -= dt;if(vipPirateTimer > 0) return;
   vipPirateTimer = 40 + Math.random()*40;
-  var tech = curSys ? curSys.tech : 6;
-  var type = pickPirate(tech);
+  var tech = curSys ? curSys.tech : 6;var type = pickPirate(tech);
   var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
   spawnShipAt(type, true, false, pos);
   msg('Пираты охотятся за пассажиром!', '#ff4b3e');
 }
-
 function missionTick(dt){
-  if(mission){
-    if(mission.type === 'vip') vipTick(dt);
-    return;
-  }
+  if(mission){if(mission.type === 'vip') vipTick(dt);return;}
   missionSpawnTimer -= dt;
-  if(missionSpawnTimer <= 0){
-    missionSpawnTimer = 60 + Math.random()*60;
-    spawnMission();
-  }
+  if(missionSpawnTimer <= 0){missionSpawnTimer = 60 + Math.random()*60;spawnMission();}
 }
-
 function renderBordComp(){
-  var body = $('#bc-body');
-  var btns = $('#bc-buttons');
+  var body = $('#bc-body');var btns = $('#bc-buttons');
   if(!body || !btns) return;
-  if(!mission){
-    body.textContent = '— НЕТ СООБЩЕНИЙ —';
-    btns.innerHTML = '';
-    return;
-  }
+  if(!mission){body.textContent = '— НЕТ СООБЩЕНИЙ —';btns.innerHTML = '';return;}
   body.textContent = mission.message;
   if(mission.stage === 'pending'){
-    btns.innerHTML =
-      '<button data-action="accept" class="pri">ПРИНЯТЬ</button>' +
-      '<button data-action="reject">ОТКЛОНИТЬ</button>';
-  } else {
-    btns.innerHTML = '';
-  }
+    btns.innerHTML = '<button data-action="accept" class="pri">ПРИНЯТЬ</button><button data-action="reject">ОТКЛОНИТЬ</button>';
+  } else {btns.innerHTML = '';}
 }
-
 var bcBtnsEl = document.getElementById('bc-buttons');
 if(bcBtnsEl){
   bcBtnsEl.addEventListener('click', function(e){
-    var btn = e.target.closest ? e.target.closest('button') : null;
-    if(!btn) return;
+    var btn = e.target.closest ? e.target.closest('button') : null;if(!btn) return;
     if(btn.dataset.action === 'accept') acceptMission();
     else if(btn.dataset.action === 'reject') rejectMission();
   });
@@ -1619,9 +1463,7 @@ if(bcBtnsEl){
 
 function stationCollision(rel){
  if(!station) return false;
- var lz = dot(rel, station.b.f);
- var lx = Math.abs(dot(rel, station.b.r));
- var ly = Math.abs(dot(rel, station.b.u));
+ var lz = dot(rel, station.b.f);var lx = Math.abs(dot(rel, station.b.r));var ly = Math.abs(dot(rel, station.b.u));
  var BOX = STATION_BOX + 100;
  if(lx < BOX && ly < BOX && Math.abs(lz) < BOX){
   if(lx < STATION_SLOT_HALF_W && ly < STATION_SLOT_HALF_H && lz < STATION_SLOT_FACE + 300 && lz > STATION_CORRIDOR_INNER) return false;
@@ -1629,40 +1471,30 @@ function stationCollision(rel){
  }
  return false;
 }
-
 function placeOrbit(sys, legalBit){
- var pdir = planetDir(sys, legalBit);
- var pinfo = planetInfoFor(sys);
- var pR = pinfo.radius;
+ var pdir = planetDir(sys, legalBit);var pinfo = planetInfoFor(sys);var pR = pinfo.radius;
  if(curSys){curSys.planetType=pinfo.type;curSys.planetTypeName=pinfo.name;curSys.planetRadius=pR;}
- var alt = pR * rnd(1.8, 2.2);
- var rs = pR + alt;
- var sSpawn = rnd(5000, 7000);
- var Dc = rs + sSpawn * 0.9;
- var C = mul(pdir, Dc);
- var S = mul(pdir, Dc - rs);
+ var alt = pR * rnd(1.8, 2.2);var rs = pR + alt;var sSpawn = rnd(5000, 7000);
+ var Dc = rs + sSpawn * 0.9;var C = mul(pdir, Dc);var S = mul(pdir, Dc - rs);
  var side = perpTo(pdir);
  planet = {pos: C, r: pR, rot: rnd(0, 6.283), spin: rnd(0.006, 0.016) * (Math.random() < 0.5 ? -1 : 1), tilt: rnd(-0.45, 0.45)};
  buildTerrain((sys.s0 ^ sys.s1 ^ sys.s2) >>> 0, pinfo.type);
- station = {kind: 'station', ship: 'coriolis', bp: 'coriolis', pos: S, b: basisFrom(mul(pdir, -1)), speed: 0,
-  energy: SHIP.coriolis.energy, maxEnergy: SHIP.coriolis.energy, radius: BP.coriolis.radius * 0.9,
-  spin: STATION_SPIN, name: 'Кориолис', hitT: 0};
+ station = {kind:'station', ship:'coriolis', bp:'coriolis', pos:S, b:basisFrom(mul(pdir,-1)), speed:0,
+  energy:SHIP.coriolis.energy, maxEnergy:SHIP.coriolis.energy, radius:BP.coriolis.radius*0.9,
+  spin:STATION_SPIN, name:'Кориолис', hitT:0};
  buildStationLights();
- var forwardDist = STATION_SLOT_FACE + rnd(4000, 8000);
- var sideDist = rnd(-2500, 2500);
+ var forwardDist = STATION_SLOT_FACE + rnd(4000, 8000);var sideDist = rnd(-2500, 2500);
  P.pos = add(S, add(mul(pdir, -forwardDist), mul(side, sideDist)));
  P.b = basisFrom(nrm(sub(S, P.pos)));
  orbit = {out: pdir, side: side, pdir: pdir};
  placeSun();
 }
 function placeSun(){
- var tp=nrm(sub(planet.pos,P.pos));
- var t1=perpTo(tp),t2=cross(tp,t1);
+ var tp=nrm(sub(planet.pos,P.pos));var t1=perpTo(tp),t2=cross(tp,t1);
  var ang=rnd(110,130)*Math.PI/180,phi=rnd(0,6.283);
  var sd=nrm(add(mul(tp,Math.cos(ang)),add(mul(t1,Math.sin(ang)*Math.cos(phi)),mul(t2,Math.sin(ang)*Math.sin(phi)))));
  sun={pos:add(P.pos,mul(sd,rnd(190000,260000))),r:rnd(11000,16000),dir:sd};
 }
-
 function buildSystem(idx,fresh){
  var sys=galaxy(gal)[idx];curSys=sys;CMD.sysIdx=idx;CMD.galaxy=gal;
  CMD.market=marketOf(sys);
@@ -1703,8 +1535,7 @@ function syncDockBtn(){
  if(tr)tr.classList.toggle('on',!!CMD.tractorOn);
 }
 function spawnShip(type,hostile,police){
- var sp=SHIP[type];
- var o;
+ var sp=SHIP[type];var o;
  if(!station){
   var d=rnd(1600,4400),a=rnd(0,Math.PI*2),e=rnd(-0.45,0.45);
   var pos=add(P.pos,V(Math.cos(a)*Math.cos(e)*d,Math.sin(e)*d,Math.sin(a)*Math.cos(e)*d));
@@ -1713,10 +1544,7 @@ function spawnShip(type,hostile,police){
    hostile:!!hostile,police:!!police,radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
    aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
    wanderT:rnd(2,5),wanderDir:basisFrom(sub(P.pos,pos)).f,chattered:false};
-  applyPersonality(o);
-  rememberEncounter(o);
-  objects.push(o);
-  return o;
+  applyPersonality(o);rememberEncounter(o);objects.push(o);return o;
  }
  var axis = nrm(station.b.f);
  var slotCenter = add(station.pos, mul(axis, STATION_SLOT_FACE));
@@ -1730,10 +1558,7 @@ function spawnShip(type,hostile,police){
   radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
   aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
   wanderT:rnd(2,5),wanderDir:heading,chattered:false};
- applyPersonality(o);
- rememberEncounter(o);
- objects.push(o);
- return o;
+ applyPersonality(o);rememberEncounter(o);objects.push(o);return o;
 }
 function spawnAst(){
  for(var tries=0;tries<8;tries++){
@@ -1808,81 +1633,42 @@ window.addEventListener('blur',function(){
   resetStick();
 });
 
-/* ============================================================
-   ДЖОЙСТИК · toggle-захват
-   ============================================================ */
 var stickEl=$('#stick'),knobEl=$('#knob');
 var stickCaptured = false;
 var stickReturnAnim = null;
-
 function updateKnobVisual(){
   var r = stickEl.getBoundingClientRect();
   if(r.width < 2) return;
-  var maxOff = r.width/2 - 21;
-  if(maxOff <= 0) return;
+  var maxOff = r.width/2 - 21;if(maxOff <= 0) return;
   knobEl.style.transform = 'translate(' + (touch.x*maxOff) + 'px,' + (touch.y*maxOff) + 'px)';
 }
-
-function resetStick(){
-  touch.x = 0; touch.y = 0;
-  knobEl.style.transform = 'translate(0,0)';
-  stickEl.classList.remove('act');
-}
-
+function resetStick(){touch.x = 0; touch.y = 0;knobEl.style.transform = 'translate(0,0)';stickEl.classList.remove('act');}
 function stickMove(e){
-  var r = stickEl.getBoundingClientRect();
-  if(r.width < 2) return;
-  var cx = r.left + r.width/2;
-  var cy = r.top + r.height/2;
-  var dx = (e.clientX - cx) / (r.width/2);
-  var dy = (e.clientY - cy) / (r.height/2);
+  var r = stickEl.getBoundingClientRect();if(r.width < 2) return;
+  var cx = r.left + r.width/2;var cy = r.top + r.height/2;
+  var dx = (e.clientX - cx) / (r.width/2);var dy = (e.clientY - cy) / (r.height/2);
   var mag = Math.sqrt(dx*dx + dy*dy);
   if(mag > 1){ dx /= mag; dy /= mag; }
-  touch.x = dx;
-  touch.y = dy;
-  updateKnobVisual();
+  touch.x = dx; touch.y = dy;updateKnobVisual();
 }
-
 function smoothReturnStick(){
-  var startX = touch.x, startY = touch.y;
-  var startT = performance.now();
-  var dur = 220;
+  var startX = touch.x, startY = touch.y;var startT = performance.now();var dur = 220;
   function anim(){
-    var t = Math.min(1, (performance.now() - startT) / dur);
-    var e = 1 - Math.pow(1-t, 3);
-    touch.x = startX * (1-e);
-    touch.y = startY * (1-e);
-    updateKnobVisual();
-    if(t < 1){
-      stickReturnAnim = requestAnimationFrame(anim);
-    } else {
-      touch.x = 0; touch.y = 0;
-      stickEl.classList.remove('act');
-      stickReturnAnim = null;
-    }
+    var t = Math.min(1, (performance.now() - startT) / dur);var e = 1 - Math.pow(1-t, 3);
+    touch.x = startX * (1-e);touch.y = startY * (1-e);updateKnobVisual();
+    if(t < 1){stickReturnAnim = requestAnimationFrame(anim);}
+    else {touch.x = 0; touch.y = 0;stickEl.classList.remove('act');stickReturnAnim = null;}
   }
   stickReturnAnim = requestAnimationFrame(anim);
 }
-
 stickEl.addEventListener('pointerdown', function(e){
   if(e.button !== 0 && e.pointerType === 'mouse') return;
-  e.preventDefault();
-  SND.init();
+  e.preventDefault();SND.init();
   if(stickReturnAnim){ cancelAnimationFrame(stickReturnAnim); stickReturnAnim = null; }
-  if(stickCaptured){
-    stickCaptured = false;
-    stickEl.classList.remove('captured');
-    smoothReturnStick();
-  } else {
-    stickCaptured = true;
-    stickEl.classList.add('captured', 'act');
-    stickMove(e);
-  }
+  if(stickCaptured){stickCaptured = false;stickEl.classList.remove('captured');smoothReturnStick();}
+  else {stickCaptured = true;stickEl.classList.add('captured', 'act');stickMove(e);}
 });
-
-window.addEventListener('pointermove', function(e){
-  if(stickCaptured) stickMove(e);
-});
+window.addEventListener('pointermove', function(e){if(stickCaptured) stickMove(e);});
 
 function bindBtns(sel){
  Array.prototype.forEach.call(document.querySelectorAll(sel+' button'),function(b){
@@ -1925,8 +1711,7 @@ cv.addEventListener('click',function(e){
  if(dx*dx+dy*dy<(radar.R+18)*(radar.R+18))cycleRange();
 });
 function cycleRange(){
- radar.mode=(radar.mode+1)%(RANGES.length+1);
- SND.beep();
+ radar.mode=(radar.mode+1)%(RANGES.length+1);SND.beep();
  msg('Радар: '+(radar.mode===0?'АВТО':(RANGES[radar.mode-1]/1000)+' км'),'#3fdcff');
 }
 function goFull(){
@@ -1942,11 +1727,7 @@ function toggleFull(){
  if(document.fullscreenElement||document.webkitFullscreenElement)exitFull();else goFull();
  setTimeout(layout,80);
 }
-
-function viewBasis(){
- if(!P.rear)return P.b;
- return{r:mul(P.b.r,-1),u:P.b.u,f:mul(P.b.f,-1)};
-}
+function viewBasis(){if(!P.rear)return P.b;return{r:mul(P.b.r,-1),u:P.b.u,f:mul(P.b.f,-1)};}
 function crosshairTarget(){
  var vb=viewBasis(),best=null,bestD=1e9,i;
  var tol=Math.max(0.026,32/(H||480));
@@ -1968,12 +1749,9 @@ function fireLaser(){
  P.cool=0.28;SND.laser();vib(30);
  P.laserHeat=Math.min(P.laserHeatMax, P.laserHeat + P.laserHeatPerShot);
  if(P.laserHeat>=P.laserHeatMax) P.laserOverheated=true;
- var power=laserPower();
- var best=crosshairTarget();
- var tx=W*0.5,ty=H*0.5;
+ var power=laserPower();var best=crosshairTarget();var tx=W*0.5,ty=H*0.5;
  if(best){
-  var vb=viewBasis();
-  var lc=toLocal(vb,sub(best.pos,P.pos));
+  var vb=viewBasis();var lc=toLocal(vb,sub(best.pos,P.pos));
   if(lc.z>NEAR){var pt=projectPt(lc);if(isFinite(pt[0])&&isFinite(pt[1])){tx=clamp(pt[0],0,W);ty=clamp(pt[1],0,H);}}
  }
  var origins;
@@ -1984,8 +1762,7 @@ function fireLaser(){
   bolts.push({screen:true,from:origins[k],to:[tx,ty],life:0.14,maxLife:0.14,col:'#eaffea',width:Math.max(1.5,H/400)});
  }
  if(best){
-  best.energy-=power*6+rnd(0,4);
-  best.hitT=0.18;P.hitFlash=0.14;SND.hit();
+  best.energy-=power*6+rnd(0,4);best.hitT=0.18;P.hitFlash=0.14;SND.hit();
   if(best.kind==='station'){
    if(CMD.legal<2){CMD.legal=2;MEMORY.bounty+=500;msg('ОГОНЬ ПО СТАНЦИИ · розыск','#ff4b3e');spawnPoliceSoon();}
    best.energy=SHIP.coriolis.energy;
@@ -2027,12 +1804,9 @@ function spawnPoliceSoon(){if(policeTimer<0)policeTimer=rnd(5,12);}
 function killObj(o){
  var idx=objects.indexOf(o);if(idx<0)return;
  var missionKill = o.isMissionTarget && mission && mission.stage === 'accepted';
- if(o.kind==='pirate'||o.kind==='police'){
-  say(o, pickChatter(o.kind==='pirate'?'pirateHit':'policeHit'), '#ff8b3e');
- }
+ if(o.kind==='pirate'||o.kind==='police'){say(o, pickChatter(o.kind==='pirate'?'pirateHit':'policeHit'), '#ff8b3e');}
  if(o.distressVictim && objects.indexOf(o.distressVictim) >= 0){
-  var rw = 200 + Math.floor(Math.random()*400);
-  CMD.cash += rw;
+  var rw = 200 + Math.floor(Math.random()*400);CMD.cash += rw;
   MEMORY.factions.traders = (MEMORY.factions.traders||0) + 1;
   msg('Спасение подтверждено · +'+rw+' Cr', '#8cff6a');
  }
@@ -2052,25 +1826,20 @@ function killObj(o){
  if(missionKill) completeMission();
 }
 function hurtPlayer(dmg,silent){
- P.energy-=dmg;P.dmgFlash=0.3;if(!silent)SND.hurt();
- if(!silent)vib(100);
+ P.energy-=dmg;P.dmgFlash=0.3;if(!silent)SND.hurt();if(!silent)vib(100);
  if(P.energy<=0){P.energy=0;die();}
  else if(!silent&&dmg>4)msg('ПОПАДАНИЕ · '+Math.round(P.energy/P.maxEnergy*100)+'%','#ff4b3e');
 }
 function die(){
  if(state==='dead')return;
- 
  SND.stopDockAmb();
- mission = null;
- renderBordComp();
+ mission = null;renderBordComp();
  if(CMD.eq.escape){
-  CMD.eq.escape=0;
-  boom(add(P.pos,mul(P.b.f,300)),20,'#ff8b3e');SND.boom();
+  CMD.eq.escape=0;boom(add(P.pos,mul(P.b.f,300)),20,'#ff8b3e');SND.boom();
   var i;for(i=0;i<CMD.cargo.length;i++)CMD.cargo[i]=0;
   P.energy=P.maxEnergy;P.speed=60;
   if(station){var aw=nrm(sub(station.pos,planet.pos));P.pos=add(station.pos,mul(aw,station.radius+1400));P.b=basisFrom(aw);}
-  msg('КАПСУЛА · груз потерян','#ffd426');
-  return;
+  msg('КАПСУЛА · груз потерян','#ffd426');return;
  }
  boom(add(P.pos,mul(P.b.f,430)),26,'#ff8b3e');
  SND.boom();state='dead';deathT=0;
@@ -2089,15 +1858,13 @@ function toggleDockComp(){
  if(!CMD.eq.dockcomp){msg('Стык.комп не установлен (1500 Cr)','#ffd426');SND.beep();return;}
  if(!CMD.dockComp){
   if(!station){msg('Станция не найдена','#ff4b3e');return;}
-  var relS = sub(P.pos, station.pos);
-  var along = dot(relS, station.b.f);
+  var relS = sub(P.pos, station.pos);var along = dot(relS, station.b.f);
   var slotCenter = add(station.pos, mul(station.b.f, STATION_SLOT_FACE));
   var distToSlot = ln(sub(P.pos, slotCenter));
   var outOfZone = along < -800 || (along > DOCK_NEAR && distToSlot > DOCK_RANGE);
   if(outOfZone){msg('Стык.комп: подойдите к окну станции (15 км)','#ffd426');SND.beep();return;}
  }
- CMD.dockComp=!CMD.dockComp;
- if(CMD.dockComp)CMD.tractorOn=false;
+ CMD.dockComp=!CMD.dockComp;if(CMD.dockComp)CMD.tractorOn=false;
  syncDockBtn();
  msg(CMD.dockComp?'СТЫК.КОМП ВКЛЮЧЁН · до 15 км':'Стык.комп выключен',CMD.dockComp?'#3fdcff':'#8492a8');
  SND.beep();
@@ -2105,8 +1872,7 @@ function toggleDockComp(){
 function toggleTractor(){
  if(state!=='flight')return;
  if(!CMD.eq.tractor){msg('Трактор не установлен (800 Cr)','#ffd426');SND.beep();return;}
- CMD.tractorOn=!CMD.tractorOn;
- if(CMD.tractorOn)CMD.dockComp=false;
+ CMD.tractorOn=!CMD.tractorOn;if(CMD.tractorOn)CMD.dockComp=false;
  syncDockBtn();
  msg(CMD.tractorOn?'ТРАКТОР: ЗАХВАТ (500 м)':'Трактор выкл',CMD.tractorOn?'#3fdcff':'#8492a8');
  SND.beep();
@@ -2123,18 +1889,16 @@ function doDock(){
  CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();
  P.speed=0;bolts=[];P.laserHeat=0;P.laserOverheated=false;
  SND.dock();vib([30,40,80]);
- 
  SND.startDockAmb();
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
  msg('СТЫКОВКА · '+curSys.name,'#8cff6a');
- if(Math.random() < 0.5){
-  say(station, pickChatter('greeting') + ', ' + CMD.name, '#3fdcff');
- }
+ if(Math.random() < 0.5){say(station, pickChatter('greeting') + ', ' + CMD.name, '#3fdcff');}
  msg('В доке: ' + (Math.floor(Math.random()*5)+1) + ' кораблей · ' + (Math.random()<0.5?'свободен':'занят') + ' док 3', '#8492a8');
  checkMissionDelivery();
  var evNews = driftMarket();
  if(evNews) msg('Рынок: ' + evNews, '#ffd426');
+ rebuildMarketTicker();
  CMD.energySaved=P.energy;saveGame(true);openMarket();
 }
 function launch(){
@@ -2147,17 +1911,13 @@ function launch(){
   msg('Отстыковка: некорректные координаты','#ff4b3e');SND.beep();return;
  }
  state='flight';prevState='flight';
- CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();
- show(null);
+ CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();show(null);
  P.pos = add(station.pos, mul(station.b.f, LAUNCH_OFFSET));
- P.b = basisFrom(station.b.f);
- P.speed = 250;
- P.energy = Math.min(P.maxEnergy, Math.max(P.energy, 80));
- P.rear = false;
+ P.b = basisFrom(station.b.f);P.speed = 250;
+ P.energy = Math.min(P.maxEnergy, Math.max(P.energy, 80));P.rear = false;
  P.laserHeat = 0;P.laserOverheated = false;
  stationGreeted = false;
  SND.stopDockAmb();
- 
  msg('Отстыковка выполнена · удачи, '+CMD.name,'#3fdcff');
  try{SND.dock();}catch(e){}
  updateBar();
@@ -2185,32 +1945,25 @@ function arrive(){
  if(!hyperGal&&hyperTo!==prev)CMD.visited++;
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
- /* Проверка миссии */
  if(mission){
   if(mission.type === 'courier' && mission.stage === 'accepted' && !mission.hasContainer){
    msg('МИССИЯ ПРОВАЛЕНА: контейнер потерян', '#ff4b3e');
-   mission = null;
-   renderBordComp();
+   mission = null;renderBordComp();
   } else if(mission.type && mission.type.indexOf('kill_') === 0 && CMD.sysIdx !== mission.spawnSysIdx){
    msg('МИССИЯ ПРОВАЛЕНА: цель недоступна', '#ff4b3e');
-   mission = null;
-   renderBordComp();
+   mission = null;renderBordComp();
   }
  }
- var outDir=station.b.f;
- var side=orbit.side;
- var cos_ang=rnd(0.3,1.0);
- var sin_ang=Math.sqrt(Math.max(0,1-cos_ang*cos_ang));
- var sign=Math.random()<0.5?-1:1;
- var dist=station.radius+rnd(2500,30000);
+ var outDir=station.b.f;var side=orbit.side;
+ var cos_ang=rnd(0.3,1.0);var sin_ang=Math.sqrt(Math.max(0,1-cos_ang*cos_ang));
+ var sign=Math.random()<0.5?-1:1;var dist=station.radius+rnd(2500,30000);
  P.pos=add(station.pos,add(mul(outDir,cos_ang*dist),mul(side,sign*sin_ang*dist)));
- P.b=basisFrom(sub(station.pos,P.pos));
- P.speed=100;state='flight';prevState='flight';
+ P.b=basisFrom(sub(station.pos,P.pos));P.speed=100;state='flight';prevState='flight';
  stationGreeted = false;
+ rebuildMarketTicker();
  msg('Прибытие: '+curSys.name+' · '+curSys.planetTypeName,'#8cff6a');
  if(CMD.legal>=1)msg('Статус: '+(CMD.legal>=2?'в розыске':'правонарушитель'),'#ff4b3e');
 }
-
 function steerTo(o,want,rate,dt){
  var f=nrm(o.b.f),w=nrm(want),cr=cross(f,w),cl=ln(cr);
  var ang=Math.acos(clamp(dot(f,w),-1,1)),axis;
@@ -2224,7 +1977,6 @@ function update(dt){
  ambientTick(dt);
  missionTick(dt);
  CMD.time+=dt;burnT-=dt;warnT-=dt;scoopMsgT-=dt;
-
  var inp=readInput(),pr=1.55*dt,rr=1.95*dt,yr=0.9*dt;
  if(inp.pitch){P.b.u=rotAxis(P.b.u,P.b.r,inp.pitch*pr);P.b.f=rotAxis(P.b.f,P.b.r,inp.pitch*pr);}
  if(inp.roll){var ra=-inp.roll*rr;P.b.r=rotAxis(P.b.r,P.b.f,ra);P.b.u=rotAxis(P.b.u,P.b.f,ra);}
@@ -2234,27 +1986,21 @@ function update(dt){
  if(P.laserOverheated && P.laserHeat < P.laserHeatMax * 0.3) P.laserOverheated = false;
  
  if(CMD.dockComp && CMD.eq.dockcomp && station){
-  var axis=nrm(station.b.f);
-  var relS=sub(P.pos,station.pos);
-  var along=dot(relS,axis);
-  var perpVec=sub(relS,mul(axis,along));
-  var perpDist=ln(perpVec);
+  var axis=nrm(station.b.f);var relS=sub(P.pos,station.pos);var along=dot(relS,axis);
+  var perpVec=sub(relS,mul(axis,along));var perpDist=ln(perpVec);
   var slotCenter=add(station.pos,mul(axis,STATION_SLOT_FACE));
   var distToSlot=ln(sub(P.pos,slotCenter));
   var outOfZone=along < -800 || (along > DOCK_NEAR && distToSlot > DOCK_RANGE);
   if(outOfZone){msg('Стык.комп: покинули зону окна','#ffd426');CMD.dockComp=false;syncDockBtn();}
   else if(perpDist < STATION_SLOT_HALF_W + 100 && along < STATION_SLOT_FACE + 500){
-   var diveDir=mul(axis,-1);
-   steerTo(P,diveDir,3.5,dt);
+   var diveDir=mul(axis,-1);steerTo(P,diveDir,3.5,dt);
    var diveSpeed=clamp(along*0.3,60,350);
    P.speed+=(diveSpeed-P.speed)*Math.min(1,dt*2);
    if(along<1500&&dot(P.b.f,diveDir)>0.7){doDock();return;}
   } else {
    var stageZ=clamp(along-Math.max(1500,along*0.15),STATION_SLOT_FACE+500,16000);
-   var stagePoint=add(station.pos,mul(axis,stageZ));
-   var toStage=sub(stagePoint,P.pos);
-   var dToStage=ln(toStage);
-   steerTo(P,toStage,2.0,dt);
+   var stagePoint=add(station.pos,mul(axis,stageZ));var toStage=sub(stagePoint,P.pos);
+   var dToStage=ln(toStage);steerTo(P,toStage,2.0,dt);
    var approachSpeed=clamp(dToStage*0.12,100,800);
    P.speed+=(approachSpeed-P.speed)*Math.min(1,dt*1.5);
   }
@@ -2302,17 +2048,13 @@ function update(dt){
   o=objects[i];
   if(o.kind==='debris'){o.pos=add(o.pos,mul(o.vel,dt));o.life-=dt;o.b.f=rotAxis(o.b.f,o.b.u,dt*3);o.b=ortho(o.b);if(o.life<=0)objects.splice(i,1);continue;}
   if(o.kind==='missile'){
-   o.life-=dt;
-   var alive=o.target&&objects.indexOf(o.target)>=0;
+   o.life-=dt;var alive=o.target&&objects.indexOf(o.target)>=0;
    if(alive){steerTo(o,sub(o.target.pos,o.pos),3.2,dt);o.speed=Math.min(o.speed+3200*dt,6200);}
    else o.speed=Math.max(1200,o.speed-1800*dt);
    o.vel=mul(o.b.f,o.speed);o.pos=add(o.pos,mul(o.vel,dt));
    if(alive&&ln(sub(o.target.pos,o.pos))<o.target.radius+60){
     var tg=o.target;
-    if(tg.kind==='station'){
-     boom(o.pos,6,'#ff9d4b');SND.boom();
-     objects.splice(i,1);continue;
-    }
+    if(tg.kind==='station'){boom(o.pos,6,'#ff9d4b');SND.boom();objects.splice(i,1);continue;}
     tg.energy-=140;tg.hitT=0.2;SND.boom();
     if(tg.energy<=0)killObj(tg);
     objects.splice(i,1);continue;
@@ -2325,17 +2067,13 @@ function update(dt){
    o.b.f=rotAxis(o.b.f,o.b.u,0.5*dt);o.b.u=rotAxis(o.b.u,o.b.f,0.3*dt);o.b=ortho(o.b);
    var dc=ln(sub(o.pos,P.pos));
    if(CMD.tractorOn&&CMD.eq.tractor&&dc<500){
-    var pullDir=nrm(sub(P.pos,o.pos));
-    var pull=320*(1-dc/500);
+    var pullDir=nrm(sub(P.pos,o.pos));var pull=320*(1-dc/500);
     o.vel=add(o.vel,mul(pullDir,pull*dt));
     if(dc<170){
      if(o.isMissionContainer && mission && mission.type === 'courier'){
-      mission.hasContainer = true;
-      mission.stage = 'delivering';
+      mission.hasContainer = true;mission.stage = 'delivering';
       mission.message = 'МИССИЯ · контейнер на борту. Доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
-      msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');
-      SND.scoop();
-      renderBordComp();
+      msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');SND.scoop();renderBordComp();
       objects.splice(i,1); continue;
      }
      if(cargoCount()>=cargoMax())msg('Трюм полон','#ff4b3e');
@@ -2345,12 +2083,9 @@ function update(dt){
    }
    if(dc<170){
     if(o.isMissionContainer && mission && mission.type === 'courier'){
-     mission.hasContainer = true;
-     mission.stage = 'delivering';
+     mission.hasContainer = true;mission.stage = 'delivering';
      mission.message = 'МИССИЯ · контейнер на борту. Доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
-     msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');
-     SND.scoop();
-     renderBordComp();
+     msg('Контейнер на борту · курс: ' + mission.targetSysName, '#8cff6a');SND.scoop();renderBordComp();
      objects.splice(i,1);continue;
     }
     if(P.speed>=260)msg('Слишком быстро','#ff4b3e');
@@ -2358,7 +2093,7 @@ function update(dt){
     else{CMD.cargo[o.good]++;msg('Захвачено: '+GOODS_RU[o.good],'#ffd426');SND.scoop();}
     objects.splice(i,1);continue;
    }
-    if(!o.isMissionContainer && (o.life<=0||dc>200000))objects.splice(i,1);
+   if(!o.isMissionContainer && (o.life<=0||dc>200000))objects.splice(i,1);
    continue;
   }
   if(o.kind==='ast'){
@@ -2367,10 +2102,7 @@ function update(dt){
    o.b.f=rotAxis(o.b.f,o.b.u,o.spin.y*dt);o.b.u=rotAxis(o.b.u,o.b.f,o.spin.x*dt);o.b=ortho(o.b);
    if(station){
     var relAst=sub(o.pos,station.pos);
-    if(ln(relAst)<station.radius+2000 && stationCollision(relAst)){
-     boom(o.pos,6,'#d8a06a');SND.boom();
-     objects.splice(i,1);continue;
-    }
+    if(ln(relAst)<station.radius+2000 && stationCollision(relAst)){boom(o.pos,6,'#d8a06a');SND.boom();objects.splice(i,1);continue;}
    }
    var da=ln(sub(o.pos,P.pos));
    if(da<o.radius+50+P.speed*dt&&P.speed>60){
@@ -2397,23 +2129,16 @@ function update(dt){
      var mem = MEMORY.knownPirates[o.pname];
      var chatterKind = o.ship === 'thargon' ? 'thargon' : (o.kind==='pirate'?'pirateGreet':'policeGreet');
      if(mem && mem.count > 1 && o.kind==='pirate' && o.ship !== 'thargon'){
-       say(o, 'Ты! Снова ты!', '#ff4b3e');
-       o.aggr = (o.aggr||1) * 1.4;
-     } else {
-       say(o, pickChatter(chatterKind), o.kind==='pirate'?'#ff5f4d':'#7fd0ff');
-     }
+       say(o, 'Ты! Снова ты!', '#ff4b3e');o.aggr = (o.aggr||1) * 1.4;
+     } else {say(o, pickChatter(chatterKind), o.kind==='pirate'?'#ff5f4d':'#7fd0ff');}
    }
    o.cool-=dt;o.hitT=Math.max(0,(o.hitT||0)-dt);
    var aggro=o.hostile||(o.police&&CMD.legal>=1);
    var fleeTh = o.fleeThreshold || 0.2;
-   if(o.energy <= o.maxEnergy * fleeTh && !o.flee && aggro){
-     o.flee = true;
-     say(o, 'Я ухожу!', '#ffd426');
-   }
+   if(o.energy <= o.maxEnergy * fleeTh && !o.flee && aggro){o.flee = true;say(o, 'Я ухожу!', '#ffd426');}
    var needCombat = aggro && d < 6000 && !o.flee && o.energy > o.maxEnergy * fleeTh;
    if(needCombat){
-    var standoffMin = Math.max(500, o.radius + 300);
-    var standoffMax = standoffMin + 1800;
+    var standoffMin = Math.max(500, o.radius + 300);var standoffMax = standoffMin + 1800;
     if(d < standoffMin){steerTo(o, mul(dir, -1), 2.0, dt);o.speed = Math.min(o.speed + 250*dt, SHIP[o.ship].speed * 24);}
     else if(d > standoffMax){steerTo(o, dir, 1.2, dt);o.speed = Math.min(o.speed + 150*dt, SHIP[o.ship].speed * 24);}
     else{
@@ -2433,8 +2158,7 @@ function update(dt){
     o.wanderT = (o.wanderT || rnd(2,5)) - dt;
     if(o.wanderT <= 0){
      var wanderAxis = nrm(V(rnd(-1,1), rnd(-1,1), rnd(-1,1)));
-     o.wanderDir = nrm(rotAxis(o.b.f, wanderAxis, rnd(0.4, 1.1)));
-     o.wanderT = rnd(2.5, 6);
+     o.wanderDir = nrm(rotAxis(o.b.f, wanderAxis, rnd(0.4, 1.1)));o.wanderT = rnd(2.5, 6);
     }
     if(o.flee){
      steerTo(o, mul(dir, -1), 1.3, dt);
@@ -2446,24 +2170,19 @@ function update(dt){
     }
    }
    if(o.landing && o.slotTarget){
-     var toSlot = sub(o.slotTarget, o.pos);
-     var ds = ln(toSlot);
+     var toSlot = sub(o.slotTarget, o.pos);var ds = ln(toSlot);
      if(ds < 800){ objects.splice(i,1); continue; }
-     steerTo(o, toSlot, 1.5, dt);
-     o.speed = 150;
+     steerTo(o, toSlot, 1.5, dt);o.speed = 150;
    }
    o.pos = add(o.pos, mul(o.b.f, o.speed * dt));
    if(station){
     var relStat = sub(o.pos, station.pos);
-    if(ln(relStat) < station.radius + 1000 && stationCollision(relStat)){
-     boom(o.pos, 8, '#ff9d4b');SND.boom();objects.splice(i, 1);continue;
-    }
+    if(ln(relStat) < station.radius + 1000 && stationCollision(relStat)){boom(o.pos, 8, '#ff9d4b');SND.boom();objects.splice(i, 1);continue;}
    }
    if(d>300000 || (o.flee && d>200000)){objects.splice(i,1);continue;}
    var vColl=ln(sub(mul(o.b.f,o.speed),mul(P.b.f,P.speed)));
    if(d<o.radius+55+P.speed*dt&&P.speed>30&&vColl>80){
-    hurtPlayer(clamp(vColl*0.08,10,80));o.energy-=120;
-    msg('СТОЛКНОВЕНИЕ','#ff4b3e');
+    hurtPlayer(clamp(vColl*0.08,10,80));o.energy-=120;msg('СТОЛКНОВЕНИЕ','#ff4b3e');
     if(o.energy<=0)killObj(o);
     if(state!=='flight')return;
    }
@@ -2477,28 +2196,21 @@ function update(dt){
   if(bt.hostile){
    var wv=sub(p1,p0),pv=sub(P.pos,p0),wl2=dot(wv,wv);
    var t=wl2>1e-6?clamp(dot(pv,wv)/wl2,0,1):0;
-   if(ln(sub(add(p0,mul(wv,t)),P.pos))<62){
-    hurtPlayer(bt.dmg||10);bolts.splice(i,1);
-    if(state!=='flight')return;
-    continue;
-   }
+   if(ln(sub(add(p0,mul(wv,t)),P.pos))<62){hurtPlayer(bt.dmg||10);bolts.splice(i,1);if(state!=='flight')return;continue;}
   }
   bt.pos=p1;bt.life-=dt;
   if(bt.life<=0||ln(sub(bt.pos,P.pos))>200000)bolts.splice(i,1);
  }
  if(station && state==='flight' && !CMD.dockComp){
-  var relS2 = sub(P.pos, station.pos);
-  var along2 = dot(relS2, station.b.f);
-  var lx2 = Math.abs(dot(relS2, station.b.r));
-  var ly2 = Math.abs(dot(relS2, station.b.u));
+  var relS2 = sub(P.pos, station.pos);var along2 = dot(relS2, station.b.f);
+  var lx2 = Math.abs(dot(relS2, station.b.r));var ly2 = Math.abs(dot(relS2, station.b.u));
   if(lx2 < 400 && ly2 < 1000 && along2 > -400 && along2 < STATION_SLOT_FACE + 600 && P.speed < 300){doDock();return;}
  }
  var ships=0,asts=0;
  for(i=0;i<objects.length;i++){var kk=objects[i].kind;
   if(kk==='pirate'||kk==='trader'||kk==='police')ships++;else if(kk==='ast')asts++;}
  if(ships<5&&Math.random()<dt*0.2){
-  var isHostile=Math.random()<0.5;
-  var tech=curSys?curSys.tech:6;
+  var isHostile=Math.random()<0.5;var tech=curSys?curSys.tech:6;
   spawnShip(isHostile?pickPirate(tech):pickTrader(tech),isHostile,false);
  }
  if(asts<2&&Math.random()<dt*0.1)spawnAst();
@@ -2518,8 +2230,7 @@ function resize(){
  var r=screenEl.getBoundingClientRect();
  var w=r.width>2?r.width:960,h=r.height>2?r.height:600;
  var dpr=Math.min(1.5,window.devicePixelRatio||1);
- W=Math.round(clamp(w*dpr*RS,320,1900));
- H=Math.round(clamp(h*dpr*RS,220,1400));
+ W=Math.round(clamp(w*dpr*RS,320,1900));H=Math.round(clamp(h*dpr*RS,220,1400));
  if(W*H>2400000){var k=Math.sqrt(2400000/(W*H));W=Math.max(320,Math.round(W*k));H=Math.max(220,Math.round(H*k));}
  if(cv.width!==W)cv.width=W;
  if(cv.height!==H)cv.height=H;
@@ -2531,11 +2242,8 @@ window.addEventListener('load',layout);
 if(window.ResizeObserver){try{new ResizeObserver(function(){layout();}).observe(stageEl);}catch(e){}}
 
 function projectPt(p){
- var px = (p.x !== undefined) ? p.x : p[0];
- var py = (p.y !== undefined) ? p.y : p[1];
- var pz = (p.z !== undefined) ? p.z : p[2];
- var z = pz > 0.1 ? pz : 0.1;
- var s = FOCAL / z;
+ var px = (p.x !== undefined) ? p.x : p[0];var py = (p.y !== undefined) ? p.y : p[1];var pz = (p.z !== undefined) ? p.z : p[2];
+ var z = pz > 0.1 ? pz : 0.1;var s = FOCAL / z;
  return [W/2 + px*s, H/2 - py*s];
 }
 function edgePts(a,b){
@@ -2549,33 +2257,20 @@ function edgePts(a,b){
  if((pa[0]<-mx&&pb[0]<-mx)||(pa[0]>W+mx&&pb[0]>W+mx)||(pa[1]<-mx&&pb[1]<-mx)||(pa[1]>H+mx&&pb[1]>H+mx))return null;
  return[pa,pb];
 }
-function strokeEdges(list,tv){
- for(var i=0;i<list.length;i++){
-  var e=edgePts(tv[list[i][0]],tv[list[i][1]]);
-  if(e){ctx.moveTo(e[0][0],e[0][1]);ctx.lineTo(e[1][0],e[1][1]);}
- }
-}
+function strokeEdges(list,tv){for(var i=0;i<list.length;i++){var e=edgePts(tv[list[i][0]],tv[list[i][1]]);if(e){ctx.moveTo(e[0][0],e[0][1]);ctx.lineTo(e[1][0],e[1][1]);}}}
 function drawObj(o,vb){
  var bp=BP[o.bp];if(!bp||!o.b)return;
- var rel=sub(o.pos,P.pos),d=ln(rel);
- if(!(d>1))return;
- var c=toLocal(vb,rel);
- if(!isFinite(c.x)||!isFinite(c.y)||!isFinite(c.z))return;
+ var rel=sub(o.pos,P.pos),d=ln(rel);if(!(d>1))return;
+ var c=toLocal(vb,rel);if(!isFinite(c.x)||!isFinite(c.y)||!isFinite(c.z))return;
  var br=toLocal(vb,o.b.r),bu=toLocal(vb,o.b.u),bf=toLocal(vb,o.b.f);
  var tv=[],i,j,vv,x,y,z;
- for(i=0;i<bp.v.length;i++){
-  vv=bp.v[i];x=vv[0];y=vv[1];z=vv[2];
-  tv.push([c.x+x*br.x+y*bu.x+z*bf.x,c.y+x*br.y+y*bu.y+z*bf.y,c.z+x*br.z+y*bu.z+z*bf.z]);
- }
+ for(i=0;i<bp.v.length;i++){vv=bp.v[i];x=vv[0];y=vv[1];z=vv[2];
+  tv.push([c.x+x*br.x+y*bu.x+z*bf.x,c.y+x*br.y+y*bu.y+z*bf.y,c.z+x*br.z+y*bu.z+z*bf.z]);}
  var fv=[];
  for(i=0;i<bp.n.length;i++){
   var n=bp.n[i],ct=bp.cen[i];
-  var nx=n[0]*br.x+n[1]*bu.x+n[2]*bf.x;
-  var ny=n[0]*br.y+n[1]*bu.y+n[2]*bf.y;
-  var nz=n[0]*br.z+n[1]*bu.z+n[2]*bf.z;
-  var ccx=c.x+ct[0]*br.x+ct[1]*bu.x+ct[2]*bf.x;
-  var ccy=c.y+ct[0]*br.y+ct[1]*bu.y+ct[2]*bf.y;
-  var ccz=c.z+ct[0]*br.z+ct[1]*bu.z+ct[2]*bf.z;
+  var nx=n[0]*br.x+n[1]*bu.x+n[2]*bf.x;var ny=n[0]*br.y+n[1]*bu.y+n[2]*bf.y;var nz=n[0]*br.z+n[1]*bu.z+n[2]*bf.z;
+  var ccx=c.x+ct[0]*br.x+ct[1]*bu.x+ct[2]*bf.x;var ccy=c.y+ct[0]*br.y+ct[1]*bu.y+ct[2]*bf.y;var ccz=c.z+ct[0]*br.z+ct[1]*bu.z+ct[2]*bf.z;
   fv.push((nx*ccx+ny*ccy+nz*ccz)<0);
  }
  if(o.kind==='station'&&bp.n.length>0){
@@ -2583,18 +2278,11 @@ function drawObj(o,vb){
   for(i=0;i<bp.n.length;i++){
    if(!fv[i])continue;
    var ct2=bp.cen[i];
-   var c2x=c.x+ct2[0]*br.x+ct2[1]*bu.x+ct2[2]*bf.x;
-   var c2y=c.y+ct2[0]*br.y+ct2[1]*bu.y+ct2[2]*bf.y;
-   var c2z=c.z+ct2[0]*br.z+ct2[1]*bu.z+ct2[2]*bf.z;
+   var c2x=c.x+ct2[0]*br.x+ct2[1]*bu.x+ct2[2]*bf.x;var c2y=c.y+ct2[0]*br.y+ct2[1]*bu.y+ct2[2]*bf.y;var c2z=c.z+ct2[0]*br.z+ct2[1]*bu.z+ct2[2]*bf.z;
    if(c2z<NEAR)continue;
    var cp=projectPt([c2x,c2y,c2z]);
-   for(j=0;j<bp.e.length;j++){
-    var ed=bp.e[j];
-    if(ed[2]!==i&&ed[3]!==i)continue;
-    var e=edgePts(tv[ed[0]],tv[ed[1]]);
-    if(!e)continue;
-    ctx.beginPath();ctx.moveTo(cp[0],cp[1]);ctx.lineTo(e[0][0],e[0][1]);ctx.lineTo(e[1][0],e[1][1]);ctx.closePath();ctx.fill();
-   }
+   for(j=0;j<bp.e.length;j++){var ed=bp.e[j];if(ed[2]!==i&&ed[3]!==i)continue;var e=edgePts(tv[ed[0]],tv[ed[1]]);if(!e)continue;
+    ctx.beginPath();ctx.moveTo(cp[0],cp[1]);ctx.lineTo(e[0][0],e[0][1]);ctx.lineTo(e[1][0],e[1][1]);ctx.closePath();ctx.fill();}
   }
  }
  var hasPath=false;ctx.beginPath();
@@ -2637,11 +2325,9 @@ function drawSun(){
  if(!isFinite(sr)||sr<0.4||!isFinite(p[0])||!isFinite(p[1]))return;
  var R=Math.max(sr*5.5,12);
  if(p[0]+R<0||p[0]-R>W||p[1]+R<0||p[1]-R>H)return;
- try{
-  var g=ctx.createRadialGradient(p[0],p[1],Math.max(0.5,sr*0.2),p[0],p[1],R);
+ try{var g=ctx.createRadialGradient(p[0],p[1],Math.max(0.5,sr*0.2),p[0],p[1],R);
   g.addColorStop(0,'#fffdf0');g.addColorStop(0.14,'#ffe27a');g.addColorStop(0.40,'rgba(255,160,50,.28)');g.addColorStop(1,'rgba(255,120,20,0)');
-  ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],R,0,Math.PI*2);ctx.fill();
- }catch(e){}
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(p[0],p[1],R,0,Math.PI*2);ctx.fill();}catch(e){}
  ctx.fillStyle='#fffbdf';ctx.beginPath();ctx.arc(p[0],p[1],Math.max(sr,1.6),0,Math.PI*2);ctx.fill();
 }
 var SEA_COL=['#0a2540','#155080','#2a88c8','#5fbee8'];
@@ -2690,11 +2376,8 @@ function surface(vb,c,sr,pl,d, pCtx){
  var projX = c.x * (FOCAL / c.z);var projY = -c.y * (FOCAL / c.z);
  for(i=0;i<n;i++){
   var u=verts[i];
-  var ox=R*(u[0]*e1.x+u[1]*e2.x+u[2]*e3.x);
-  var oy=R*(u[0]*e1.y+u[1]*e2.y+u[2]*e3.y);
-  var oz=R*(u[0]*e1.z+u[1]*e2.z+u[2]*e3.z);
-  var X=c.x+ox,Y=c.y+oy,Z=c.z+oz;
-  var dv=ox*X+oy*Y+oz*Z;
+  var ox=R*(u[0]*e1.x+u[1]*e2.x+u[2]*e3.x);var oy=R*(u[0]*e1.y+u[1]*e2.y+u[2]*e3.y);var oz=R*(u[0]*e1.z+u[1]*e2.z+u[2]*e3.z);
+  var X=c.x+ox,Y=c.y+oy,Z=c.z+oz;var dv=ox*X+oy*Y+oz*Z;
   if(Z>2&&dv<0){
    var s=FOCAL/Z;
    px[i*2] = X*s - projX; px[i*2+1] = -Y*s - projY; vis[i]=1;
@@ -2706,11 +2389,9 @@ function surface(vb,c,sr,pl,d, pCtx){
  var bi;for(bi=0;bi<BUCK.length;bi++)BUCK[bi].length=0;
  function bucketOf(l){return l>=0.5?3:(l>=0.18?2:(l>=0.0?1:0));}
  function scan(list,base){
-  for(var k=0;k<list.length;k++){
-   var q=list[k];
+  for(var k=0;k<list.length;k++){var q=list[k];
    if(!vis[q[0]]||!vis[q[1]]||!vis[q[2]]||!vis[q[3]])continue;
-   BUCK[base+bucketOf((lit[q[0]]+lit[q[1]]+lit[q[2]]+lit[q[3]])*0.25)].push(q);
-  }
+   BUCK[base+bucketOf((lit[q[0]]+lit[q[1]]+lit[q[2]]+lit[q[3]])*0.25)].push(q);}
  }
  scan(PL.sea,0);scan(PL.land,4);scan(PL.ice,8);
  function fill(cells,color,stroke){
@@ -2782,8 +2463,7 @@ function drawBolts(vb){
  }
 }
 function drawMarker(vb,pos,label,col,fs){
- var rel=sub(pos,P.pos),c=toLocal(vb,rel),d=ln(rel);
- if(!(d>1))return;
+ var rel=sub(pos,P.pos),c=toLocal(vb,rel),d=ln(rel);if(!(d>1))return;
  if(c.z>NEAR){var p=projectPt(c);if(isFinite(p[0])&&p[0]>18&&p[0]<W-18&&p[1]>18&&p[1]<H-18)return;}
  var dir=c.z>0?V(c.x,c.y,0):V(-c.x,-c.y,0),l=Math.sqrt(dir.x*dir.x+dir.y*dir.y);
  if(!(l>1e-4)){dir=V(1,0,0);l=1;}
@@ -2803,10 +2483,8 @@ function radarRange(){
  var need=1500,i;
  if(station)need=Math.max(need,ln(sub(station.pos,P.pos))*1.05);
  for(i=0;i<objects.length;i++){
-  var o=objects[i];
-  if(o.kind==='debris'||o.kind==='ast')continue;
-  var d=ln(sub(o.pos,P.pos));
-  if(d<26000)need=Math.max(need,d*1.05);
+  var o=objects[i];if(o.kind==='debris'||o.kind==='ast')continue;
+  var d=ln(sub(o.pos,P.pos));if(d<26000)need=Math.max(need,d*1.05);
   if(o.isMissionContainer||o.isMissionTarget)need=Math.max(need,d*1.05);
  }
  for(i=0;i<RANGES.length;i++)if(RANGES[i]>=need)return RANGES[i];
@@ -2840,8 +2518,7 @@ function drawRadar(vb,dt,target){
  try{
   var lp=sub(planet.pos,P.pos),dp=ln(lp);
   if(dp>1){
-   var lpl=toLocal(vb,lp);
-   var th=Math.atan2(lpl.x,lpl.z);
+   var lpl=toLocal(vb,lp);var th=Math.atan2(lpl.x,lpl.z);
    var ha=Math.min(Math.PI*0.98,Math.asin(clamp(planet.r/dp,-1,1)));
    ctx.strokeStyle='rgba(110,180,255,.85)';ctx.lineWidth=Math.max(2,3.2*u);
    ctx.beginPath();ctx.arc(cx,cy,R*0.955,th-ha-Math.PI/2,th+ha-Math.PI/2);ctx.stroke();
@@ -2851,23 +2528,19 @@ function drawRadar(vb,dt,target){
  }catch(e){}
  try{
   var ls=sub(sun.pos,P.pos),ds=ln(ls);
-  if(ds>1){
-   var lsl=toLocal(vb,ls),ths=Math.atan2(lsl.x,lsl.z);
+  if(ds>1){var lsl=toLocal(vb,ls),ths=Math.atan2(lsl.x,lsl.z);
    var pxs=cx+Math.sin(ths)*R*0.97,pys=cy-Math.cos(ths)*R*0.97;
-   radarBlip(pxs,pys,'#ffd76a','star',Math.max(3,4.2*u),0);
-  }
+   radarBlip(pxs,pys,'#ffd76a','star',Math.max(3,4.2*u),0);}
  }catch(e){}
  for(i=0;i<objects.length;i++){
   var o=objects[i];if(o.kind==='debris')continue;
   var l=toLocal(vb,sub(o.pos,P.pos));
-  var hp=Math.sqrt(l.x*l.x+l.z*l.z),d=ln(l);
-  if(!(d>1))continue;
+  var hp=Math.sqrt(l.x*l.x+l.z*l.z),d=ln(l);if(!(d>1))continue;
   var k=R/Math.max(1e-6,range),X=l.x*k,Y=-l.z*k,out=false;
   var rr=Math.sqrt(X*X+Y*Y);
   if(rr>R*0.96){var sc=(R*0.96)/Math.max(1e-6,rr);X*=sc;Y*=sc;out=true;}
   var x=cx+X,y=cy+Y;
   var sz=Math.max(2.6,3.6*u),col='#8cff6a',shape='dot',ang=0;
-  /* Спец. отрисовка миссий */
   if(o.isMissionContainer || o.isMissionTarget){
    ctx.globalAlpha = out ? 0.6 : 1;
    if(o.isMissionContainer){
@@ -2891,8 +2564,7 @@ function drawRadar(vb,dt,target){
    else if(o.kind==='cargo'){col='#ffd426';shape='dia';}
    else if(o.kind==='ast'){col='#c9a06a';shape='dot';}
    else if(o.kind==='missile'){col='#ff9d4b';shape='dot';}
-   else{
-    var f=toLocal(vb,o.b.f);ang=Math.atan2(f.x,f.z);shape='tri';
+   else{var f=toLocal(vb,o.b.f);ang=Math.atan2(f.x,f.z);shape='tri';
     if(o.kind==='pirate')col=o.hostile?'#ff5f4d':'#8cff6a';
     else if(o.kind==='police')col=(CMD.legal>=1)?'#ff5f4d':'#7fd0ff';
     else col='#8cff6a';
@@ -2989,25 +2661,20 @@ function drawHUD(vb,dt,target){
  ctx.fillStyle=en>0.5?'#8cff6a':(en>0.22?'#ffd426':'#ff4b3e');
  ctx.fillRect(ex-3*u,ey+eh-eh*en,6*u,Math.max(1,eh*en));
  for(i=0;i<=4;i++){var y2=ey+eh-eh*(i/4);ctx.strokeStyle=g;ctx.beginPath();ctx.moveTo(ex-(i%2===0?10:6)*u,y2);ctx.lineTo(ex,y2);ctx.stroke();}
- /* ПРИБОР КРЕНА (круглый) — заменяет прямоугольный */
  var R=clamp(Math.min(W,H)*0.175,62,152);
  var rcx=Math.max(80,W/2-R-80),rcy=H-R-Math.max(12,H*0.028);
  var rollR=Math.min(42,W*0.045);
  var rra=Math.atan2(P.b.r.y,Math.max(1e-6,Math.hypot(P.b.r.x,P.b.r.z)));
  if(P.rear) rra = -rra;
- // Внешний круг
  ctx.strokeStyle=g;ctx.lineWidth=Math.max(1.2,1.5*u);
  ctx.beginPath();ctx.arc(rcx,rcy,rollR,0,Math.PI*2);ctx.stroke();
- // Внутренний круг (фон)
  ctx.fillStyle='rgba(8,16,8,0.5)';
  ctx.beginPath();ctx.arc(rcx,rcy,rollR-1,0,Math.PI*2);ctx.fill();
- // Горизонт, поворачивается на rra
  ctx.save();ctx.translate(rcx,rcy);ctx.rotate(rra);
  ctx.strokeStyle='rgba(140,255,106,0.5)';ctx.lineWidth=Math.max(0.8,1*u);
  ctx.beginPath();ctx.arc(0,0,rollR*0.7,0,Math.PI*2);ctx.stroke();
  ctx.strokeStyle='#eaffea';ctx.lineWidth=Math.max(1.4,2*u);
  ctx.beginPath();ctx.moveTo(-rollR*0.85,0);ctx.lineTo(rollR*0.85,0);ctx.stroke();
- // Метки крена
  var marks=[-60,-45,-30,-15,0,15,30,45,60];
  ctx.strokeStyle='rgba(140,255,106,0.65)';ctx.lineWidth=Math.max(0.8,1.1*u);
  for(var mi=0;mi<marks.length;mi++){
@@ -3019,17 +2686,14 @@ function drawHUD(vb,dt,target){
   ctx.stroke();
  }
  ctx.restore();
- // Фиксированный символ самолёта (треугольник) в центре
  ctx.fillStyle='#ffd426';
  ctx.beginPath();
  ctx.moveTo(rcx,rcy-rollR*0.13);
  ctx.lineTo(rcx-rollR*0.13,rcy+rollR*0.15);
  ctx.lineTo(rcx+rollR*0.13,rcy+rollR*0.15);
  ctx.closePath();ctx.fill();
- // Подпись
  ctx.fillStyle='rgba(140,255,106,.6)';ctx.font=Math.round(fs*0.72)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
  ctx.fillText('КРЕН',rcx,rcy+rollR+fs*0.9);ctx.textAlign='left';
- /* конец прибора крена */
  ctx.font=Math.round(fs*0.82)+'px "JetBrains Mono",monospace';ctx.fillStyle=g;
  var ty=H*0.07;
  ctx.fillText('СКОРОСТЬ '+(P.speed/P.maxSpeed*0.35).toFixed(2)+' LM',W*0.022,ty);
@@ -3131,14 +2795,10 @@ function render(dt){
  drawBolts(vb);
  if(CMD.tractorOn&&CMD.eq.tractor&&state==='flight'){
   for(var t=0;t<objects.length;t++){
-   var oc=objects[t];
-   if(oc.kind!=='cargo')continue;
-   var dtb=ln(sub(oc.pos,P.pos));
-   if(dtb>=500)continue;
-   var ac=toLocal(vb,sub(oc.pos,P.pos));
-   if(ac.z<NEAR)continue;
-   var pc=projectPt(ac);
-   if(!isFinite(pc[0]))continue;
+   var oc=objects[t];if(oc.kind!=='cargo')continue;
+   var dtb=ln(sub(oc.pos,P.pos));if(dtb>=500)continue;
+   var ac=toLocal(vb,sub(oc.pos,P.pos));if(ac.z<NEAR)continue;
+   var pc=projectPt(ac);if(!isFinite(pc[0]))continue;
    ctx.strokeStyle='rgba(63,220,255,'+(0.75-dtb/700).toFixed(2)+')';
    ctx.lineWidth=Math.max(1,H/420);
    ctx.beginPath();ctx.moveTo(W/2,H/2);ctx.lineTo(pc[0],pc[1]);ctx.stroke();
@@ -3174,8 +2834,7 @@ function loop(ts){
     if(ob.kind==='demo'){
      var a=ob.phase+demoT*ob.w;
      var np=add(station.pos,add(mul(demoAxis.r,Math.cos(a)*ob.orbit),mul(demoAxis.u,Math.sin(a)*ob.orbit)));
-     var vel=sub(np,ob.pos);
-     ob.pos=np;
+     var vel=sub(np,ob.pos);ob.pos=np;
      if(ln(vel)>1e-6)ob.b=basisFrom(vel);
     }else if(ob.kind==='station'){
      var rat=ob.spin*dt;ob.b.r=rotAxis(ob.b.r,ob.b.f,rat);ob.b.u=rotAxis(ob.b.u,ob.b.f,rat);ob.b=ortho(ob.b);
@@ -3241,11 +2900,8 @@ function updateBar(){
  if(bb){
   if(MEMORY.bounty > 0){
    bb.style.display = 'inline';
-   var bv = $('#st-bounty-val');
-   if(bv) bv.textContent = MEMORY.bounty + ' Cr';
-  } else {
-   bb.style.display = 'none';
-  }
+   var bv = $('#st-bounty-val');if(bv) bv.textContent = MEMORY.bounty + ' Cr';
+  } else {bb.style.display = 'none';}
  }
 
  var bcomp = $('#bordcomp');
@@ -3281,24 +2937,19 @@ function updateBar(){
 
 function computeBestPrices(){
  var sys=galaxy(gal),cur=sys[CMD.sysIdx],maxFuel=CMD.fuel/10;
- var best=[],g,i;
- var visitedArr=CMD.visitedSystems||[];
+ var best=[],g,i;var visitedArr=CMD.visitedSystems||[];
  for(g=0;g<QQ23.length;g++)best[g]={price:CMD.market[g].price/10,sys:null,current:true};
  for(i=0;i<sys.length;i++){
   if(i===CMD.sysIdx)continue;
   if(visitedArr.indexOf(i)<0)continue;
   if(lyBetween(cur,sys[i])>maxFuel)continue;
   var m=marketOf(sys[i]);
-  for(g=0;g<QQ23.length;g++){
-   var p=m[g].price/10;
-   if(p>best[g].price)best[g]={price:p,sys:sys[i].name,current:false};
-  }
+  for(g=0;g<QQ23.length;g++){var p=m[g].price/10;if(p>best[g].price)best[g]={price:p,sys:sys[i].name,current:false};}
  }
  return best;
 }
 function openMarket(){
- state='docked';prevState='docked';
- show('ov-market');
+ state='docked';prevState='docked';show('ov-market');
  $('#mk-sys').textContent=curSys.name;
  $('#mk-econ').textContent=ECON[curSys.econ];
  $('#mk-gov').textContent=GOV[curSys.gov];
@@ -3306,8 +2957,7 @@ function openMarket(){
  CMD._bestPrices=computeBestPrices();
  if(Math.random() < 0.7){
   var rumor = NEWS[Math.floor(Math.random()*NEWS.length)];
-  var rEl = $('#mk-rumor');
-  if(rEl) rEl.textContent = '📻 ' + rumor;
+  var rEl = $('#mk-rumor');if(rEl) rEl.textContent = '📻 ' + rumor;
  }
  renderMarket();updateBar();
 }
@@ -3327,8 +2977,7 @@ function renderMarket(){
  var cg=$('#mk-cargo'),ch='',bp=CMD._bestPrices||[];
  for(i=0;i<CMD.cargo.length;i++){
   if(CMD.cargo[i]>0){
-   var curP=CMD.market[i].price/10,extra='';
-   var b=bp[i];
+   var curP=CMD.market[i].price/10,extra='';var b=bp[i];
    if(b&&!b.current&&b.price>curP)extra=' <span style="color:var(--grn)">→ '+b.price.toFixed(1)+' · '+b.sys+'</span>';
    ch+='<span>'+GOODS_RU[i]+' <b>×'+CMD.cargo[i]+'</b>'+extra+'</span>';
   }
@@ -3661,13 +3310,9 @@ function loadGame(){
   MEMORY.knownPirates = {};
   MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
   MEMORY.bounty = 0;
-  ambientTimer = 25;
-  bgSoundTimer = 12;
-  missionSpawnTimer = 45;
-  vipPirateTimer = 0;
-  mission = null;
-  stationGreeted = false;
+  ambientTimer = 25;bgSoundTimer = 12;missionSpawnTimer = 45;vipPirateTimer = 0;mission = null;stationGreeted = false;
   renderBordComp();
+  rebuildMarketTicker();
   targetSys=null;state='flight';prevState='flight';show(null);
   msg('Загружено · '+curSys.name+' · '+curShip().ru,'#3fdcff');
   return true;
@@ -3683,12 +3328,7 @@ function newGame(name){
  MEMORY.knownPirates = {};
  MEMORY.factions = { traders:0, pirates:0, police:0, thargoids:0 };
  MEMORY.bounty = 0;
- ambientTimer = 20;
- bgSoundTimer = 12;
- missionSpawnTimer = 45;
- vipPirateTimer = 0;
- mission = null;
- stationGreeted = false;
+ ambientTimer = 20;bgSoundTimer = 12;missionSpawnTimer = 45;vipPirateTimer = 0;mission = null;stationGreeted = false;
  buildSystem(7,true);
  state='docked';prevState='docked';
  layout();
@@ -3696,9 +3336,9 @@ function newGame(name){
  msg('Вы в доке станции «Кориолис» · нажмите «ОТСТЫКОВКА», когда будете готовы','#3fdcff');
  msg('Совет: начните с покупки товаров · цель для первого рейса — ZAONCE','#ffd426');
  SND.init();SND.beep();saveGame(true);
- 
  SND.startDockAmb();
  renderBordComp();
+ rebuildMarketTicker();
  openMarket();
 }
 function toTitle(){state='title';prevState='title';show('ov-title');$('#btn-cont').disabled=!hasSave();demoWorld();layout();}
@@ -3735,6 +3375,7 @@ $('#cmdr').value='JAMESON';
 renderBordComp();
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
 initNewsTicker();
+rebuildMarketTicker();
 requestAnimationFrame(loop);
 })();
 </script>
