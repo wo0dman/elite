@@ -168,7 +168,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .newsbar{flex:none;height:26px;background:#070b12;border-bottom:1px solid var(--line);display:flex;align-items:center;overflow:hidden;font-family:var(--f-mono);font-size:11px;position:relative}
 .news-label{flex:none;padding:0 12px;height:100%;display:flex;align-items:center;background:#0a1018;border-right:1px solid var(--line);color:var(--grn);font-weight:600;font-size:10px;letter-spacing:.1em;z-index:2;text-shadow:0 0 8px #8cff6a55}
 .news-view{flex:1;min-width:0;height:100%;overflow:hidden;position:relative}
-.newsticker{display:inline-block;white-space:nowrap;padding-left:100%;will-change:transform;color:var(--mut);line-height:26px}
+.newsticker{display:inline-block;white-space:nowrap;padding-left:100%;will-change:transform;color:var(--cy);line-height:26px;font-family:var(--f-mono);font-size:12px;letter-spacing:.02em}
 @keyframes scroll-news{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 /* Вторая строка — рынок */
 .newsbar.market{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#0a0812}
@@ -645,7 +645,79 @@ var NEWS = [
   '⠁⠃⠇⠇⨀ ⨁⨂ — сигнал на частоте, официально не используемой.',
   '◈⬡⏣ ⨙⨚ — сообщение без отправителя.',
   '⨀⨁⨂◈ ⌬⏣ — данные переданы. Ждите.',
-  '⨄⨅⨆⨇ ⨈◈ — координаты в системе счисления, не встречавшейся ранее.'
+  '⨄⨅⨆⨇ ⨈◈ — координаты в системе счисления, не встречавшейся ранее.',
+  /* ===== КОСМИЧЕСКИЕ АНЕКДОТЫ И ШУТКИ ===== */
+'Пилоты травят байки про странные корабли в гиперпространстве. Самый бывалый молчит. — А вы, сэр, видели что-нибудь подобное? — Нет. У меня правило — не напиваться перед вылетом.',
+'Империи не хватает кораблей. Пилот: «Меня выкинули в открытый космос и заставили изображать TIE-истребитель!» Офицер: «Тебе повезло. Мы всем экипажем изображали звездный разрушитель».',
+'Космонавт сообщает в ЦУП: «В двух километрах от корабля огромное синее чудовище с антенной. Смотрит на меня и держит фотоаппарат».',
+'— Как называется фильм про космос? — «Космические яйца». — А про астронавтов? — «Космические тупицы».',
+'— Почему космонавты всегда опаздывают? — Потому что они живут в другом часовом поясе.',
+'— Какой любимый вид спорта у астронавтов? — Прыжки в высоту. На Луне.',
+'— Что сказал астронавт, когда нашел шоколадку в космосе? — «Сладость!»',
+'— Почему Солнце не пошло в колледж? — У него уже был миллион градусов.',
+'— Почему ресторан на Луне прогорел? — Потому что у него не было атмосферы.',
+'— Как удержать штаны в космосе? — Поясом астероидов.',
+'— Что сказать трехголовому пришельцу? — Привет. Привет. Привет.',
+'— Почему Нептун расстался с Ураном? — Они хотели плутонических отношений.',
+'— Как астрономы начинают вечеринку? — Они план… планируют.',
+'— Какая самая образованная планета? — Солнце: миллионы градусов.',
+'— Какие звезды носят солнечные очки? — Кинозвезды.',
+'— Почему звезду арестовали? — Она была падающей.',
+'— Как уложить маленького астронавта спать? — Ракетой!',
+'— Почему Луна не получила кредит? — У нее была последняя четверть.',
+'— Что сказал Сатурн Юпитеру? — Дай мне кольцо как-нибудь.',
+'— Почему корову отправили в космос? — Чтобы она увидела МУУУУУн.',
+'— Что читают планеты? — Кометы книг.',
+'— Почему звезда получила двойку? — Она была ниже уровня C.',
+'— Что сказал большой астероид маленькому? — Не волнуйся, это не конец света.',
+'— Что сказала одна черная дыра другой? — У меня есть ион для тебя.',
+'— Почему звезду выгнали из бара? — Она была слишком яркой и шумной.',
+'— Любимый шоколад астронавта? — Марс.',
+'— Почему собака Сириус не смеялась над шуткой? — Было слишком Сириус.',
+'— Почему Луна пропустила ужин? — Она была полной.',
+'— Что называют замороженным астронавтом? — Астро-поп.',
+'— Что такое световой год? — Это как обычный год, но с меньшим количеством калорий.',
+'— Как астронавт развлекается? — Он просто космический.',
+'— Что сказал астронавт, когда нашел конфету в космосе? — Сладко! Марс!',
+'— Почему свидание на Луне прошло плохо? — Не было химии.',
+'— Что сказал маленький астронавт? — Мне нужно немного пространства.',
+'— Почему астронавт расстался? — Ему нужно было пространство.',
+'— Что сказал астронавт липкому другу? — Мне нужно немного пространства.',
+'— Что сказал Юпитер Сатурну? — Дай мне кольцо как-нибудь.',
+'— Почему Венера пошла на пляж? — Чтобы получить тан-гент.',
+'— Что сказал инопланетянин, когда увидел Землю? — Какая красивая голубая планета. Жаль, что там живут люди.',
+'— Сколько астрономов нужно, чтобы вкрутить лампочку? — Ни одного, они любят темноту.',
+'— Почему астронавты никогда не теряются? — Они всегда следуют за звездами.',
+'— Что сказал астронавт, когда его спросили, как пройти в Карнеги-холл? — Практика, парень, практика.',
+'— Что сказал лунный житель, увидев спутник? — Эй, малыш, куда спешишь? Я облетаю Землю за 28 дней. — А я пытаюсь убежать от русских.',
+'— Как называется космический корабль, который корчит рожи? — Смешная тарелка.',
+'— Почему астронавт взял метлу? — Чтобы подмести галактику.',
+'— Что делают инопланетяне в пятницу? — Летающие тарелки со скидкой.',
+'— Почему пришелец провалил экзамен по вождению? — Он превышал скорость.',
+'— Что сказала одна звезда другой? — Ты освещаешь мое небо.',
+'— Что сказал Марс, когда покраснел? — Земля помахала мне.',
+'— Что сказала черная дыра после ужина? — Это действительно заполнило пустоту.',
+'— Почему астронавты спокойны под давлением? — Они умеют оставаться холодными в космосе.',
+'— Что сказал астронавт, когда нашел шоколадку? — Сладость!',
+'— Почему Солнце пошло к врачу? — У него был солнечный ожог.',
+'— Что сказал Нил Армстронг, когда наступил на жвачку? — Это один маленький шаг для человека, но гигантский скачок для моего стоматологического счета.',
+'— Что сказала одна черная дыра другой? — У меня есть ион для тебя.',
+'— Почему Венера пошла на пляж? — Чтобы получить тан-гент.',
+'— Почему Юпитер такой большой? — Он просто много ест.',
+'— Что сказал Плутон? — Я все еще планета в вашем сердце.',
+'— Почему Сатурн такой хороший в отношениях? — Он всегда надевает кольцо.',
+'— Что сказал астронавт, когда увидел Землю? — Это не дом, это просто место, где я оставил ключи.',
+'— Почему инопланетяне не выходят на связь? — Они читают наши новости.',
+'— Что сказал космический турист, сидя в «Союзе»? — Я VIP: один в трехместном корабле, и даже окно разрешили не закрывать.',
+'— Что сказал пилот, увидев стар-дестроер? — Я думал, это галлюцинация. Оказалось, это практика.',
+'— Что сказал пилот после учений? — Меня заставили изображать TIE-истребитель. А офицер сказал, что весь экипаж изображал стар-дестроер.',
+'— Какой самый популярный напиток в космосе? — «Млечный путь».',
+'— Почему космонавты не боятся темноты? — Они знают, что звезды всегда рядом.',
+'— Что сказал астронавт, когда уронил инструмент в открытый космос? — Ну вот, теперь это чей-то НЛО.',
+'— Почему космические пираты всегда веселые? — У них есть корабли с хорошим чувством юмора.',
+'— Что сказал Таргон, когда увидел торговца? — Обед!',
+'— Почему Вайперы всегда летают парами? — Один стреляет, другой пишет протокол.',
+'— Что сказал пилот, когда пристыковался со скоростью 300? — «Ой».'
 ];
 
 var newsTickerEl = null;
@@ -918,6 +990,25 @@ var SND={ac:null,on:true,
  scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);},
  dockAmb:null,
  startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
+  shipAmb:null, shipAmbGain:null,
+ startShipAmb:function(){
+   if(!this.ac || this.shipAmb || !this.on) return;
+   try{
+     var o = this.ac.createOscillator();
+     var g = this.ac.createGain();
+     o.type = 'sawtooth';
+     o.frequency.value = 72;          // ниже, чем у дока (40), но другой тембр
+     g.gain.value = 0.006;            // тише, чем гул дока
+     o.connect(g); g.connect(this.ac.destination);
+     o.start();
+     this.shipAmb = o; this.shipAmbGain = g;
+   }catch(e){}
+ },
+ stopShipAmb:function(){
+   if(!this.shipAmb) return;
+   try{ this.shipAmb.stop(); }catch(e){}
+   this.shipAmb = null; this.shipAmbGain = null;
+ },
  stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
  chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
  sonar:function(){this.tone(1400,700,0.15,'sine',0.025);},
@@ -925,7 +1016,7 @@ var SND={ac:null,on:true,
  radioStatic:function(){
   if(!this.on||!this.ac)return false;
   try{
-   var dur=3+Math.random()*7;
+   var dur=6+Math.random()*12;
    var t=this.ac.currentTime;
    var n=Math.max(1,Math.floor(this.ac.sampleRate*dur));
    var b=this.ac.createBuffer(1,n,this.ac.sampleRate);
@@ -1628,11 +1719,11 @@ window.addEventListener('keydown',function(e){
 window.addEventListener('keyup',function(e){keys[e.code]=false;});
 window.addEventListener('blur',function(){
   keys={};touch.up=false;touch.down=false;touch.fire=false;touch.yawL=false;touch.yawR=false;
+  if(document.exitPointerLock){ try { document.exitPointerLock(); } catch(err) {} }
   if(stickCaptured){ stickCaptured=false; stickEl.classList.remove('captured'); }
   if(stickReturnAnim){ cancelAnimationFrame(stickReturnAnim); stickReturnAnim=null; }
   resetStick();
 });
-
 var stickEl=$('#stick'),knobEl=$('#knob');
 var stickCaptured = false;
 var stickReturnAnim = null;
@@ -1663,12 +1754,62 @@ function smoothReturnStick(){
 }
 stickEl.addEventListener('pointerdown', function(e){
   if(e.button !== 0 && e.pointerType === 'mouse') return;
-  e.preventDefault();SND.init();
+  e.preventDefault();
+  SND.init();
   if(stickReturnAnim){ cancelAnimationFrame(stickReturnAnim); stickReturnAnim = null; }
-  if(stickCaptured){stickCaptured = false;stickEl.classList.remove('captured');smoothReturnStick();}
-  else {stickCaptured = true;stickEl.classList.add('captured', 'act');stickMove(e);}
+
+  if(stickCaptured){
+    // отпускаем — pointerlockchange сработает и всё почистит
+    if(document.exitPointerLock) { try { document.exitPointerLock(); } catch(err) {} }
+    return;
+  }
+
+  // захват
+  stickCaptured = true;
+  stickEl.classList.add('captured', 'act');
+  touch.x = 0;
+  touch.y = 0;
+  updateKnobVisual();
+
+  if(stickEl.requestPointerLock){
+    try { stickEl.requestPointerLock(); } catch(err) {}
+  }
 });
-window.addEventListener('pointermove', function(e){if(stickCaptured) stickMove(e);});
+
+// Следим за захватом — если pointer lock потерян (Esc, переключение вкладки и т.д.),
+// корректно отпускаем джойстик
+document.addEventListener('pointerlockchange', function(){
+  if(document.pointerLockElement !== stickEl){
+    if(stickCaptured){
+      stickCaptured = false;
+      stickEl.classList.remove('captured');
+      smoothReturnStick();
+    }
+  }
+});
+document.addEventListener('pointerlockerror', function(){
+  // Браузер запретил lock — тихо откатываемся
+  if(stickCaptured){
+    stickCaptured = false;
+    stickEl.classList.remove('captured');
+    smoothReturnStick();
+  }
+});
+
+// Движение мыши. При pointer lock используется относительное смещение,
+// при отсутствии lock — старое абсолютное поведение (fallback для старых браузеров)
+document.addEventListener('pointermove', function(e){
+  if(!stickCaptured) return;
+  if(document.pointerLockElement === stickEl){
+    var sens = 0.0025;
+    touch.x = clamp(touch.x + (e.movementX || 0) * sens, -1, 1);
+    touch.y = clamp(touch.y + (e.movementY || 0) * sens, -1, 1);
+    updateKnobVisual();
+  } else {
+    // Fallback: мышь не захвачена — работает старое абсолютное следование
+    stickMove(e);
+  }
+});
 
 function bindBtns(sel){
  Array.prototype.forEach.call(document.querySelectorAll(sel+' button'),function(b){
@@ -1832,6 +1973,7 @@ function hurtPlayer(dmg,silent){
 }
 function die(){
  if(state==='dead')return;
+ SND.stopShipAmb();
  SND.stopDockAmb();
  mission = null;renderBordComp();
  if(CMD.eq.escape){
@@ -1889,6 +2031,7 @@ function doDock(){
  CMD.dockComp=false;CMD.tractorOn=false;syncDockBtn();
  P.speed=0;bolts=[];P.laserHeat=0;P.laserOverheated=false;
  SND.dock();vib([30,40,80]);
+ SND.stopShipAmb();
  SND.startDockAmb();
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
  if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
@@ -1918,6 +2061,7 @@ function launch(){
  P.laserHeat = 0;P.laserOverheated = false;
  stationGreeted = false;
  SND.stopDockAmb();
+ SND.startShipAmb();
  msg('Отстыковка выполнена · удачи, '+CMD.name,'#3fdcff');
  try{SND.dock();}catch(e){}
  updateBar();
@@ -3336,6 +3480,7 @@ function newGame(name){
  msg('Вы в доке станции «Кориолис» · нажмите «ОТСТЫКОВКА», когда будете готовы','#3fdcff');
  msg('Совет: начните с покупки товаров · цель для первого рейса — ZAONCE','#ffd426');
  SND.init();SND.beep();saveGame(true);
+ SND.stopShipAmb();
  SND.startDockAmb();
  renderBordComp();
  rebuildMarketTicker();
