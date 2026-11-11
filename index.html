@@ -990,24 +990,28 @@ var SND={ac:null,on:true,
  scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);},
  dockAmb:null,
  startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
-  shipAmb:null, shipAmbGain:null,
+ shipAmb:null, shipAmbGain:null, shipAmbFilter:null,
  startShipAmb:function(){
    if(!this.ac || this.shipAmb || !this.on) return;
    try{
      var o = this.ac.createOscillator();
      var g = this.ac.createGain();
-     o.type = 'sawtooth';
-     o.frequency.value = 72;          // ниже, чем у дока (40), но другой тембр
-     g.gain.value = 0.006;            // тише, чем гул дока
-     o.connect(g); g.connect(this.ac.destination);
+     var f = this.ac.createBiquadFilter();
+     o.type = 'sine';                 // мягкий, без «пилы»
+     o.frequency.value = 45;          // ниже (было 72)
+     f.type = 'lowpass';
+     f.frequency.value = 120;         // срезаем всё выше 120 Гц — глухой, тёплый гул
+     f.Q.value = 0.5;
+     g.gain.value = 0.010;            // чуть громче — sine тише на слух, чем sawtooth
+     o.connect(f); f.connect(g); g.connect(this.ac.destination);
      o.start();
-     this.shipAmb = o; this.shipAmbGain = g;
+     this.shipAmb = o; this.shipAmbGain = g; this.shipAmbFilter = f;
    }catch(e){}
  },
  stopShipAmb:function(){
    if(!this.shipAmb) return;
    try{ this.shipAmb.stop(); }catch(e){}
-   this.shipAmb = null; this.shipAmbGain = null;
+   this.shipAmb = null; this.shipAmbGain = null; this.shipAmbFilter = null;
  },
  stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
  chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
