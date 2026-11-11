@@ -2913,7 +2913,7 @@ function resize(){
  if(W*H>2400000){var k=Math.sqrt(2400000/(W*H));W=Math.max(320,Math.round(W*k));H=Math.max(220,Math.round(H*k));}
  if(cv.width!==W)cv.width=W;
  if(cv.height!==H)cv.height=H;
- FOCAL=H*0.95;
+ FOCAL=H*0.75;
 }
 window.addEventListener('resize',function(){RS=1;layout();});
 window.addEventListener('orientationchange',function(){setTimeout(function(){RS=1;layout();},160);});
