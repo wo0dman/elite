@@ -177,7 +177,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 @keyframes scroll-market{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 #st-bounty{color:var(--mut)}
 #st-bounty b{color:var(--rd)}
-.bordcomp{position:absolute;right:150px;bottom:30px;width:220px;font-family:var(--f-mono);font-size:10px;color:var(--grn);background:transparent;border:1px solid rgba(140,255,106,0.55);border-radius:8px;padding:8px 10px;z-index:6;text-shadow:0 0 4px #8cff6a55;min-height:80px;max-height:160px;overflow:hidden;display:none}
+.bordcomp{position:absolute;right:165px;bottom:40px;width:170px;font-family:var(--f-mono);font-size:10px;color:var(--grn);background:transparent;border:1px solid rgba(140,255,106,0.55);border-radius:8px;padding:8px 10px;z-index:6;text-shadow:0 0 4px #8cff6a55;min-height:80px;max-height:160px;overflow:hidden;display:none}
 .bc-title{font-size:9px;letter-spacing:.15em;color:var(--cy);margin-bottom:4px;text-transform:uppercase}
 .bc-body{font-size:10.5px;color:var(--grn);line-height:1.4;margin-bottom:6px;word-wrap:break-word;max-height:100px;overflow-y:auto}
 .bc-buttons{display:flex;gap:4px}
@@ -1456,7 +1456,7 @@ var EQUIP=[
  {id:'missile',name:'Ракета',price:30,multi:true,hint:'пуск [T]'},
  {id:'scoop',name:'Топливный заборник',price:525,hint:'заправка у звезды'},
  {id:'bigbay',name:'Большой трюм',price:500,hint:'+15 т'},
- {id:'tractor',name:'Тракторный луч',price:800,hint:'контейнеры 500 м · [V]'},
+ {id:'tractor',name:'Тракторный луч',price:800,hint:'контейнеры 2 км · [V]'},
  {id:'military',name:'Военный лазер',price:3200,hint:'+2 к мощности'},
  {id:'bomb',name:'Энергобомба',price:900,hint:'[B]'},
  {id:'escape',name:'Спасательная капсула',price:1000,hint:'спасает при гибели'},
@@ -2451,7 +2451,6 @@ function fireLaser(){
 }
 function fireMissile(){
  if(state!=='flight'||P.missCool>0)return;
- if(P.rear){msg('Стрельба только из вида «нос»','#ffd426');SND.beep();return;}
  if(missileMax()<1){msg('Нет пусковых','#ffd426');SND.beep();return;}
  if((CMD.eq.missile||0)<1){msg('Ракет нет','#ffd426');SND.beep();return;}
  var t=crosshairTarget();
@@ -2460,7 +2459,7 @@ function fireMissile(){
  var vb=viewBasis();
  objects.push({kind:'missile',bp:'shard',pos:add(P.pos,mul(vb.f,180)),b:vb,vel:mul(vb.f,2600),
   target:t,life:6,radius:10,hostile:false,speed:2600,col:'#ff9d4b',hitT:0});
- msg('Ракета · '+t.name,'#ff9d4b');
+ msg((P.rear?'РАКЕТА НАЗАД · ':'Ракета · ')+t.name,'#ff9d4b');
 }
 function energyBomb(){
  if(state!=='flight')return;
@@ -2550,7 +2549,7 @@ function toggleTractor(){
  if(!CMD.eq.tractor){msg('Трактор не установлен (800 Cr)','#ffd426');SND.beep();return;}
  CMD.tractorOn=!CMD.tractorOn;if(CMD.tractorOn)CMD.dockComp=false;
  syncDockBtn();
- msg(CMD.tractorOn?'ТРАКТОР: ЗАХВАТ (500 м)':'Трактор выкл',CMD.tractorOn?'#3fdcff':'#8492a8');
+ msg(CMD.tractorOn?'ТРАКТОР: ЗАХВАТ (2 км)':'Трактор выкл',CMD.tractorOn?'#3fdcff':'#8492a8');
  SND.beep();
 }
 function checkMissionDelivery(){
@@ -2744,8 +2743,10 @@ function update(dt){
    o.pos=add(o.pos,mul(o.vel,dt));o.life-=dt;
    o.b.f=rotAxis(o.b.f,o.b.u,0.5*dt);o.b.u=rotAxis(o.b.u,o.b.f,0.3*dt);o.b=ortho(o.b);
    var dc=ln(sub(o.pos,P.pos));
-   if(CMD.tractorOn&&CMD.eq.tractor&&dc<500){
-    var pullDir=nrm(sub(P.pos,o.pos));var pull=320*(1-dc/500);
+   if(CMD.tractorOn&&CMD.eq.tractor&&dc<2000){
+    var pullDir=nrm(sub(P.pos,o.pos));
+    var pullFalloff = Math.max(0, 1 - dc/2000);
+    var pull=320 * pullFalloff * pullFalloff;
     o.vel=add(o.vel,mul(pullDir,pull*dt));
     if(dc<170){
      if(o.isMissionContainer && mission && mission.type === 'courier'){
@@ -3316,19 +3317,66 @@ function drawHUD(vb,dt,target){
   ctx.moveTo(cx,cy+rAim*0.1);ctx.lineTo(cx,cy+rAim*0.25);
   ctx.stroke();
   ctx.fillStyle='#3fdcff';ctx.font=Math.round(fs*0.7)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
-  ctx.fillText('ТРАКТОР 500 м',cx,cy+rAim+fs*0.9);ctx.textAlign='left';
+  ctx.fillText('ТРАКТОР 2 км',cx,cy+rAim+fs*0.9);ctx.textAlign='left';
  } else if(!P.rear){
   ctx.strokeStyle=P.hitFlash>0?'#ffffff':g;
   ctx.beginPath();
   ctx.moveTo(cx-r*2,cy);ctx.lineTo(cx-r*0.6,cy);ctx.moveTo(cx+r*0.6,cy);ctx.lineTo(cx+r*2,cy);
   ctx.moveTo(cx,cy-r*2);ctx.lineTo(cx,cy-r*0.6);ctx.moveTo(cx,cy+r*0.6);ctx.lineTo(cx,cy+r*2);ctx.stroke();
   ctx.beginPath();ctx.arc(cx,cy,r*0.3,0,Math.PI*2);ctx.stroke();
+ } else {
+  var diaR = r*2.2;
+  ctx.strokeStyle = P.hitFlash>0 ? '#ffffff' : '#ffd426';
+  ctx.lineWidth = Math.max(1.4, H/380);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - diaR);
+  ctx.lineTo(cx + diaR*0.7, cy);
+  ctx.lineTo(cx, cy + diaR);
+  ctx.lineTo(cx - diaR*0.7, cy);
+  ctx.closePath();
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,212,38,0.55)';
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - diaR*0.4);
+  ctx.lineTo(cx + diaR*0.28, cy);
+  ctx.lineTo(cx, cy + diaR*0.4);
+  ctx.lineTo(cx - diaR*0.28, cy);
+  ctx.closePath();
+  ctx.stroke();
+  ctx.fillStyle = '#ffd426';
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(1.5, r*0.18), 0, Math.PI*2);
+  ctx.fill();
  }
  if(P.rear){
-  ctx.fillStyle='rgba(140,255,106,0.35)';ctx.font=Math.round(fs*1.1)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
-  ctx.fillText('КОРМА',cx,cy-fs*2);
-  ctx.font=Math.round(fs*0.7)+'px "JetBrains Mono",monospace';ctx.fillStyle='rgba(255,75,62,0.7)';
-  ctx.fillText('СТРЕЛЬБА ЗАБЛОКИРОВАНА',cx,cy-fs*0.9);ctx.textAlign='left';
+  ctx.fillStyle='rgba(255,212,38,0.55)';ctx.font=Math.round(fs*1.1)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+  ctx.fillText('КОРМА',cx,cy-fs*3.6);
+  ctx.font=Math.round(fs*0.7)+'px "JetBrains Mono",monospace';ctx.fillStyle='rgba(140,255,106,0.75)';
+  ctx.fillText('[T] РАКЕТА ПО ПРЕСЛЕДОВАТЕЛЮ',cx,cy-fs*2.5);ctx.textAlign='left';
+  if(target && target.pos){
+   var vbR = viewBasis();
+   var lcR = toLocal(vbR, sub(target.pos, P.pos));
+   if(lcR.z > NEAR){
+    var ptR = projectPt(lcR);
+    if(isFinite(ptR[0]) && isFinite(ptR[1])){
+     var tgtR = Math.max(22, H*0.045);
+     ctx.strokeStyle = '#ff4b3e';
+     ctx.lineWidth = Math.max(1.6, H/400);
+     ctx.beginPath();
+     ctx.moveTo(ptR[0], ptR[1] - tgtR);
+     ctx.lineTo(ptR[0] + tgtR*0.7, ptR[1]);
+     ctx.lineTo(ptR[0], ptR[1] + tgtR);
+     ctx.lineTo(ptR[0] - tgtR*0.7, ptR[1]);
+     ctx.closePath();
+     ctx.stroke();
+     ctx.fillStyle = '#ff4b3e';
+     ctx.font = Math.round(fs*0.72) + 'px "JetBrains Mono",monospace';
+     ctx.textAlign = 'center';
+     ctx.fillText('ЦЕЛЬ', ptR[0], ptR[1] - tgtR - fs*0.4);
+     ctx.textAlign = 'left';
+    }
+   }
+  }
  }
  var bx=W*0.115,by=H*0.34,bh=H*0.22,sp=clamp(P.speed/P.maxSpeed,0,1);
  ctx.strokeStyle=g;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx,by+bh);ctx.stroke();
@@ -3433,8 +3481,8 @@ function drawHUD(vb,dt,target){
     }
    }
   }
-  if(!hint&&target)hint='Цель: '+(target.name||'—')+' · [Space] лазер · [T] ракета';
-  if(CMD.tractorOn&&CMD.eq.tractor)hint='ТРАКТОР · [V] выкл · контейнеры в 500 м';
+  if(!hint&&target)hint='Цель: '+(target.name||'—')+(P.rear?' · [T] ракета назад':' · [Space] лазер · [T] ракета');
+  if(CMD.tractorOn&&CMD.eq.tractor)hint='ТРАКТОР · [V] выкл · контейнеры в 2 км';
   if(hint){
    ctx.textAlign='center';ctx.font=Math.round(fs*0.78)+'px "JetBrains Mono",monospace';
    ctx.fillStyle='#8cff6a';ctx.globalAlpha=0.9;
@@ -3471,17 +3519,18 @@ function render(dt){
  var sorted=objects.slice().sort(function(a,b){return ln(sub(b.pos,P.pos))-ln(sub(a.pos,P.pos));});
  for(var i=0;i<sorted.length;i++)drawObj(sorted[i],vb);
  drawBolts(vb);
- if(CMD.tractorOn&&CMD.eq.tractor&&state==='flight'){
-  for(var t=0;t<objects.length;t++){
-   var oc=objects[t];if(oc.kind!=='cargo')continue;
-   var dtb=ln(sub(oc.pos,P.pos));if(dtb>=500)continue;
-   var ac=toLocal(vb,sub(oc.pos,P.pos));if(ac.z<NEAR)continue;
-   var pc=projectPt(ac);if(!isFinite(pc[0]))continue;
-   ctx.strokeStyle='rgba(63,220,255,'+(0.75-dtb/700).toFixed(2)+')';
-   ctx.lineWidth=Math.max(1,H/420);
-   ctx.beginPath();ctx.moveTo(W/2,H/2);ctx.lineTo(pc[0],pc[1]);ctx.stroke();
+   if(CMD.tractorOn&&CMD.eq.tractor&&state==='flight'){
+   for(var t=0;t<objects.length;t++){
+    var oc=objects[t];if(oc.kind!=='cargo')continue;
+    var dtb=ln(sub(oc.pos,P.pos));if(dtb>=2000)continue;
+    var ac=toLocal(vb,sub(oc.pos,P.pos));if(ac.z<NEAR)continue;
+    var pc=projectPt(ac);if(!isFinite(pc[0]))continue;
+    var beamAlpha = Math.max(0.08, 0.9 - dtb/2200);
+    ctx.strokeStyle='rgba(63,220,255,'+beamAlpha.toFixed(2)+')';
+    ctx.lineWidth=Math.max(1,H/420);
+    ctx.beginPath();ctx.moveTo(W/2,H/2);ctx.lineTo(pc[0],pc[1]);ctx.stroke();
+   }
   }
- }
  drawEngineTrail(vb);
  if(state==='title'){
   ctx.fillStyle='#8cff6a';ctx.font=Math.max(10,H/50)+'px "JetBrains Mono",monospace';ctx.textAlign='left';
