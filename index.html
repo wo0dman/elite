@@ -708,7 +708,7 @@ function rebuildMarketTicker(){
       var threshold = Math.max(1, Math.abs(baseCr) * 0.05);
       if(Math.abs(delta) < threshold) continue;
       var sign = delta > 0 ? '+' : '';
-      var color = delta > 0 ? 'var(--grn)' : 'var(--rd)';
+      var color = delta > 0 ? 'var(--rd)' : 'var(--grn)';
       parts.push(abbrGood(GOODS_RU[g]) + ' <span style="color:' + color + ';font-weight:600">' + sign + Math.round(delta) + '</span>');
     }
 
