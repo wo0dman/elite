@@ -701,7 +701,7 @@ function buildNewsStream(){
       var ad = ADS[Math.floor(Math.random()*ADS.length)];
       batch.push('<span style="color:#ff9d4b;font-weight:600">📢 ' + ad + '</span>');
     } else {
-      batch.push('<span style="color:var(--cy)">▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
+      batch.push('<span style="color:var(--cy)">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
     }
   }
   return batch.join(sep) + sep;
