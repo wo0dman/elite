@@ -1069,38 +1069,112 @@ var RADIO = {
     isOn: false,
     audioCtx: null,
     currentTimeout: null,
-    trackList: [
-        'radio/track1.mid',
-        'radio/track2.mid',
-        'radio/track3.mid',
-        'radio/track4.mid',
-        'radio/track5.mid'
-    ],
-    init: function(){
-        if(!SND.ac) SND.init();
+    tracks: [],                 // заполняется при старте
+    lastTrackIdx: -1,
+    tracksLoaded: false,
+    apiLoaded: false,
+
+    // ⚙️ НАСТРОЙКИ — впишите свои значения
+    githubUser: 'wo0dman',    // например, 'jameson'
+    githubRepo: 'elite',// имя репозитория
+    githubBranch: 'main',       // 'main' или 'master'
+
+    // Загрузка списка MIDI через GitHub API
+    loadTracksFromGitHub: function() {
+        var self = this;
+        if (this.tracksLoaded) return Promise.resolve(this.tracks);
+        var url = 'https://api.github.com/repos/' + this.githubUser + '/' +
+                  this.githubRepo + '/contents/radio?ref=' + this.githubBranch;
+        return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
+            .then(function(r) {
+                if (!r.ok) throw new Error('GitHub API: ' + r.status);
+                return r.json();
+            })
+            .then(function(list) {
+                if (!Array.isArray(list)) throw new Error('GitHub API: not an array');
+                var files = list.filter(function(f) {
+                    return f.type === 'file' && /\.(mid|midi)$/i.test(f.name);
+                });
+                if (files.length === 0) throw new Error('No MIDI files in radio/');
+                self.tracks = files.map(function(f) {
+                    // download_url — прямая ссылка, минует CORS-проблемы
+                    return f.download_url;
+                });
+                self.tracksLoaded = true;
+                self.apiLoaded = true;
+                console.log('[Radio] Loaded from GitHub API:', self.tracks.length, 'files');
+                return self.tracks;
+            });
+    },
+
+    // Fallback — перебор имён track1.mid … track20.mid
+    probeTrackNames: function() {
+        var self = this;
+        var list = [];
+        var probes = [];
+        for (var i = 1; i <= 20; i++) {
+            var name = 'radio/track' + i + '.mid';
+            probes.push(
+                fetch(name, { method: 'HEAD' }).then(function(r) {
+                    if (r.ok) list.push(name);
+                }).catch(function() { /* 404 → молча пропускаем */ })
+            );
+        }
+        return Promise.all(probes).then(function() {
+            if (list.length === 0) throw new Error('No tracks found by probing');
+            self.tracks = list.sort();
+            self.tracksLoaded = true;
+            console.log('[Radio] Loaded by probing:', self.tracks.length, 'files');
+            return self.tracks;
+        });
+    },
+
+    // Универсальный загрузчик — сначала API, потом перебор
+    ensureTracks: function() {
+        if (this.tracksLoaded) return Promise.resolve(this.tracks);
+        var self = this;
+        return this.loadTracksFromGitHub()
+            .catch(function(err) {
+                console.warn('[Radio] GitHub API failed:', err.message, '→ fallback to probe');
+                return self.probeTrackNames();
+            });
+    },
+
+    init: function() {
+        if (!SND.ac) SND.init();
         this.audioCtx = SND.ac;
         RADIO_FX.init(this.audioCtx);
     },
-    playRandom: function(){
-        if(!this.isOn || !this.player) return;
+
+    playRandom: function() {
+        if (!this.isOn || !this.player) return;
         var self = this;
-        if(this.currentTimeout){ clearTimeout(this.currentTimeout); this.currentTimeout = null; }
-        var idx = Math.floor(Math.random()*this.trackList.length);
-        var url = this.trackList[idx];
-        try {
-            this.player.play(url).catch(function(e){
-                console.warn('Radio track failed:', url, e);
-                self.currentTimeout = setTimeout(function(){ self.playRandom(); }, 4000);
+        if (this.currentTimeout) { clearTimeout(this.currentTimeout); this.currentTimeout = null; }
+
+        this.ensureTracks().then(function(tracks) {
+            if (!tracks.length) return;
+            // Исключаем предыдущий трек, чтобы не повторяться дважды подряд
+            var pool = tracks.length > 1
+                ? tracks.filter(function(_, i) { return i !== self.lastTrackIdx; })
+                : tracks;
+            var pickIdx = Math.floor(Math.random() * pool.length);
+            var url = pool[pickIdx];
+            self.lastTrackIdx = tracks.indexOf(url);
+
+            self.player.play(url).catch(function(e) {
+                console.warn('[Radio] Track failed:', url, e);
+                self.currentTimeout = setTimeout(function() { self.playRandom(); }, 4000);
             });
-        } catch(e) {
-            console.warn('Radio play error:', e);
-            self.currentTimeout = setTimeout(function(){ self.playRandom(); }, 4000);
-        }
+        }).catch(function(err) {
+            console.warn('[Radio] No tracks available:', err.message);
+            self.currentTimeout = setTimeout(function() { self.playRandom(); }, 8000);
+        });
     },
-    toggle: function(){
+
+    toggle: function() {
         this.isOn = !this.isOn;
-        if(this.isOn){
-            if(!this.player){
+        if (this.isOn) {
+            if (!this.player) {
                 try {
                     this.player = new MidiAudioPlayer({
                         volume: 0.7,
@@ -1108,17 +1182,17 @@ var RADIO = {
                         destination: RADIO_FX.input
                     });
                     this.player.on('endOfFile', this.playRandom.bind(this));
-                } catch(e) {
-                    console.error('Radio init failed:', e);
+                } catch (e) {
+                    console.error('[Radio] Init failed:', e);
                     this.isOn = false;
                     return false;
                 }
             }
             this.playRandom();
         } else {
-            if(this.currentTimeout){ clearTimeout(this.currentTimeout); this.currentTimeout = null; }
-            if(this.player && typeof this.player.stop === 'function'){
-                try { this.player.stop(); } catch(e) {}
+            if (this.currentTimeout) { clearTimeout(this.currentTimeout); this.currentTimeout = null; }
+            if (this.player && typeof this.player.stop === 'function') {
+                try { this.player.stop(); } catch (e) {}
             }
         }
         return this.isOn;
