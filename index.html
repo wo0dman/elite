@@ -7,7 +7,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/press-start-2p@latest/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/jetbrains-mono@latest/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/manrope@latest/index.css">
-<script src="https://cdn.jsdelivr.net/npm/midi-audio-player/dist/midi-audio-player.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/soundfont-player@0.4.0/dist/soundfont-player.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/build/Midi.min.js"></script>
 <style>
 :root{
   --bg:#04060a;--line:#18202e;--line2:#26314a;--ink:#dfe9f7;--mut:#8492a8;--dim:#5b687e;
@@ -1065,77 +1066,70 @@ var RADIO_FX = {
 };
 
 var RADIO = {
-    player: null,
+    instrument: null,
     isOn: false,
     audioCtx: null,
     currentTimeout: null,
-    tracks: [],                 // заполняется при старте
+    tracks: [],
     lastTrackIdx: -1,
     tracksLoaded: false,
-    apiLoaded: false,
 
-    // ⚙️ НАСТРОЙКИ — впишите свои значения
-    githubUser: 'wo0dman',    // например, 'jameson'
-    githubRepo: 'elite',// имя репозитория
-    githubBranch: 'main',       // 'main' или 'master'
+    githubUser: 'wo0dman',
+    githubRepo: 'elite',
+    githubBranch: 'main',
 
-    // Загрузка списка MIDI через GitHub API
     loadTracksFromGitHub: function() {
         var self = this;
         if (this.tracksLoaded) return Promise.resolve(this.tracks);
         var url = 'https://api.github.com/repos/' + this.githubUser + '/' +
                   this.githubRepo + '/contents/radio?ref=' + this.githubBranch;
+        console.log('[Radio] GET', url);
         return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
             .then(function(r) {
-                if (!r.ok) throw new Error('GitHub API: ' + r.status);
+                if (!r.ok) throw new Error('GitHub API HTTP ' + r.status);
                 return r.json();
             })
             .then(function(list) {
-                if (!Array.isArray(list)) throw new Error('GitHub API: not an array');
+                if (!Array.isArray(list)) throw new Error('GitHub API: ответ не массив');
                 var files = list.filter(function(f) {
                     return f.type === 'file' && /\.(mid|midi)$/i.test(f.name);
                 });
-                if (files.length === 0) throw new Error('No MIDI files in radio/');
-                self.tracks = files.map(function(f) {
-                    // download_url — прямая ссылка, минует CORS-проблемы
-                    return f.download_url;
-                });
+                if (files.length === 0) throw new Error('В папке radio/ нет .mid файлов');
+                self.tracks = files.map(function(f) { return f.download_url; });
                 self.tracksLoaded = true;
-                self.apiLoaded = true;
-                console.log('[Radio] Loaded from GitHub API:', self.tracks.length, 'files');
+                console.log('[Radio] Загружено через API:', self.tracks.length, 'файлов');
                 return self.tracks;
             });
     },
 
-    // Fallback — перебор имён track1.mid … track20.mid
     probeTrackNames: function() {
         var self = this;
         var list = [];
         var probes = [];
         for (var i = 1; i <= 20; i++) {
-            var name = 'radio/track' + i + '.mid';
-            probes.push(
-                fetch(name, { method: 'HEAD' }).then(function(r) {
-                    if (r.ok) list.push(name);
-                }).catch(function() { /* 404 → молча пропускаем */ })
-            );
+            (function(name) {
+                probes.push(
+                    fetch(name, { method: 'HEAD' }).then(function(r) {
+                        if (r.ok) list.push(name);
+                    }).catch(function() {})
+                );
+            })('radio/track' + i + '.mid');
         }
         return Promise.all(probes).then(function() {
-            if (list.length === 0) throw new Error('No tracks found by probing');
+            if (list.length === 0) throw new Error('Не найдено ни одного track1..track20.mid');
             self.tracks = list.sort();
             self.tracksLoaded = true;
-            console.log('[Radio] Loaded by probing:', self.tracks.length, 'files');
+            console.log('[Radio] Загружено перебором:', self.tracks.length, 'файлов');
             return self.tracks;
         });
     },
 
-    // Универсальный загрузчик — сначала API, потом перебор
     ensureTracks: function() {
         if (this.tracksLoaded) return Promise.resolve(this.tracks);
         var self = this;
         return this.loadTracksFromGitHub()
             .catch(function(err) {
-                console.warn('[Radio] GitHub API failed:', err.message, '→ fallback to probe');
+                console.warn('[Radio] API не сработал:', err.message, '→ пробую перебор имён');
                 return self.probeTrackNames();
             });
     },
@@ -1144,56 +1138,92 @@ var RADIO = {
         if (!SND.ac) SND.init();
         this.audioCtx = SND.ac;
         RADIO_FX.init(this.audioCtx);
+        var self = this;
+        if (typeof soundfont === 'undefined') {
+            return Promise.reject(new Error('soundfont-player не загружен'));
+        }
+        console.log('[Radio] Загружаю инструмент acoustic_grand_piano…');
+        return soundfont.instrument(this.audioCtx, 'acoustic_grand_piano').then(function(inst) {
+            self.instrument = inst;
+            console.log('[Radio] Инструмент готов');
+        });
+    },
+
+    stopCurrent: function() {
+        if (this.currentTimeout) {
+            clearTimeout(this.currentTimeout);
+            this.currentTimeout = null;
+        }
     },
 
     playRandom: function() {
-        if (!this.isOn || !this.player) return;
+        if (!this.isOn || !this.instrument) return;
         var self = this;
-        if (this.currentTimeout) { clearTimeout(this.currentTimeout); this.currentTimeout = null; }
+        this.stopCurrent();
 
         this.ensureTracks().then(function(tracks) {
             if (!tracks.length) return;
-            // Исключаем предыдущий трек, чтобы не повторяться дважды подряд
             var pool = tracks.length > 1
                 ? tracks.filter(function(_, i) { return i !== self.lastTrackIdx; })
                 : tracks;
             var pickIdx = Math.floor(Math.random() * pool.length);
             var url = pool[pickIdx];
             self.lastTrackIdx = tracks.indexOf(url);
+            console.log('[Radio] Играю:', url);
 
-            self.player.play(url).catch(function(e) {
-                console.warn('[Radio] Track failed:', url, e);
-                self.currentTimeout = setTimeout(function() { self.playRandom(); }, 4000);
+            return fetch(url).then(function(r) {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.arrayBuffer();
+            }).then(function(buf) {
+                if (typeof Midi === 'undefined') {
+                    throw new Error('@tonejs/midi не загружен');
+                }
+                var midi = new Midi(buf);
+                var totalDuration = midi.duration;
+                var startTime = self.audioCtx.currentTime + 0.15;
+
+                midi.tracks.forEach(function(track) {
+                    track.notes.forEach(function(note) {
+                        try {
+                            self.instrument.play(note.name, startTime + note.time, {
+                                duration: note.duration,
+                                gain: 0.5,
+                                destination: RADIO_FX.input
+                            });
+                        } catch(e) {}
+                    });
+                });
+
+                console.log('[Radio] Длительность:', totalDuration.toFixed(1) + ' сек');
+
+                self.currentTimeout = setTimeout(function() {
+                    if (self.isOn) self.playRandom();
+                }, (totalDuration + 1) * 1000);
             });
         }).catch(function(err) {
-            console.warn('[Radio] No tracks available:', err.message);
-            self.currentTimeout = setTimeout(function() { self.playRandom(); }, 8000);
+            console.warn('[Radio] Ошибка трека:', err.message);
+            self.currentTimeout = setTimeout(function() {
+                if (self.isOn) self.playRandom();
+            }, 6000);
         });
     },
 
     toggle: function() {
         this.isOn = !this.isOn;
+        var self = this;
         if (this.isOn) {
-            if (!this.player) {
-                try {
-                    this.player = new MidiAudioPlayer({
-                        volume: 0.7,
-                        reverb: 0.12,
-                        destination: RADIO_FX.input
-                    });
-                    this.player.on('endOfFile', this.playRandom.bind(this));
-                } catch (e) {
-                    console.error('[Radio] Init failed:', e);
-                    this.isOn = false;
-                    return false;
-                }
+            if (!this.instrument) {
+                this.init().then(function() {
+                    if (self.isOn) self.playRandom();
+                }).catch(function(err) {
+                    console.error('[Radio] Init failed:', err);
+                    self.isOn = false;
+                });
+            } else {
+                this.playRandom();
             }
-            this.playRandom();
         } else {
-            if (this.currentTimeout) { clearTimeout(this.currentTimeout); this.currentTimeout = null; }
-            if (this.player && typeof this.player.stop === 'function') {
-                try { this.player.stop(); } catch (e) {}
-            }
+            this.stopCurrent();
         }
         return this.isOn;
     }
@@ -3606,11 +3636,19 @@ $('#b-sound').addEventListener('click',function(){
 });
 $('#b-radio').addEventListener('click', function(){
     SND.init();
-    if(!RADIO.audioCtx) RADIO.init();
+    if (!RADIO.audioCtx) RADIO.init();
     var on = RADIO.toggle();
     this.classList.toggle('on', on);
     this.textContent = on ? '📻 РАДИО' : '📻 ВЫКЛ';
     SND.beep();
+    if (on) {
+        console.group('%c[Radio] ДИАГНОСТИКА', 'color:#ffd426;font-weight:bold');
+        console.log('soundfont-player:', typeof soundfont !== 'undefined' ? '✅' : '❌');
+        console.log('@tonejs/midi:', typeof Midi !== 'undefined' ? '✅' : '❌');
+        console.log('RADIO_FX.input:', RADIO_FX.input ? '✅' : '❌');
+        console.log('GitHub API URL:', 'https://api.github.com/repos/' + RADIO.githubUser + '/' + RADIO.githubRepo + '/contents/radio?ref=' + RADIO.githubBranch);
+        console.groupEnd();
+    }
 });
 $('#b-full').addEventListener('click',toggleFull);
 $('#b-pause').addEventListener('click',function(){if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
