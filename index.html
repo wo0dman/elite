@@ -1022,206 +1022,200 @@ var SND={ac:null,on:true,
    ============================================================ */
 var RADIO_FX = {
     input: null,
+    gate: null,
     output: null,
     init: function(audioCtx){
         if(this.input) return;
         this.input = audioCtx.createGain();
-        this.input.gain.value = 0.75;
+        this.input.gain.value = 0.9;
+
+        this.gate = audioCtx.createGain();
+        this.gate.gain.value = 0;
 
         var highpass = audioCtx.createBiquadFilter();
         highpass.type = 'highpass';
-        highpass.frequency.value = 400;
-        highpass.Q.value = 0.7;
+        highpass.frequency.value = 200;
 
         var peaking = audioCtx.createBiquadFilter();
         peaking.type = 'peaking';
-        peaking.frequency.value = 1800;
-        peaking.gain.value = 6;
+        peaking.frequency.value = 1500;
+        peaking.gain.value = 4;
         peaking.Q.value = 1.2;
 
         var lowpass = audioCtx.createBiquadFilter();
         lowpass.type = 'lowpass';
-        lowpass.frequency.value = 3500;
-        lowpass.Q.value = 0.7;
+        lowpass.frequency.value = 5000;
 
         var shaper = audioCtx.createWaveShaper();
-        var n = 4096, curve = new Float32Array(n), k = 8;
+        var n = 4096, curve = new Float32Array(n), k = 3;
         for(var i=0;i<n;i++){
             var x = (i*2)/n - 1;
             curve[i] = ((Math.PI+k)*x)/(Math.PI+k*Math.abs(x));
         }
         shaper.curve = curve;
-        shaper.oversample = '4x';
+        shaper.oversample = '2x';
 
         this.output = audioCtx.createGain();
-        this.output.gain.value = 0.4;
+        this.output.gain.value = 0.6;
 
         this.input.connect(highpass);
         highpass.connect(peaking);
         peaking.connect(lowpass);
         lowpass.connect(shaper);
-        shaper.connect(this.output);
+        shaper.connect(this.gate);
+        this.gate.connect(this.output);
         this.output.connect(audioCtx.destination);
+    },
+    setGate: function(v){
+        if(this.gate){
+            try { this.gate.gain.setTargetAtTime(v, this.input.context.currentTime, 0.05); }
+            catch(e) { this.gate.gain.value = v; }
+        }
     }
 };
-
 var RADIO = {
     instrument: null,
+    instrumentPromise: null,
     isOn: false,
     audioCtx: null,
     currentTimeout: null,
     tracks: [],
     lastTrackIdx: -1,
     tracksLoaded: false,
+    playVersion: 0,
 
     githubUser: 'wo0dman',
     githubRepo: 'elite',
     githubBranch: 'main',
 
-    loadTracksFromGitHub: function() {
+    loadTracksFromGitHub: function(){
         var self = this;
         if (this.tracksLoaded) return Promise.resolve(this.tracks);
         var url = 'https://api.github.com/repos/' + this.githubUser + '/' +
                   this.githubRepo + '/contents/radio?ref=' + this.githubBranch;
-        console.log('[Radio] GET', url);
         return fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } })
-            .then(function(r) {
-                if (!r.ok) throw new Error('GitHub API HTTP ' + r.status);
-                return r.json();
-            })
-            .then(function(list) {
-                if (!Array.isArray(list)) throw new Error('GitHub API: ответ не массив');
-                var files = list.filter(function(f) {
-                    return f.type === 'file' && /\.(mid|midi)$/i.test(f.name);
-                });
-                if (files.length === 0) throw new Error('В папке radio/ нет .mid файлов');
-                self.tracks = files.map(function(f) { return f.download_url; });
+            .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(function(list){
+                if (!Array.isArray(list)) throw new Error('not array');
+                var files = list.filter(function(f){ return f.type === 'file' && /\.(mid|midi)$/i.test(f.name); });
+                if (!files.length) throw new Error('no MIDI');
+                self.tracks = files.map(function(f){ return f.download_url; });
                 self.tracksLoaded = true;
-                console.log('[Radio] Загружено через API:', self.tracks.length, 'файлов');
+                console.log('[Radio] Загружено:', self.tracks.length, 'файлов');
                 return self.tracks;
             });
     },
 
-    probeTrackNames: function() {
-        var self = this;
-        var list = [];
-        var probes = [];
-        for (var i = 1; i <= 20; i++) {
-            (function(name) {
-                probes.push(
-                    fetch(name, { method: 'HEAD' }).then(function(r) {
-                        if (r.ok) list.push(name);
-                    }).catch(function() {})
-                );
-            })('radio/track' + i + '.mid');
-        }
-        return Promise.all(probes).then(function() {
-            if (list.length === 0) throw new Error('Не найдено ни одного track1..track20.mid');
-            self.tracks = list.sort();
-            self.tracksLoaded = true;
-            console.log('[Radio] Загружено перебором:', self.tracks.length, 'файлов');
-            return self.tracks;
-        });
-    },
-
-    ensureTracks: function() {
+    ensureTracks: function(){
         if (this.tracksLoaded) return Promise.resolve(this.tracks);
-        var self = this;
-        return this.loadTracksFromGitHub()
-            .catch(function(err) {
-                console.warn('[Radio] API не сработал:', err.message, '→ пробую перебор имён');
-                return self.probeTrackNames();
-            });
+        return this.loadTracksFromGitHub();
     },
 
-    init: function() {
+    init: function(){
+        if (this.instrument) return Promise.resolve(this.instrument);
+        if (this.instrumentPromise) return this.instrumentPromise;
+
         if (!SND.ac) SND.init();
+        if (SND.ac.state === 'suspended') { try { SND.ac.resume(); } catch(e){} }
         this.audioCtx = SND.ac;
         RADIO_FX.init(this.audioCtx);
-        var self = this;
+
         if (typeof Soundfont === 'undefined') {
-            return Promise.reject(new Error('soundfont-player не загружен'));
+            return Promise.reject(new Error('Soundfont не загружен'));
         }
-        console.log('[Radio] Загружаю инструмент acoustic_grand_piano…');
-        return Soundfont.instrument(this.audioCtx, 'acoustic_grand_piano').then(function(inst) {
-            self.instrument = inst;
-            console.log('[Radio] Инструмент готов');
-        });
+
+        var self = this;
+        console.log('[Radio] Загружаю инструмент…');
+        this.instrumentPromise = Soundfont.instrument(this.audioCtx, 'acoustic_grand_piano')
+            .then(function(inst){
+                self.instrument = inst;
+                self.instrumentPromise = null;
+                console.log('[Radio] Инструмент готов');
+                return inst;
+            }).catch(function(err){
+                self.instrumentPromise = null;
+                throw err;
+            });
+        return this.instrumentPromise;
     },
 
-    stopCurrent: function() {
-        if (this.currentTimeout) {
-            clearTimeout(this.currentTimeout);
-            this.currentTimeout = null;
-        }
+    stopCurrent: function(){
+        this.playVersion++;
+        if (this.currentTimeout) { clearTimeout(this.currentTimeout); this.currentTimeout = null; }
+        RADIO_FX.setGate(0);
     },
 
-    playRandom: function() {
-        if (!this.isOn || !this.instrument) return;
+    playRandom: function(){
+        if (!this.isOn) return;
         var self = this;
         this.stopCurrent();
+        var myVersion = this.playVersion;
 
-        this.ensureTracks().then(function(tracks) {
-            if (!tracks.length) return;
-            var pool = tracks.length > 1
-                ? tracks.filter(function(_, i) { return i !== self.lastTrackIdx; })
-                : tracks;
-            var pickIdx = Math.floor(Math.random() * pool.length);
-            var url = pool[pickIdx];
-            self.lastTrackIdx = tracks.indexOf(url);
-            console.log('[Radio] Играю:', url);
+        this.init().then(function(instrument){
+            if (!self.isOn || myVersion !== self.playVersion) return;
+            return self.ensureTracks().then(function(tracks){
+                if (!self.isOn || myVersion !== self.playVersion) return;
+                if (!tracks.length) return;
 
-            return fetch(url).then(function(r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.arrayBuffer();
-            }).then(function(buf) {
-                if (typeof Midi === 'undefined') {
-                    throw new Error('@tonejs/midi не загружен');
-                }
-                var midi = new Midi(buf);
-                var totalDuration = midi.duration;
-                var startTime = self.audioCtx.currentTime + 0.15;
+                var pool = tracks.length > 1
+                    ? tracks.filter(function(_, i){ return i !== self.lastTrackIdx; })
+                    : tracks;
+                var url = pool[Math.floor(Math.random() * pool.length)];
+                self.lastTrackIdx = tracks.indexOf(url);
+                console.log('[Radio] Играю:', url);
 
-                midi.tracks.forEach(function(track) {
-                    track.notes.forEach(function(note) {
-                        try {
-                            self.instrument.play(note.name, startTime + note.time, {
-                                duration: note.duration,
-                                gain: 0.5,
-                                destination: RADIO_FX.input
-                            });
-                        } catch(e) {}
+                return fetch(url).then(function(r){
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.arrayBuffer();
+                }).then(function(buf){
+                    if (myVersion !== self.playVersion) return;
+                    if (typeof Midi === 'undefined') throw new Error('@tonejs/midi не загружен');
+
+                    var midi = new Midi(buf);
+                    var startTime = self.audioCtx.currentTime + 0.2;
+                    var totalDuration = midi.duration;
+                    var count = 0;
+
+                    midi.tracks.forEach(function(track){
+                        track.notes.forEach(function(note){
+                            try {
+                                instrument.play(note.name, startTime + note.time, {
+                                    duration: Math.max(0.05, note.duration),
+                                    gain: 0.7,
+                                    destination: RADIO_FX.input
+                                });
+                                count++;
+                            } catch(e) {}
+                        });
                     });
+                    RADIO_FX.setGate(1);
+                    console.log('[Radio] Длительность:', totalDuration.toFixed(1) + ' сек · нот:', count);
+
+                    self.currentTimeout = setTimeout(function(){
+                        if (self.isOn && myVersion === self.playVersion) self.playRandom();
+                    }, (totalDuration + 1.5) * 1000);
                 });
-
-                console.log('[Radio] Длительность:', totalDuration.toFixed(1) + ' сек');
-
-                self.currentTimeout = setTimeout(function() {
-                    if (self.isOn) self.playRandom();
-                }, (totalDuration + 1) * 1000);
             });
-        }).catch(function(err) {
-            console.warn('[Radio] Ошибка трека:', err.message);
-            self.currentTimeout = setTimeout(function() {
-                if (self.isOn) self.playRandom();
-            }, 6000);
+        }).catch(function(err){
+            console.warn('[Radio] Ошибка:', err.message);
+            if (self.isOn && myVersion === self.playVersion) {
+                self.currentTimeout = setTimeout(function(){
+                    if (self.isOn && myVersion === self.playVersion) self.playRandom();
+                }, 6000);
+            }
         });
     },
 
-    toggle: function() {
+    toggle: function(){
         this.isOn = !this.isOn;
         var self = this;
         if (this.isOn) {
-            if (!this.instrument) {
-                this.init().then(function() {
-                    if (self.isOn) self.playRandom();
-                }).catch(function(err) {
-                    console.error('[Radio] Init failed:', err);
-                    self.isOn = false;
-                });
-            } else {
-                this.playRandom();
-            }
+            this.init().then(function(){
+                if (self.isOn) self.playRandom();
+            }).catch(function(err){
+                console.error('[Radio] Init failed:', err);
+                self.isOn = false;
+            });
         } else {
             this.stopCurrent();
         }
@@ -3636,20 +3630,12 @@ $('#b-sound').addEventListener('click',function(){
 });
 $('#b-radio').addEventListener('click', function(){
     SND.init();
-    if (!RADIO.audioCtx) RADIO.init();
     var on = RADIO.toggle();
     this.classList.toggle('on', on);
     this.textContent = on ? '📻 РАДИО' : '📻 ВЫКЛ';
     SND.beep();
-    if (on) {
-        console.group('%c[Radio] ДИАГНОСТИКА', 'color:#ffd426;font-weight:bold');
-        console.log('Soundfont (soundfont-player):', typeof Soundfont !== 'undefined' ? '✅' : '❌');
-        console.log('@tonejs/midi:', typeof Midi !== 'undefined' ? '✅' : '❌');
-        console.log('RADIO_FX.input:', RADIO_FX.input ? '✅' : '❌');
-        console.log('GitHub API URL:', 'https://api.github.com/repos/' + RADIO.githubUser + '/' + RADIO.githubRepo + '/contents/radio?ref=' + RADIO.githubBranch);
-        console.groupEnd();
-    }
 });
+
 $('#b-full').addEventListener('click',toggleFull);
 $('#b-pause').addEventListener('click',function(){if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
 $('#b-help').addEventListener('click',toggleGuide);
