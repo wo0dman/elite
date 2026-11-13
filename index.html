@@ -175,7 +175,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .newsbar.market .newsticker{padding-left:0;color:var(--yl)}
 #st-bounty{color:var(--mut)}
 #st-bounty b{color:var(--rd)}
-.bordcomp{position:absolute;right:165px;bottom:40px;width:170px;font-family:var(--f-mono);font-size:10px;color:var(--grn);background:transparent;border:1px solid rgba(140,255,106,0.55);border-radius:8px;padding:8px 10px;z-index:6;text-shadow:0 0 4px #8cff6a55;min-height:80px;max-height:160px;overflow:hidden;display:none}
+.bordcomp{position:absolute;right:165px;bottom:40px;width:320px;font-family:var(--f-mono);font-size:10px;color:var(--grn);background:transparent;border:1px solid rgba(140,255,106,0.55);border-radius:8px;padding:8px 10px;z-index:6;text-shadow:0 0 4px #8cff6a55;min-height:80px;max-height:160px;overflow:hidden;display:none}
 .bc-title{font-size:9px;letter-spacing:.15em;color:var(--cy);margin-bottom:4px;text-transform:uppercase}
 .bc-body{font-size:10.5px;color:var(--grn);line-height:1.4;margin-bottom:6px;word-wrap:break-word;max-height:100px;overflow-y:auto}
 .bc-buttons{display:flex;gap:4px}
@@ -714,7 +714,7 @@ function buildNewsStream(){
       var ad = ADS[Math.floor(Math.random()*ADS.length)];
       batch.push('<span style="color:#ff9d4b;font-weight:600">📢 ' + ad + '</span>');
     } else {
-      batch.push('<span style="color:var(--cy)">▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
+      batch.push('<span style="color:var(--cy)">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
     }
   }
   return batch.join(sep) + sep;
@@ -728,7 +728,7 @@ function initNewsTicker(){
   void newsTickerEl.offsetWidth;
   var totalW = newsTickerEl.offsetWidth;
   if(totalW < 50) return;
-  var dur = Math.max(60, totalW / 130);
+  var dur = Math.max(60, totalW / 60);
   newsTickerEl.style.animation = 'scroll-market ' + dur + 's linear infinite';
 }
 
@@ -1448,6 +1448,7 @@ function spawnMission(){
   else m = makeKillMission();
   if(!m) return;
   mission = m;renderBordComp();SND.beep();msg('БОРТ.КОМП: входящее сообщение', '#3fdcff');
+  SHIP_AI.announceMission(mission);
 }
 function spawnCourierContainer(){
   if(!station) return null;
@@ -1486,6 +1487,7 @@ function acceptMission(){
     mission.message = 'МИССИЯ · уничтожьте цель (отмечена на радаре). Награда: ' + mission.reward + ' Cr.';
   }
   SND.buy();msg('МИССИЯ ПРИНЯТА', '#8cff6a');renderBordComp();
+  SHIP_AI.announceMissionAccept();
 }
 function rejectMission(){
   if(!mission || mission.stage !== 'pending') return;
@@ -1496,7 +1498,9 @@ function completeMission(){
   if(!mission) return;
   var rw = mission.reward;CMD.cash += rw;
   msg('МИССИЯ ВЫПОЛНЕНА · +' + rw + ' Cr', '#8cff6a');SND.buy();
-  mission = null;missionSpawnTimer = 45 + Math.random()*45;renderBordComp();
+    mission = null;missionSpawnTimer = 45 + Math.random()*45;renderBordComp();
+  SHIP_AI.announceMissionComplete();
+
 }
 function vipTick(dt){
   if(!mission || mission.type !== 'vip' || mission.stage !== 'accepted') return;
@@ -2069,10 +2073,12 @@ function arrive(){
  if(mission){
   if(mission.type === 'courier' && mission.stage === 'accepted' && !mission.hasContainer){
    msg('МИССИЯ ПРОВАЛЕНА: контейнер потерян', '#ff4b3e');
-   mission = null;renderBordComp();
+         mission = null;renderBordComp();
+      SHIP_AI.announceMissionFail();
   } else if(mission.type && mission.type.indexOf('kill_') === 0 && CMD.sysIdx !== mission.spawnSysIdx){
    msg('МИССИЯ ПРОВАЛЕНА: цель недоступна', '#ff4b3e');
-   mission = null;renderBordComp();
+         mission = null;renderBordComp();
+      SHIP_AI.announceMissionFail();
   }
  }
  var outDir=station.b.f;var side=orbit.side;
@@ -3567,10 +3573,10 @@ var SHIP_AI = {
   adEnabled: true,
   lastPhraseTime: 0,
   lastAdTime: 0,
-  cooldown: 9000,
+  cooldown: 34000,
   adCooldown: 45000,
   hideTimeout: null,
-  voiceConfig: { lang: 'ru-RU', pitch: 0.55, rate: 0.88, volume: 0.85 },
+  voiceConfig: { lang: 'ru-RU', pitch: 1.55, rate: 0.88, volume: 0.85 },
   phrases: {
     start: [
       'Инициализация завершена. Страховка аннулирована. Полетели.',
@@ -3703,23 +3709,143 @@ var SHIP_AI = {
       'Империя пала. Вы — тоже. Рано или поздно.',
       'Корабль — это гроб. С двигателем.',
       'Космос — это тишина. Пока вы не закричите.'
+    ],
+
+    // ==================== МИССИИ ====================
+    insults: [
+      'слабак','ничтожество','неудачник','дилетант','недотёпа','олух',
+      'червяк','смертник','щенок','салага','бедолага','растяпа'
+    ],
+    missionEndings: [
+      'соглашайся, слабак',
+      'не трусь, тряпка',
+      'берись, если не боишься',
+      'ну что, рискнёшь?',
+      'только не ной потом',
+      'давай, пока я не передумал'
+    ],
+    missionAccept: [
+      'Молодец. Хоть на что-то сгодился.',
+      'Хотя бы не сбежал. Пока.',
+      'Смело. Глупо, но смело.',
+      'Ну вот. Теперь у тебя есть цель. И шанс умереть.',
+      'Принято. Я уже начал писать некролог.'
+    ],
+    missionFail: [
+      'Провал. Кто бы сомневался.',
+      'Ну предсказуемо. Как и всё в твоей жизни.',
+      'Миссия провалена. Заказчик в ярости. Ты — в отчаянии. Классика.',
+      'Я бы сказал «я разочарован», но я не удивлён.',
+      'Ещё один провал. Добавлю в твою коллекцию.'
+    ],
+    missionComplete: [
+      'Даже ты справился. Поверить не могу.',
+      'Миссия выполнена. Не знаю, как. Не спрашивай.',
+      'Кредиты у тебя. Совесть — нет. Как обычно.',
+      'Хорошо. Может, из тебя ещё что-то выйдет. Может.',
+      'Поздравляю. Теперь ты — должник. Шучу. Ты всегда был.'
     ]
-  },
-  speak: function(text){
-    if(!('speechSynthesis' in window)) return;
-    try{ speechSynthesis.cancel(); }catch(e){}
-    try{
-      var utt = new SpeechSynthesisUtterance(text);
-      utt.lang = this.voiceConfig.lang;
-      utt.pitch = this.voiceConfig.pitch;
-      utt.rate = this.voiceConfig.rate;
-      utt.volume = this.voiceConfig.volume;
-      var voices = speechSynthesis.getVoices();
-      var ru = voices.find ? voices.find(function(v){return v.lang && v.lang.indexOf('ru')===0;}) : null;
-      if(ru) utt.voice = ru;
-      speechSynthesis.speak(utt);
-    }catch(e){}
-  },
+    },            
+       
+  speak: function(text) {
+  if (!('speechSynthesis' in window)) return;
+  try{ speechSynthesis.cancel(); }catch(e){}
+
+  // ← ВКЛЮЧАЕМ ШУМ РАЦИИ
+  this.startSpeakerNoise();
+
+  try{
+    var utt = new SpeechSynthesisUtterance(text);
+    utt.lang = this.voiceConfig.lang;
+    utt.pitch = this.voiceConfig.pitch;
+    utt.rate = this.voiceConfig.rate;
+    utt.volume = this.voiceConfig.volume;
+    var voices = speechSynthesis.getVoices();
+    var ru = voices.find ? voices.find(function(v){return v.lang && v.lang.indexOf('ru')===0;}) : null;
+    if(ru) utt.voice = ru;
+
+    // ← ОСТАНАВЛИВАЕМ ШУМ ПО ОКОНЧАНИИ РЕЧИ
+    var self = this;
+    utt.onend = function(){ self.stopSpeakerNoise(); };
+    utt.onerror = function(){ self.stopSpeakerNoise(); };
+
+    speechSynthesis.speak(utt);
+  }catch(e){ this.stopSpeakerNoise(); }
+},
+
+speakerNoise: null,
+speakerNoiseGain: null,
+
+startSpeakerNoise: function(){
+  if(!SND.ac || !SND.on) return;
+  if(this.speakerNoise) return;
+  try{
+    var ac = SND.ac;
+    var dur = 30; // 30 секунд буфера, зацикливаем
+    var n = Math.floor(ac.sampleRate * dur);
+    var buf = ac.createBuffer(1, n, ac.sampleRate);
+    var d = buf.getChannelData(0);
+    for(var i=0;i<n;i++) d[i] = (Math.random()*2-1) * 0.5;
+
+    var src = ac.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+
+    // Полосовой фильтр — «жестянка» рации
+    var bp = ac.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 800;
+    bp.Q.value = 2;
+
+    // Лёгкий дисторшн через WaveShaper — «треск»
+    var ws = ac.createWaveShaper();
+    var curve = new Float32Array(1024);
+    for(var k=0;k<1024;k++){
+      var x = (k/512)-1;
+      curve[k] = Math.tanh(x * 5);
+    }
+    ws.curve = curve;
+    ws.oversample = '2x';
+
+    // Низкочастотный гул несущей
+    var hum = ac.createOscillator();
+    hum.type = 'sine';
+    hum.frequency.value = 100;
+    var humGain = ac.createGain();
+    humGain.gain.value = 0.003;
+
+    var gain = ac.createGain();
+    gain.gain.value = 0.03;
+    gain.gain.linearRampToValueAtTime(0.035, ac.currentTime + 0.1);
+
+    src.connect(bp);
+    bp.connect(ws);
+    ws.connect(gain);
+    hum.connect(humGain);
+    humGain.connect(gain);
+    gain.connect(ac.destination);
+
+    src.start();
+    hum.start();
+    this.speakerNoise = {src:src, hum:hum, gain:gain, bp:bp, ws:ws};
+  }catch(e){}
+},
+
+stopSpeakerNoise: function(){
+  var sn = this.speakerNoise;
+  if(!sn) return;
+  try{
+    var ac = SND.ac;
+    sn.gain.gain.cancelScheduledValues(ac.currentTime);
+    sn.gain.gain.linearRampToValueAtTime(0.0, ac.currentTime + 0.8);
+    setTimeout(function(){
+      try{ sn.src.stop(); }catch(e){}
+      try{ sn.hum.stop(); }catch(e){}
+    }, 200);
+  }catch(e){}
+  this.speakerNoise = null;
+},
+
   showBordcomp: function(text, isAd){
     var bcBody = document.getElementById('bc-body');
     var bcButtons = document.getElementById('bc-buttons');
@@ -3729,12 +3855,12 @@ var SHIP_AI = {
     if(bcButtons){
       bcButtons.innerHTML = '';
       var btn1 = document.createElement('button');
-      btn1.textContent = isAd ? 'Купить (шучу)' : 'Признать ничтожность';
+      btn1.textContent = isAd ? 'Купить' : 'Признать ничтожность';
       btn1.className = 'pri';
       var self1 = this;
       btn1.onclick = function(){ self1.hideBordcomp(); };
       var btn2 = document.createElement('button');
-      btn2.textContent = isAd ? 'Заткнуть рекламу' : 'Заткнись, консервная банка';
+      btn2.textContent = isAd ? 'Заткнуть рекламу' : 'Заткнись, железка';
       var self2 = this;
       btn2.onclick = function(){
         try{ speechSynthesis.cancel(); }catch(e){}
@@ -3779,6 +3905,39 @@ var SHIP_AI = {
   onDocking: function(){ this.say('dock'); },
   onHyperJump: function(){ this.say('hyper'); },
   onDeath: function(){ this.say('death', true); },
+    // ==================== ОЗВУЧКА МИССИЙ ====================
+  cleanMissionText: function(m){
+    var sys = m.targetSysName || 'неизвестной системе';
+    var rw = m.reward || 0;
+    var t = m.type || '';
+    if(t === 'courier') return 'требуется найти контейнер в космосе и доставить в систему ' + sys + ' за ' + m.jumps + ' прыжков, награда — ' + rw + ' кредитов';
+    if(t === 'vip') return 'требуется доставить пассажира в систему ' + sys + ' за ' + m.jumps + ' прыжков, осторожно: за ним охотятся пираты, награда — ' + rw + ' кредитов';
+    if(t === 'kill_pirate') return 'требуется уничтожить пирата в системе ' + sys + ', награда — ' + rw + ' кредитов';
+    if(t === 'kill_trader') return 'требуется уничтожить торговца в системе ' + sys + ', награда — ' + rw + ' кредитов';
+    if(t === 'kill_police') return 'требуется уничтожить полицейского в системе ' + sys + ', награда — ' + rw + ' кредитов';
+    if(t === 'kill_thargon') return 'требуется уничтожить Таргона в системе ' + sys + ', награда — ' + rw + ' кредитов';
+    return 'требуется контракт, награда — ' + rw + ' кредитов';
+  },
+
+  announceMission: function(m){
+    if(!this.enabled || !m) return;
+    var clean = this.cleanMissionText(m);
+    var insult = this.phrases.insults[Math.floor(Math.random()*this.phrases.insults.length)];
+    var ending = this.phrases.missionEndings[Math.floor(Math.random()*this.phrases.missionEndings.length)];
+    var text = insult.charAt(0).toUpperCase() + insult.slice(1) +
+               ', тебе входящее сообщение. ' +
+               clean.charAt(0).toUpperCase() + clean.slice(1) +
+               '. ' +
+               ending.charAt(0).toUpperCase() + ending.slice(1) + '.';
+    this.lastPhraseTime = Date.now();
+    this.showBordcomp(text, false);
+    this.speak(text);
+  },
+
+  announceMissionAccept: function(){ this.say('missionAccept', true); },
+  announceMissionFail: function(){ this.say('missionFail', true); },
+  announceMissionComplete: function(){ this.say('missionComplete', true); },
+  // ==================== КОНЕЦ ОЗВУЧКИ ====================
   backgroundChatter: function(){
     var now = Date.now();
     if(Math.random() < 0.015 && (now - this.lastPhraseTime > this.cooldown)){ this.say('lies'); return; }
