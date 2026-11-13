@@ -1336,7 +1336,7 @@ var SND={ac:null,on:true,
 /* ============================================================
    ПОТОКОВОЕ РАДИО · живые станции с CORS
    ============================================================ */
-var STREAM_RADIO = {
+<!--var STREAM_RADIO = {
     audio: null,
     isOn: false,
     isLoading: false,
@@ -1460,7 +1460,105 @@ var STREAM_RADIO = {
             btn.classList.remove('on');
         }
     }
+};-->
+// ============ ГАЛАКТИЧЕСКОЕ РАДИО ============
+const STREAM_RADIO = {
+  isOn: false,
+  currentIndex: 0,
+  audio: null,
+  stations: [
+    { name: "SomaFM: Groove Salad", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
+    { name: "SomaFM: Drone Zone", url: "https://ice1.somafm.com/dronezone-128-mp3" },
+    { name: "SomaFM: Synthwave", url: "https://ice1.somafm.com/synthwave-128-mp3" },
+    { name: "SomaFM: Space Station", url: "https://ice1.somafm.com/spacestation-128-mp3" },
+    { name: "SomaFM: DEF CON", url: "https://ice1.somafm.com/defcon-128-mp3" },
+    { name: "SomaFM: Lush", url: "https://ice1.somafm.com/lush-128-mp3" }
+  ],
+
+  init: function() {
+    // Создаём аудио-объект с разрешением CORS и предзагрузкой
+    this.audio = new Audio();
+    this.audio.crossOrigin = "anonymous";
+    this.audio.preload = "none";
+    
+    // Обработка ошибок воспроизведения (помогает отладить, если что-то пошло не так)
+    this.audio.addEventListener('error', (e) => {
+      console.warn("Ошибка потока радио:", e);
+      this.next(); // Пробуем следующую станцию при сбое
+    });
+  },
+
+  play: function() {
+    if (!this.audio) this.init();
+    this.isOn = true;
+    const station = this.stations[this.currentIndex];
+    this.audio.src = station.url;
+    
+    // play() возвращает Promise. Ловим ошибку, если браузер заблокировал автовоспроизведение
+    const playPromise = this.audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(error => {
+        console.warn("Воспроизведение заблокировано браузером. Требуется клик пользователя.", error);
+        this.isOn = false;
+      });
+    }
+    updateBar(); // Обновляем интерфейс (если у тебя есть такая функция)
+  },
+
+  stop: function() {
+    this.isOn = false;
+    if (this.audio) {
+      this.audio.pause();
+      this.audio.src = "";
+    }
+    updateBar();
+  },
+
+  toggle: function() {
+    if (this.isOn) {
+      this.stop();
+    } else {
+      this.play();
+    }
+  },
+
+  next: function() {
+    this.currentIndex = (this.currentIndex + 1) % this.stations.length;
+    if (this.isOn) {
+      this.play();
+    }
+  },
+
+  prev: function() {
+    this.currentIndex = (this.currentIndex - 1 + this.stations.length) % this.stations.length;
+    if (this.isOn) {
+      this.play();
+    }
+  }
 };
+
+// ============ ПРИВЯЗКА К ИНТЕРФЕЙСУ ============
+document.addEventListener('DOMContentLoaded', () => {
+  STREAM_RADIO.init();
+
+  // Клик по кнопке радио в интерфейсе
+  const radioBtn = document.getElementById('b-radio');
+  if (radioBtn) {
+    radioBtn.addEventListener('click', () => {
+      STREAM_RADIO.toggle();
+      radioBtn.classList.toggle('on', STREAM_RADIO.isOn);
+    });
+  }
+
+  // Переключение станций клавишами [ и ]
+  document.addEventListener('keydown', (e) => {
+    if (e.key === ']') {
+      STREAM_RADIO.next();
+    } else if (e.key === '[') {
+      STREAM_RADIO.prev();
+    }
+  });
+});
 
 // ЧАСТЬ 3 — продолжение с CHATTER и до конца </html>
 
