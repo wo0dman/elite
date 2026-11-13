@@ -976,6 +976,315 @@ var SND={ac:null,on:true,
  shipAmb:null, shipAmbGain:null, shipAmbFilter:null,
  startShipAmb:function(){if(!this.ac || this.shipAmb || !this.on) return;try{var o=this.ac.createOscillator();var g=this.ac.createGain();var f=this.ac.createBiquadFilter();o.type='sine';o.frequency.value=45;f.type='lowpass';f.frequency.value=120;f.Q.value=0.5;g.gain.value=0.010;o.connect(f);f.connect(g);g.connect(this.ac.destination);o.start();this.shipAmb=o;this.shipAmbGain=g;this.shipAmbFilter=f;}catch(e){}},
  stopShipAmb:function(){if(!this.shipAmb) return;try{this.shipAmb.stop();}catch(e){}this.shipAmb=null;this.shipAmbGain=null;this.shipAmbFilter=null;},
+ 
+   // ============ MODERN RETRO SOUND PACK ============
+  _delayBusy: false,
+
+  _fatOsc: function(type, f1, f2, dur, vol, detune, drive) {
+    if (!this.on || !this.ac) return;
+    var t = this.ac.currentTime;
+    var o1 = this.ac.createOscillator(), o2 = this.ac.createOscillator(), o3 = this.ac.createOscillator();
+    var g = this.ac.createGain(), dist = this.ac.createWaveShaper();
+    var curve = new Float32Array(256);
+    for (var i = 0; i < 256; i++) { var x = i*2/256 - 1; curve[i] = (1+drive)*x / (1+drive*Math.abs(x)); }
+    dist.curve = curve;
+    o1.type = type; o2.type = type; o3.type = 'sine';
+    o1.frequency.setValueAtTime(f1, t);
+    o2.frequency.setValueAtTime(f1*(1+detune), t);
+    o3.frequency.setValueAtTime(f1*0.5, t);
+    if (f1 !== f2) {
+      o1.frequency.exponentialRampToValueAtTime(Math.max(30,f2), t+dur);
+      o2.frequency.exponentialRampToValueAtTime(Math.max(30,f2*(1+detune)), t+dur);
+      o3.frequency.exponentialRampToValueAtTime(Math.max(30,f2*0.5), t+dur);
+    }
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t+0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o1.connect(g); o2.connect(g); o3.connect(g);
+    g.connect(dist); dist.connect(this.master);
+    o1.start(t); o2.start(t); o3.start(t);
+    o1.stop(t+dur+0.05); o2.stop(t+dur+0.05); o3.stop(t+dur+0.05);
+  },
+
+  _fm: function(carrierType, modType, cFreq, mFreq, cDur, modDepth, vol) {
+    if (!this.on || !this.ac) return;
+    var t = this.ac.currentTime;
+    var car = this.ac.createOscillator(), mod = this.ac.createOscillator();
+    var modGain = this.ac.createGain(), out = this.ac.createGain();
+    car.type = carrierType; mod.type = modType;
+    car.frequency.setValueAtTime(cFreq, t);
+    mod.frequency.setValueAtTime(mFreq, t);
+    modGain.gain.setValueAtTime(modDepth, t);
+    out.gain.setValueAtTime(0.0001, t);
+    out.gain.exponentialRampToValueAtTime(vol, t+0.002);
+    out.gain.exponentialRampToValueAtTime(0.0001, t+cDur);
+    mod.connect(modGain); modGain.connect(car.frequency);
+    car.connect(out); out.connect(this.master);
+    car.start(t); mod.start(t); car.stop(t+cDur+0.05); mod.stop(t+cDur+0.05);
+  },
+
+  _withDelay: function(fn, delayTime, feedback) {
+    if (!this.on || !this.ac) return;
+    if (this._delayBusy) { fn(); return; }
+    this._delayBusy = true;
+    var oldMaster = this.master;
+    var delay = this.ac.createDelay(), fb = this.ac.createGain();
+    delay.delayTime.value = delayTime;
+    fb.gain.value = feedback;
+    delay.connect(fb); fb.connect(delay);
+    delay.connect(oldMaster);
+    this.master = delay;
+    try { fn(); } finally { this.master = oldMaster; this._delayBusy = false; }
+  },
+
+  // Перезаписываем старый _noise на новый с фильтрами
+  _noise: function(dur, vol, type, f1, Q, f2) {
+    if (!this.on || !this.ac) return;
+    var t = this.ac.currentTime, n = Math.floor(this.ac.sampleRate*dur);
+    var buf = this.ac.createBuffer(1, n, this.ac.sampleRate), d = buf.getChannelData(0);
+    for (var i = 0; i < n; i++) d[i] = Math.random()*2 - 1;
+    var src = this.ac.createBufferSource(); src.buffer = buf;
+    var f = this.ac.createBiquadFilter();
+    f.type = type || 'lowpass';
+    f.frequency.setValueAtTime(f1, t);
+    if (f2) f.frequency.exponentialRampToValueAtTime(Math.max(50,f2), t+dur);
+    f.Q.value = Q || 1;
+    var g = this.ac.createGain();
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    src.connect(f); f.connect(g); g.connect(this.master);
+    src.start(t); src.stop(t+dur+0.05);
+  },
+
+  // КОМБАТ
+  laser: function() {
+    var s = this;
+    this._fatOsc('sawtooth', 2400, 400, 0.18, 0.12, 0.02, 3);
+    this._noise(0.06, 0.1, 'highpass', 5000, 2);
+    this._withDelay(function() { s._fm('square', 'sine', 1800, 150, 0.15, 600, 0.08); }, 0.08, 0.3);
+  },
+  laserHeavy: function() {
+    var s = this;
+    this._fatOsc('sawtooth', 800, 100, 0.25, 0.18, 0.03, 5);
+    this._noise(0.08, 0.12, 'bandpass', 2000, 8);
+    this._withDelay(function() { s._fatOsc('square', 1200, 200, 0.2, 0.1, 0.02, 4); }, 0.1, 0.4);
+  },
+  missile: function() { this.missileLaunch(); },
+  missileLock: function() {
+    var s = this;
+    [1400, 1800, 2400, 3200, 4000].forEach(function(f, i) {
+      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.8, 0.06, 0.08, 0.01, 2); }, 0.05, 0.25); }, i*80);
+    });
+  },
+  missileLaunch: function() {
+    var s = this;
+    this._fatOsc('sawtooth', 200, 2400, 0.6, 0.18, 0.02, 4);
+    this._noise(0.7, 0.15, 'highpass', 800, 3, 6000);
+    this._withDelay(function() { s._fatOsc('sine', 120, 60, 0.5, 0.12, 0.01, 2); }, 0.15, 0.35);
+  },
+  missileIncoming: function() {
+    var s = this;
+    function p(f, d) { setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.5, 0.07, 0.1, 0.015, 3); }, 0.06, 0.3); }, d); }
+    p(1600,0); p(1600,120); p(1600,240); p(2400,360); p(2400,480); p(3200,600);
+  },
+  hit: function() {
+    var s = this;
+    this._noise(0.1, 0.22, 'bandpass', 4000, 15, 2000);
+    this._fatOsc('square', 1200, 200, 0.08, 0.14, 0.03, 5);
+    this._fatOsc('sine', 200, 60, 0.15, 0.16, 0.01, 2);
+    this._withDelay(function() { s._noise(0.05, 0.08, 'highpass', 3000, 3); }, 0.04, 0.2);
+  },
+  shieldHit: function() {
+    var s = this;
+    this._fm('sine', 'sine', 2200, 350, 0.35, 2000, 0.14);
+    this._fm('square', 'sine', 2800, 450, 0.2, 1000, 0.08);
+    this._noise(0.12, 0.08, 'highpass', 6000, 3);
+    this._withDelay(function() { s._fm('sine', 'sine', 1800, 250, 0.3, 1500, 0.06); }, 0.08, 0.4);
+  },
+  boom: function() { this.explosion(); },
+  explosion: function() {
+    var s = this;
+    this._noise(0.7, 0.25, 'lowpass', 3000, 1.5, 80);
+    this._fatOsc('sawtooth', 300, 25, 0.6, 0.18, 0.025, 4);
+    this._fatOsc('sine', 150, 20, 0.8, 0.2, 0.01, 2);
+    [0,80,180,320,500].forEach(function(d) { setTimeout(function() { s._noise(0.2, 0.12, 'lowpass', 1000+Math.random()*800, 3, 120); }, d); });
+  },
+  explosionBig: function() {
+    var s = this;
+    this._noise(2.0, 0.3, 'lowpass', 4000, 1.5, 50);
+    this._noise(1.2, 0.18, 'bandpass', 1200, 4, 180);
+    this._fatOsc('sawtooth', 500, 12, 1.8, 0.22, 0.03, 5);
+    this._fatOsc('sine', 180, 10, 2.0, 0.25, 0.015, 2);
+    this._fatOsc('triangle', 100, 8, 2.2, 0.18, 0.02, 3);
+    [0,120,280,480,720,1000].forEach(function(d) {
+      setTimeout(function() {
+        s._noise(0.25, 0.18, 'lowpass', 900+Math.random()*600, 3, 80);
+        s._fatOsc('sine', 80+Math.random()*40, 40, 0.3, 0.1, 0.01, 2);
+      }, d);
+    });
+  },
+  hurt: function() {
+    var s = this;
+    this._fatOsc('square', 400, 60, 0.35, 0.2, 0.025, 4);
+    this._noise(0.3, 0.18, 'lowpass', 2000, 1.5, 180);
+    this._fatOsc('sawtooth', 600, 80, 0.25, 0.12, 0.02, 3);
+    setTimeout(function() { s._fatOsc('sine', 250, 40, 0.5, 0.15, 0.01, 2); }, 120);
+  },
+
+  // НАВИГАЦИЯ
+  dock: function() {
+    var s = this;
+    s._noise(0.1, 0.15, 'bandpass', 1000, 10);
+    [400,600,800,1100,1500,2000].forEach(function(f, i) {
+      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f, 0.1, 0.09, 0.01, 2); }, 0.06, 0.25); }, 120+i*100);
+    });
+    setTimeout(function() { s._noise(0.4, 0.12, 'lowpass', 500, 2.5); s._fatOsc('sine', 100, 70, 0.6, 0.1, 0.01, 2); }, 800);
+  },
+  undock: function() {
+    var s = this;
+    s._noise(0.18, 0.18, 'bandpass', 800, 6);
+    setTimeout(function() { s._fatOsc('sawtooth', 100, 500, 0.6, 0.14, 0.015, 3); s._noise(0.5, 0.12, 'lowpass', 600, 2.5, 1500); }, 150);
+    setTimeout(function() { s._fatOsc('sine', 80, 120, 0.7, 0.12, 0.01, 2); }, 350);
+  },
+  hyper: function() {
+    var s = this;
+    s._fatOsc('sawtooth', 100, 600, 1.0, 0.14, 0.02, 3);
+    s._noise(1.0, 0.12, 'bandpass', 800, 4, 3000);
+    setTimeout(function() { s._fatOsc('sawtooth', 600, 5000, 0.6, 0.2, 0.025, 5); s._noise(0.7, 0.2, 'highpass', 4000, 1.5, 10000); s._fm('square', 'sine', 2500, 40, 0.6, 2500, 0.12); }, 950);
+    setTimeout(function() { s._fatOsc('sine', 150, 12, 1.2, 0.25, 0.015, 2); s._fatOsc('triangle', 300, 30, 0.9, 0.15, 0.02, 3); s._noise(1.0, 0.12, 'lowpass', 500, 1.5, 60); }, 1550);
+  },
+  sonar: function() {
+    var s = this;
+    this._fm('sine', 'sine', 1600, 10, 0.8, 500, 0.12);
+    this._fatOsc('sine', 800, 800, 0.6, 0.08, 0.005, 2);
+    this._noise(0.6, 0.05, 'bandpass', 1600, 5, 1000);
+    this._withDelay(function() { s._fm('sine', 'sine', 1200, 8, 0.7, 400, 0.06); }, 0.15, 0.45);
+  },
+  beep: function() { this._fatOsc('square', 1400, 1400, 0.1, 0.08, 0.008, 2); },
+
+  // ЭКОНОМИКА
+  buy: function() {
+    var s = this;
+    s._fm('square', 'square', 1000, 1000, 0.07, 150, 0.09);
+    s._fm('sine', 'sine', 2000, 2000, 0.1, 120, 0.06);
+    setTimeout(function() { s._fm('square', 'square', 1500, 1500, 0.07, 150, 0.09); s._fm('sine', 'sine', 3000, 3000, 0.12, 100, 0.05); }, 100);
+  },
+  sell: function() {
+    var s = this;
+    [1800,1400,1100,800,600].forEach(function(f, i) {
+      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.7, 0.08, 0.08, 0.01, 2); }, 0.05, 0.2); }, i*70);
+    });
+    setTimeout(function() { s._noise(0.12, 0.07, 'highpass', 5000, 1.5); }, 320);
+  },
+  coin: function() {
+    var s = this;
+    s._noise(0.04, 0.18, 'bandpass', 5000, 12);
+    s._fm('sine', 'sine', 2600, 2000, 0.15, 2500, 0.12);
+    setTimeout(function() { s._fm('sine', 'sine', 3200, 2500, 0.25, 1800, 0.1); }, 90);
+  },
+  rankUp: function() {
+    var s = this;
+    [523,659,784,1047,1319,1568,1976].forEach(function(f, i) {
+      setTimeout(function() {
+        s._withDelay(function() {
+          s._fatOsc('square', f, f, 0.2, 0.1, 0.01, 2);
+          s._fatOsc('sine', f*2, f*2, 0.2, 0.06, 0.008, 1.5);
+        }, 0.08, 0.3);
+      }, i*110);
+    });
+    setTimeout(function() {
+      s._fatOsc('square', 1976, 1976, 0.5, 0.12, 0.01, 3);
+      s._fatOsc('square', 2488, 2488, 0.5, 0.1, 0.01, 3);
+      s._fatOsc('square', 2960, 2960, 0.5, 0.08, 0.01, 3);
+    }, 750);
+  },
+  bounty: function() {
+    var s = this;
+    for (var i = 0; i < 10; i++) {
+      (function(d) {
+        setTimeout(function() {
+          var f = 1400 + Math.random()*2500;
+          s._withDelay(function() { s._fm('sine', 'sine', f, f*0.5, 0.09, 600, 0.06); }, 0.04, 0.2);
+        }, d);
+      })(i*55);
+    }
+  },
+  clickUI: function() { this._fatOsc('square', 1600, 1600, 0.04, 0.06, 0.006, 2); },
+
+  // СИГНАЛЫ
+  alarm: function() {
+    var s = this, i = 0, period = 220;
+    var iv = setInterval(function() {
+      var f = (i%2===0) ? 900 : 600;
+      s._withDelay(function() { s._fatOsc('square', f, f, 0.14, 0.1, 0.015, 3); }, 0.07, 0.25);
+      i++; period = Math.max(90, period-18);
+      if (i >= 12) clearInterval(iv);
+    }, period);
+  },
+  policeSiren: function() {
+    if (!this.on || !this.ac) return;
+    var t = this.ac.currentTime;
+    var o = this.ac.createOscillator(), g = this.ac.createGain();
+    var lfo = this.ac.createOscillator(), lfoGain = this.ac.createGain();
+    o.type = 'sawtooth'; lfo.type = 'sine';
+    o.frequency.setValueAtTime(1000, t);
+    lfo.frequency.setValueAtTime(7, t);
+    lfoGain.gain.setValueAtTime(350, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.12, t+0.01);
+    g.gain.setValueAtTime(0.12, t+1.6);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+1.8);
+    lfo.connect(lfoGain); lfoGain.connect(o.frequency);
+    var f = this.ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 2500; f.Q.value = 2.5;
+    o.connect(f); f.connect(g); g.connect(this.master);
+    o.start(t); lfo.start(t); o.stop(t+1.9); lfo.stop(t+1.9);
+  },
+  pirateAlert: function() {
+    var s = this;
+    s._fatOsc('sawtooth', 800, 180, 0.6, 0.16, 0.025, 4);
+    s._fm('square', 'square', 500, 100, 0.7, 400, 0.1);
+    setTimeout(function() { s._fatOsc('sawtooth', 700, 120, 0.6, 0.14, 0.025, 4); s._noise(0.4, 0.1, 'lowpass', 1500, 2.5, 250); }, 280);
+  },
+  thargoid: function() {
+    if (!this.on || !this.ac) return;
+    var t = this.ac.currentTime;
+    var car = this.ac.createOscillator(), mod = this.ac.createOscillator();
+    var modGain = this.ac.createGain(), out = this.ac.createGain();
+    var f = this.ac.createBiquadFilter();
+    car.type = 'sawtooth'; mod.type = 'sine';
+    car.frequency.setValueAtTime(500, t);
+    car.frequency.exponentialRampToValueAtTime(140, t+1.8);
+    mod.frequency.setValueAtTime(6, t);
+    mod.frequency.linearRampToValueAtTime(2.5, t+1.8);
+    modGain.gain.setValueAtTime(250, t);
+    modGain.gain.linearRampToValueAtTime(500, t+1.8);
+    f.type = 'bandpass'; f.frequency.value = 800; f.Q.value = 5;
+    out.gain.setValueAtTime(0.001, t);
+    out.gain.exponentialRampToValueAtTime(0.16, t+0.18);
+    out.gain.exponentialRampToValueAtTime(0.001, t+1.8);
+    mod.connect(modGain); modGain.connect(car.frequency);
+    car.connect(f); f.connect(out); out.connect(this.master);
+    car.start(t); mod.start(t); car.stop(t+1.9); mod.stop(t+1.9);
+    var s = this;
+    for (var i = 0; i < 8; i++) {
+      (function(d) { setTimeout(function() { s._noise(0.05, 0.1, 'bandpass', 350+Math.random()*500, 10); }, d); })(i*200);
+    }
+  },
+  scoop: function() {
+    var s = this;
+    s._fatOsc('sine', 500, 2200, 0.7, 0.1, 0.015, 2);
+    s._noise(0.7, 0.12, 'bandpass', 900, 5, 6000);
+    for (var i = 0; i < 8; i++) {
+      (function(d) { setTimeout(function() { s._fm('square', 'square', 2400+Math.random()*1200, 1800, 0.05, 250, 0.06); }, d); })(i*70);
+    }
+  },
+  chatterBlip: function() {
+    var f = 1000 + Math.random()*1000;
+    this._fm('square', 'square', f, f*0.6, 0.06, 400, 0.05);
+    this._noise(0.1, 0.04, 'bandpass', 2200, 5);
+  },
+  // ============ /MODERN RETRO SOUND PACK ============
+ 
  chatterBlip:function(){if(!this.on||!this.ac)return;this.tone(880+Math.random()*300,600,0.04,'square',0.015);},
  sonar:function(){this.tone(1400,700,0.15,'sine',0.025);},
  alarm:function(){var s=this;this.tone(600,900,0.3,'square',0.07);setTimeout(function(){s.tone(900,600,0.3,'square',0.07);},320);}
@@ -993,23 +1302,26 @@ var STREAM_RADIO = {
     { name: "Synphaera Radio", desc: "Modern space ambient", url: "https://ice1.somafm.com/synphaera-128-mp3" },
     { name: "Drone Zone", desc: "Atmospheric textures", url: "https://ice1.somafm.com/dronezone-128-mp3" }
 ],
-    init: function(){
-        if (this.audio) return;
-        var a = document.createElement('audio');
-        a.preload = 'none';
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        this.audio = a;
-        var self = this;
-        a.addEventListener('playing', function(){self.isLoading = false;self.isOn = true;self.updateButton();self.notify('playing');});
-        a.addEventListener('waiting', function(){self.isLoading = true;self.updateButton();});
-        a.addEventListener('pause', function(){self.isOn = false;self.isLoading = false;self.updateButton();});
-        a.addEventListener('error', function(e){
-            self.isLoading = false;self.isOn = false;self.updateButton();
-            if (typeof msg === 'function') msg('📻 Станция недоступна — следующая', '#ff4b3e');
-            setTimeout(function(){ self.nextStation(); }, 2000);
-        });
-    },
+      init: function() {
+    if (!this.ac) {
+      try {
+        this.ac = new (window.AudioContext || window.webkitAudioContext)();
+        this.master = this.ac.createGain();
+        this.master.gain.value = 0.85;
+        this.compressor = this.ac.createDynamicsCompressor();
+        this.compressor.threshold.value = -24;
+        this.compressor.knee.value = 30;
+        this.compressor.ratio.value = 12;
+        this.compressor.attack.value = 0.003;
+        this.compressor.release.value = 0.25;
+        this.master.connect(this.compressor);
+        this.compressor.connect(this.ac.destination);
+      } catch(e) {}
+    }
+    if (this.ac && this.ac.state === 'suspended') {
+      try { this.ac.resume(); } catch(e) {}
+    }
+  },
     notify: function(event){
         var s = this.stations[this.currentIndex];if (!s) return;
         if (event === 'playing' && typeof msg === 'function') msg('📻 ' + s.name + ' · ' + s.desc, '#ff9d4b');
@@ -1097,7 +1409,7 @@ function spawnShipAt(type, hostile, police, pos){
     name:sp.ru+(police?' (полиция)':''),
     aggr:hostile?rnd(0.6,1):0.15, flee:false, hitT:0, laser:sp.laser,
     wanderT:rnd(2,5), wanderDir:V(0,0,1), ambient:true, chattered:false};
-  applyPersonality(o);rememberEncounter(o);objects.push(o);
+  applyPersonality(o);if (o.ship === 'thargon') SND.thargoid();rememberEncounter(o);objects.push(o);
   return o;
 }
 function ambientTick(dt){
@@ -1617,7 +1929,7 @@ function spawnShip(type,hostile,police){
    hostile:!!hostile,police:!!police,radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
    aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
    wanderT:rnd(2,5),wanderDir:basisFrom(sub(P.pos,pos)).f,chattered:false};
-  applyPersonality(o);rememberEncounter(o);objects.push(o);return o;
+  applyPersonality(o);if (o.ship === 'thargon') SND.thargoid();rememberEncounter(o);objects.push(o);return o;
  }
  var axis = nrm(station.b.f);
  var slotCenter = add(station.pos, mul(axis, STATION_SLOT_FACE));
@@ -1931,12 +2243,17 @@ function killObj(o){
  }
  var sp=o.ship?SHIP[o.ship]:null;
  boom(o.pos,sp?sp.debris*2:10,o.kind==='ast'?'#d8a06a':'#ffd426');
- objects.splice(idx,1);SND.boom();vib(60);
+ objects.splice(idx,1);
+if (o.kind === 'pirate' || o.kind === 'police') SND.explosionBig();
+else SND.explosion();
+vib(60);
  if(o.kind==='pirate'||o.kind==='police'||o.kind==='trader'){
-  CMD.kills++;CMD.score++;
+  var _oldRank = rankName(CMD.score);
+CMD.kills++;CMD.score++;
+if (rankName(CMD.score) !== _oldRank) SND.rankUp();
   var bn=sp?sp.bounty:0,i;
   if(o.kind==='police'){CMD.legal=2;MEMORY.bounty+=500;bn=0;msg('ПОЛИЦЕЙСКИЙ УНИЧТОЖЕН','#ff4b3e');}
-  else if(bn>0){CMD.cash+=bn;msg(o.name+' · +'+bn+' Cr','#ffd426');}
+  else if(bn>0){CMD.cash+=bn;msg(o.name+' · +'+bn+' Cr','#ffd426');SND.bounty();}
   else msg(o.name+' уничтожен · '+rankName(CMD.score),'#ffd426');
   var cans=sp?sp.canisters:0;
   for(i=0;i<cans;i++)spawnCanister(add(o.pos,V(rnd(-90,90),rnd(-90,90),rnd(-90,90))),Math.floor(Math.random()*QQ23.length));
@@ -1945,7 +2262,11 @@ function killObj(o){
  if(missionKill) completeMission();
 }
 function hurtPlayer(dmg,silent){
- P.energy-=dmg;P.dmgFlash=0.3;if(!silent)SND.hurt();if(!silent)vib(100);
+ P.energy-=dmg;P.dmgFlash=0.3;if(!silent){
+  if (P.energy / P.maxEnergy > 0.3) SND.shieldHit();
+  else SND.hurt();
+  vib(100);
+}
  if(P.energy<=0){P.energy=0;die();}
  else if(!silent&&dmg>4)msg('ПОПАДАНИЕ · '+Math.round(P.energy/P.maxEnergy*100)+'%','#ff4b3e');
 }
@@ -2107,8 +2428,17 @@ function update(dt){
  CMD.time+=dt;burnT-=dt;warnT-=dt;scoopMsgT-=dt;
  var inp=readInput(),pr=1.55*dt,rr=1.95*dt,yr=0.9*dt;
  SHIP_AI.backgroundChatter();
+ var _tNow = crosshairTarget();
+var _tName = _tNow ? _tNow.name : null;
+if (_tName && _tName !== (SND._lastTarget||null)) SND.missileLock();
+SND._lastTarget = _tName;
  SHIP_AI.onLowFuel();
  SHIP_AI.onOverheat();
+ if (!SND._lastAlarm) SND._lastAlarm = 0;
+ if ((CMD.fuel < 15 || P.laserOverheated) && Date.now() - SND._lastAlarm > 6000) {
+   SND.alarm();
+   SND._lastAlarm = Date.now();
+ }
  if(inp.pitch){P.b.u=rotAxis(P.b.u,P.b.r,inp.pitch*pr);P.b.f=rotAxis(P.b.f,P.b.r,inp.pitch*pr);}
  if(inp.roll){var ra=-inp.roll*rr;P.b.r=rotAxis(P.b.r,P.b.f,ra);P.b.u=rotAxis(P.b.u,P.b.f,ra);}
  if(inp.yaw){P.b.r=rotAxis(P.b.r,P.b.u,inp.yaw*yr);P.b.f=rotAxis(P.b.f,P.b.u,inp.yaw*yr);}
@@ -2259,6 +2589,8 @@ function update(dt){
    if(d < 6000 && !o.sonarDone){ o.sonarDone = true; if(SND.sonar) SND.sonar(); }
    if(!o.chattered && d < 8000 && (o.kind==='pirate'||o.kind==='police')){
      o.chattered = true;
+     if (o.kind === 'pirate') SND.pirateAlert();
+else if (o.kind === 'police') SND.policeSiren();
      var mem = MEMORY.knownPirates[o.pname];
      var chatterKind = o.ship === 'thargon' ? 'thargon' : (o.kind==='pirate'?'pirateGreet':'policeGreet');
      if(mem && mem.count > 1 && o.kind==='pirate' && o.ship !== 'thargon'){
@@ -3194,7 +3526,7 @@ $('#mk-body').addEventListener('click',function(e){
  var b=e.target.closest?e.target.closest('button'):null;if(!b||b.disabled)return;
  var i=+b.dataset.i,mk=CMD.market[i],price=mk.price/10;
  if(b.dataset.act==='buy'){if(CMD.cash>=price&&cargoCount()<cargoMax()&&mk.qty>0){CMD.cash-=price;CMD.cargo[i]++;mk.qty--;SND.beep();renderMarket();updateBar();saveGame(true);}}
- else if(CMD.cargo[i]>0){CMD.cash+=price;CMD.cargo[i]--;mk.qty=Math.min(63,mk.qty+1);SND.tone(660,880,0.07,'square',0.05);renderMarket();updateBar();saveGame(true);}
+ else if(CMD.cargo[i]>0){CMD.cash+=price;CMD.cargo[i]--;mk.qty=Math.min(63,mk.qty+1);SND.sell();renderMarket();updateBar();saveGame(true);}
 });
 $('#mk-equip').addEventListener('click',function(e){
  var b=e.target.closest?e.target.closest('button'):null;if(!b||b.disabled)return;
@@ -3224,9 +3556,8 @@ function bindLaunch(selector){
 bindLaunch('#mk-launch');
 bindLaunch('#b-launch');
 
-$('#mk-guide').addEventListener('click',toggleGuide);
-$('#mk-yard').addEventListener('click',function(){openYard();});
-
+$('#mk-guide').addEventListener('click',function(){SND.clickUI();toggleGuide();});
+$('#mk-yard').addEventListener('click',function(){SND.clickUI();openYard();});
 var pv=$('#pv'),pvx=pv.getContext('2d'),pvShip='cobra',pvA=0;
 function yardPrice(id){var cur=(SHIP[CMD.ship]&&SHIP[CMD.ship].price)||0;return Math.max(0,SHIP[id].price-Math.floor(cur*0.5));}
 function openYard(){if(state!=='docked')return;pvShip=CMD.ship;show('ov-yard');renderYard();}
@@ -3261,9 +3592,9 @@ function renderYard(){
  bb.textContent=pvShip===CMD.ship?'ВАШ КОРАБЛЬ':'КУПИТЬ ЗА '+price+' Cr';
  drawPreview(0);
 }
-$('#yard-list').addEventListener('click',function(e){var row=e.target.closest?e.target.closest('.shiprow'):null;if(!row)return;pvShip=row.dataset.ship;SND.beep();renderYard();});
-$('#yard-buy').addEventListener('click',function(){buyShip(pvShip);});
-$('#yard-close').addEventListener('click',closeYard);
+$('#yard-list').addEventListener('click',function(e){var row=e.target.closest?e.target.closest('.shiprow'):null;if(!row)return;pvShip=row.dataset.ship;SND.clickUI();renderYard();});
+$('#yard-buy').addEventListener('click',function(){SND.clickUI();buyShip(pvShip);});
+$('#yard-close').addEventListener('click',function(){SND.clickUI();closeYard();});
 function buyShip(id){
  if(state!=='docked')return;
  var sp=SHIP[id];if(!sp||id===CMD.ship)return;
@@ -3433,24 +3764,23 @@ function chartClick(e){
  }
  if(best>=0&&bd<Math.pow(Math.max(16,GH/26),2)){targetSys=(best===CMD.sysIdx)?null:best;SND.beep();drawChart();updateChartInfo();}
 }
-$('#ch-jump').addEventListener('click',function(){doHyper(false);});
-$('#ch-mode').addEventListener('click',function(){chartMode=1-chartMode;SND.beep();fitView(chartMode);drawChart();updateChartInfo();});
-$('#ch-close').addEventListener('click',closeChart);
+$('#ch-jump').addEventListener('click',function(){SND.clickUI();doHyper(false);});
+$('#ch-mode').addEventListener('click',function(){SND.clickUI();chartMode=1-chartMode;fitView(chartMode);drawChart();updateChartInfo();});
+$('#ch-close').addEventListener('click',function(){SND.clickUI();closeChart();});
+$('#btn-help-close').addEventListener('click',function(){SND.clickUI();closeHelp();});
+$('#btn-help-guide').addEventListener('click',function(){SND.clickUI();toggleGuide();});
+$('#btn-guide-close').addEventListener('click',function(){SND.clickUI();closeGuide();});
+$('#btn-guide-help').addEventListener('click',function(){SND.clickUI();openHelp();});
+$('#btn-guide-pause').addEventListener('click',function(){SND.clickUI();toggleGuide();});
+$('#btn-guide-dead').addEventListener('click',function(){SND.clickUI();toggleGuide();});
+$('#btn-resume').addEventListener('click',function(){SND.clickUI();restoreState();});
+$('#btn-save').addEventListener('click',function(){SND.clickUI();CMD.energySaved=P.energy;saveGame(false);msg('Сохранено','#3fdcff');});
+$('#btn-restart').addEventListener('click',function(){SND.clickUI();toTitle();});
 
-$('#btn-help-close').addEventListener('click',closeHelp);
-$('#btn-help-guide').addEventListener('click',toggleGuide);
-$('#btn-guide-close').addEventListener('click',closeGuide);
-$('#btn-guide-help').addEventListener('click',openHelp);
-$('#btn-guide-pause').addEventListener('click',toggleGuide);
-$('#btn-guide-dead').addEventListener('click',toggleGuide);
-$('#btn-resume').addEventListener('click',restoreState);
-$('#btn-save').addEventListener('click',function(){CMD.energySaved=P.energy;saveGame(false);msg('Сохранено','#3fdcff');});
-$('#btn-restart').addEventListener('click',toTitle);
-
-$('#b-chart').addEventListener('click',toggleChart);
-$('#b-market').addEventListener('click',function(){if(state==='docked'||((state==='pause'||state==='chart')&&prevState==='docked')){openMarket();}});
-$('#b-dock').addEventListener('click',toggleDockComp);
-$('#b-radar').addEventListener('click',function(){if(state==='flight')cycleRange();});
+$('#b-chart').addEventListener('click',function(){SND.clickUI();toggleChart();});
+$('#b-market').addEventListener('click',function(){SND.clickUI();if(state==='docked'||((state==='pause'||state==='chart')&&prevState==='docked')){openMarket();}});
+$('#b-dock').addEventListener('click',function(){SND.clickUI();toggleDockComp();});
+$('#b-radar').addEventListener('click',function(){SND.clickUI();if(state==='flight')cycleRange();});
 $('#b-sound').addEventListener('click',function(){
     SND.on = !SND.on;
     this.classList.toggle('on', SND.on);
@@ -3463,16 +3793,16 @@ $('#b-radio').addEventListener('click', function(){
     STREAM_RADIO.toggle();
     SND.beep();
 });
-$('#b-full').addEventListener('click',toggleFull);
-$('#b-pause').addEventListener('click',function(){if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
-$('#b-help').addEventListener('click',toggleGuide);
+$('#b-full').addEventListener('click',function(){SND.clickUI();toggleFull();});
+$('#b-pause').addEventListener('click',function(){SND.clickUI();if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
+$('#b-help').addEventListener('click',function(){SND.clickUI();toggleGuide();});
 
-$('#btn-load-save').addEventListener('click',function(){if(!loadGame())newGame($('#cmdr').value||'JAMESON');});
-$('#btn-newgame').addEventListener('click',function(){newGame($('#cmdr').value||'JAMESON');});
-$('#btn-new').addEventListener('click',function(){SND.init();goFull();newGame($('#cmdr').value||'JAMESON');});
-$('#btn-cont').addEventListener('click',function(){SND.init();goFull();if(!loadGame())newGame($('#cmdr').value||'JAMESON');});
-$('#btn-help1').addEventListener('click',openHelp);
-$('#btn-guide1').addEventListener('click',toggleGuide);
+$('#btn-load-save').addEventListener('click',function(){SND.init();SND.clickUI();if(!loadGame())newGame($('#cmdr').value||'JAMESON');});
+$('#btn-newgame').addEventListener('click',function(){SND.init();SND.clickUI();newGame($('#cmdr').value||'JAMESON');});
+$('#btn-new').addEventListener('click',function(){SND.init();SND.clickUI();goFull();newGame($('#cmdr').value||'JAMESON');});
+$('#btn-cont').addEventListener('click',function(){SND.init();SND.clickUI();goFull();if(!loadGame())newGame($('#cmdr').value||'JAMESON');});
+$('#btn-help1').addEventListener('click',function(){SND.clickUI();openHelp();});
+$('#btn-guide1').addEventListener('click',function(){SND.clickUI();toggleGuide();});
 
 document.addEventListener('fullscreenchange',function(){setTimeout(layout,60);setTimeout(layout,320);});
 document.addEventListener('webkitfullscreenchange',function(){setTimeout(layout,60);setTimeout(layout,320);});
@@ -3975,6 +4305,23 @@ renderBordComp();
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
 initNewsTicker();
 rebuildMarketTicker();
+// ============ ГЛОБАЛЬНЫЙ КЛИК UI ============
+document.addEventListener('click', function(e){
+  var btn = e.target && e.target.closest ? e.target.closest('button') : null;
+  if (!btn) return;
+  // Не дублируем звук там, где он уже играется отдельно
+  if (btn.id === 'b-sound') return;            // переключение звука — без клика
+  if (btn.id === 'b-radio') return;            // радио — свой beep
+  if (btn.id === 'b-ai') return;               // ИИ — без клика
+  if (btn.id === 'b-launch' || btn.id === 'mk-launch') return; // launch — сам играет undock
+  if (btn.closest('#penta')) return;           // пента-пульт — fire/missile/tractor имеют свои звуки
+  if (btn.closest('.bc-buttons')) return;      // кнопки борт.компа — ПАРАДОКС-9 говорит
+  if (btn.closest('#mk-body')) return;         // покупка/продажа — buy/sell
+  if (btn.closest('#mk-equip') || btn.closest('#mk-serv')) return; // оборудование/услуги — свой звук
+  SND.init();
+  SND.clickUI();
+}, true);
+// ============ /ГЛОБАЛЬНЫЙ КЛИК UI ============
 requestAnimationFrame(loop);
 })();
 </script>
