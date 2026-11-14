@@ -4150,8 +4150,14 @@ var SHIP_AI = {
   if (!('speechSynthesis' in window)) return;
   try{ speechSynthesis.cancel(); }catch(e){}
 
-  // ← ВКЛЮЧАЕМ ШУМ РАЦИИ
+  // ← ВСЕГДА гасим предыдущий шум ПЕРЕД запуском нового
+  this.stopSpeakerNoise();
   this.startSpeakerNoise();
+
+  // ← Safety-таймер: через 25 сек глушим шум, даже если onend не сработал
+  var self = this;
+  clearTimeout(this._noiseSafetyTimer);
+  this._noiseSafetyTimer = setTimeout(function(){ self.stopSpeakerNoise(); }, 25000);
 
   try{
     var utt = new SpeechSynthesisUtterance(text);
@@ -4163,15 +4169,24 @@ var SHIP_AI = {
     var ru = voices.find ? voices.find(function(v){return v.lang && v.lang.indexOf('ru')===0;}) : null;
     if(ru) utt.voice = ru;
 
-    // ← ОСТАНАВЛИВАЕМ ШУМ ПО ОКОНЧАНИИ РЕЧИ
-    var self = this;
-    utt.onend = function(){ self.stopSpeakerNoise(); };
-    utt.onerror = function(){ self.stopSpeakerNoise(); };
+    // ← Запоминаем «активную» уттеренс, чтобы старые onend/onerror не гасили новый шум
+    this._activeUtt = utt;
+
+    utt.onend = function(){
+      clearTimeout(self._noiseSafetyTimer);
+      if(self._activeUtt === utt) self.stopSpeakerNoise();
+    };
+    utt.onerror = function(){
+      clearTimeout(self._noiseSafetyTimer);
+      if(self._activeUtt === utt) self.stopSpeakerNoise();
+    };
 
     speechSynthesis.speak(utt);
-  }catch(e){ this.stopSpeakerNoise(); }
+  }catch(e){
+    clearTimeout(this._noiseSafetyTimer);
+    this.stopSpeakerNoise();
+  }
 },
-
 speakerNoise: null,
 speakerNoiseGain: null,
 
@@ -4233,16 +4248,20 @@ startSpeakerNoise: function(){
 stopSpeakerNoise: function(){
   var sn = this.speakerNoise;
   if(!sn) return;
+  // ← СРАЗУ обнуляем — чтобы startSpeakerNoise мог создать новый шум при следующей фразе
+  this.speakerNoise = null;
+
   try{
     var ac = SND.ac;
-    sn.gain.gain.cancelScheduledValues(ac.currentTime);
-    sn.gain.gain.linearRampToValueAtTime(0.0, ac.currentTime + 0.8);
+    var now = ac.currentTime;
+    sn.gain.gain.cancelScheduledValues(now);
+    sn.gain.gain.setValueAtTime(sn.gain.gain.value || 0, now);
+    sn.gain.gain.linearRampToValueAtTime(0.0001, now + 0.15);
     setTimeout(function(){
       try{ sn.src.stop(); }catch(e){}
       try{ sn.hum.stop(); }catch(e){}
-    }, 200);
+    }, 250);
   }catch(e){}
-  this.speakerNoise = null;
 },
 
   showBordcomp: function(text, isAd){
@@ -4359,6 +4378,8 @@ document.getElementById('b-ai').addEventListener('click', function(){
   this.classList.toggle('on', SHIP_AI.enabled);
   if(!SHIP_AI.enabled){
     try{ speechSynthesis.cancel(); }catch(e){}
+    clearTimeout(SHIP_AI._noiseSafetyTimer);
+    SHIP_AI.stopSpeakerNoise();
     SHIP_AI.hideBordcomp();
   }
 });
