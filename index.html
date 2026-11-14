@@ -4374,23 +4374,7 @@ renderBordComp();
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
 initNewsTicker();
 rebuildMarketTicker();
-// ============ ГЛОБАЛЬНЫЙ КЛИК UI ============
-document.addEventListener('click', function(e){
-  var btn = e.target && e.target.closest ? e.target.closest('button') : null;
-  if (!btn) return;
-  // Не дублируем звук там, где он уже играется отдельно
-  if (btn.id === 'b-sound') return;            // переключение звука — без клика
-  if (btn.id === 'b-radio') return;            // радио — свой beep
-  if (btn.id === 'b-ai') return;               // ИИ — без клика
-  if (btn.id === 'b-launch' || btn.id === 'mk-launch') return; // launch — сам играет undock
-  if (btn.closest('#penta')) return;           // пента-пульт — fire/missile/tractor имеют свои звуки
-  if (btn.closest('.bc-buttons')) return;      // кнопки борт.компа — ПАРАДОКС-9 говорит
-  if (btn.closest('#mk-body')) return;         // покупка/продажа — buy/sell
-  if (btn.closest('#mk-equip') || btn.closest('#mk-serv')) return; // оборудование/услуги — свой звук
-  SND.init();
-  SND.clickUI();
-}, true);
-// ============ /ГЛОБАЛЬНЫЙ КЛИК UI ============
+// ============ ГЛОБАЛЬНЫЙ КЛИК 
 requestAnimationFrame(loop);
 })();
 </script>
