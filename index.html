@@ -2434,7 +2434,7 @@ function launch(){
  SND.startShipAmb();
  msg('Отстыковка выполнена · удачи, '+CMD.name,'#3fdcff');
  SHIP_AI.onGameStart();
- try{SND.dock();}catch(e){}
+ try{SND.undock();}catch(e){}
  updateBar();
 }
 function doHyper(galactic){
