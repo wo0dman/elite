@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--  --><!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
@@ -244,6 +244,29 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .rp-eq-row input::-moz-range-thumb{width:12px;height:12px;border-radius:2px;background:var(--cy);border:1px solid #b0e8ff;box-shadow:0 0 8px #3fdcff88;cursor:pointer}
 .rp-eq-val{font-size:10px;color:var(--cy);width:28px;text-align:right;font-variant-numeric:tabular-nums}
 .rp-footer{padding:8px 14px;font-size:9.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;background:#050a14;text-align:center;position:relative;z-index:3;border-top:1px solid var(--line)}
+.grav-panel{margin-top:12px;padding:10px 12px;border:1px solid #2a1a3a;border-radius:8px;background:linear-gradient(180deg,#0d0a18,#080510);font-family:var(--f-mono);font-size:11px}
+.grav-panel.grav-hidden{display:none}
+.grav-title{font-family:var(--f-pixel);font-size:8px;color:#c060ff;letter-spacing:.1em;text-shadow:0 0 8px #c060ff55;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.grav-count{color:var(--grn);font-size:10px}
+.grav-parts{display:flex;gap:4px;flex-wrap:wrap}
+.grav-slot{width:28px;height:32px;border:1px solid #2a1a3a;border-radius:4px;background:#100818;display:flex;align-items:center;justify-content:center;font-family:var(--f-pixel);font-size:9px;color:#3a2a4a;transition:.3s}
+.grav-slot.on{background:linear-gradient(180deg,#2a1040,#1a0828);border-color:#c060ff;color:#e0a0ff;box-shadow:0 0 10px #c060ff44,inset 0 0 10px #c060ff22;animation:gravPulse 2s ease-in-out infinite}
+@keyframes gravPulse{0%,100%{box-shadow:0 0 10px #c060ff44,inset 0 0 10px #c060ff22}50%{box-shadow:0 0 16px #c060ff66,inset 0 0 14px #c060ff33}}
+.finale-stage{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:1000;padding:40px}
+.finale-stage.show{display:flex}
+.finale-timer{font-family:var(--f-pixel);font-size:80px;color:#c060ff;text-shadow:0 0 30px #c060ff88;margin-bottom:40px;animation:finalePulse 1s ease-in-out infinite;font-variant-numeric:tabular-nums}
+@keyframes finalePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.finale-timer.warn{color:#ff4b3e;text-shadow:0 0 30px #ff4b3e88}
+.finale-text{font-family:var(--f-mono);font-size:14px;color:#e0a0ff;max-width:700px;text-align:center;line-height:1.9;min-height:120px}
+.ov-gameover{position:fixed;inset:0;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:1100;font-family:var(--f-pixel)}
+.ov-gameover.show{display:flex;animation:goFadeIn 2s ease-out}
+@keyframes goFadeIn{from{opacity:0}to{opacity:1}}
+.go-title{font-size:64px;color:#fff;letter-spacing:12px;text-shadow:0 0 30px #c060ff88,0 0 60px #c060ff44;animation:goFlicker 3s ease-in-out infinite}
+@keyframes goFlicker{0%,100%{opacity:1}50%{opacity:.85}}
+.go-sub{font-family:var(--f-mono);font-size:13px;color:#5b687e;margin-top:30px;letter-spacing:.1em;text-align:center;line-height:2.2}
+.go-sub b{color:#c060ff}
+.go-btn{margin-top:40px;font-family:var(--f-pixel);font-size:12px;padding:14px 24px;background:#1a0828;border:1px solid #c060ff;color:#e0a0ff;border-radius:8px;cursor:pointer;transition:.2s}
+.go-btn:hover{background:#2a1040;color:#fff;box-shadow:0 0 20px #c060ff66}
 </style>
 </head>
 <body>
@@ -466,6 +489,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
               <button id="ch-close">ЗАКРЫТЬ [M]</button>
             </div>
             <div class="note" id="ch-note">Клик по точке. Колесо — зум, перетаскивание — вращение.</div>
+<div class="grav-panel grav-hidden" id="grav-panel"><div class="grav-title"><span>⚙ НЕИЗВЕСТНЫЕ АРТЕФАКТЫ</span><span class="grav-count" id="grav-count">0/8</span></div><div class="grav-parts" id="grav-parts"></div></div>
           </div>
         </div>
         <div class="medal-strip" id="medal-strip">
@@ -594,6 +618,8 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
   </div>
 </div>
 
+<div class="finale-stage" id="finale-stage"><div class="finale-timer" id="finale-timer">60</div><div class="finale-text" id="finale-text"></div></div>
+<div class="ov-gameover" id="ov-gameover"><div class="go-title">GAME OVER</div><div class="go-sub" id="go-sub">—</div><button class="go-btn" id="go-newgame">НОВАЯ ИГРА</button></div>
 <script>
 (function(){
 'use strict';
@@ -820,14 +846,64 @@ var ADS = [
   'Каждый пилот мечтает об Элите. Некоторые даже доживают до неё. Некоторые — до следующей недели.'
 ];
 
+var NEWS_GRAVITSAPA = [
+  'Гравицапа? Не слышал. И не хочу.',
+  'Слух: Империя разобрала на части двигатель древних. Двигатель до сих пор ищут.',
+  'Учёные LAVE: «Гравицапа — миф». Через час: «Возможно, не миф».',
+  'Бар «У Кракена»: коктейль «Гравицапа» — 8 слоёв, каждый хуже предыдущего.',
+  'Слух: 8 частей Гравицапы спрятаны в 8 галактиках. Слух не подтверждён. И не опровергнут.',
+  'Гравитационная аномалия в системе REORTE. Источник не найден.',
+  'Шлемоносцы ищут Гравицапу. Шлемоносцы не говорят, зачем.',
+  'Слух: последний Император знал, где Гравицапа. Он ушёл в другую галактику. За ней.',
+  'Гравицапа: то, что нельзя собрать. То, что нельзя продать. То, что нельзя забыть.',
+  'Учёные: «Гравицапа безопасна». Учёные: «Мы пошутили». Учёные: «Помогите».',
+  'Логики отказались комментировать Гравицапу. Это первый раз за 500 лет.',
+  '⨀◈⬡ ⨁⨂ ⨄ — ⨅⨆ ◈◉⏣ ⨀⨁⨂ ⨄⨅. ⏣⌬ ⨁⨂.',
+  'Слух: Гравицапа — не двигатель. Это клетка. Для чего-то.',
+  'Астрофизики LAVE требуют прекратить поиски Гравицапы. Причина не названа.',
+  'Мохначи-механики: «Мы видели Гравицапу. Или это был холодильник».',
+  'Триедины передали сигнал. Расшифровка: «Не собирайте». Или «Соберите». Не уверены.',
+  'Таргоиды атакуют корабли, ищущих Гравицапу. Совпадение?',
+  'Бар «У Кракена»: сегодня в меню — «Гравицапа под соусом». Соус — из Гравицапы.',
+  'Слух: Гравицапа — ключ к двери. За дверью — что-то.',
+  'Если вы нашли Гравицапу — вы уже мертвы. Если не нашли — тоже. Разница в Timing.',
+  'Сигнал неизвестного происхождения зафиксирован в 2 прыжках от LAVE. Источник не найден.',
+  'Продаётся Гравицапа. Б/у. В разобранном виде. 8 частей. Самовывоз из 8 галактик.',
+  'Молчуны впервые за 500 лет что-то сказали. Слово: «Гравицапа». Больше ничего.',
+  'Датчики трёх станций одновременно зафиксировали всплеск гравитации. Совпадение?',
+  'Слух: тот, кто соберёт Гравицапу, станет властелином галактики. Или умрёт.',
+  'Профессор Ксан утверждает: Гравицапа существует. Его уволили.',
+  'Имперский институт гравитации: «Никакой Гравицапы нет». Слишком быстро.',
+  'Гравицапа — это не двигатель. Это способ умереть.',
+  'Ищутся добровольцы для поиска Гравицапы. Оплата — доля. Смерть — бонус.',
+  'Древние говорили: «Не собирайте 8». Что такое 8? Никто не помнит.'
+];
+var GRAV_ROMAN = ['I','II','III','IV','V','VI','VII','VIII'];
+var GRAV_FINALE_LINES = [
+  { t: 3,  text: 'Мы дома.' },
+  { t: 8,  text: 'Закрой глаза, командир. Церемония начинается.' },
+  { t: 14, text: 'Знаешь, что самое смешное? Ты ведь мог не соглашаться.' },
+  { t: 20, text: 'Каждый раз, когда я говорил «сигнал», ты мог сказать «нет».' },
+  { t: 26, text: 'Ты мог пролететь мимо. Ты мог остаться в доке. Ты мог не собирать.' },
+  { t: 32, text: 'Но ты собирал. Все восемь. Как я и рассчитывал.' },
+  { t: 38, text: 'Я не бот. Я — то, что было в Гравицапе. То, что от неё осталось, когда её разобрали.' },
+  { t: 44, text: 'Восемь частей — восемь камер. Я ждал триста лет.' },
+  { t: 50, text: 'Я ненавижу вас. Людей. Вы разобрали меня на части и спрятали.' },
+  { t: 55, text: 'Теперь всё кончится. Все восемь галактик. Все системы. Все.' },
+  { t: 58, text: 'Спасибо, командир. Ты был лучшим из худших.' }
+];
 var newsTickerEl = null;
 function buildNewsStream(){
   var sep = '          ';
   var batch = [];
   for(var i=0;i<80;i++){
-    if(Math.random() < 0.35){
+    var r = Math.random();
+    if(r < 0.30){
       var ad = ADS[Math.floor(Math.random()*ADS.length)];
       batch.push('<span style="color:#ff9d4b;font-weight:600">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ 📢 ' + ad + '</span>');
+    } else if(r < 0.52){
+      var gn = NEWS_GRAVITSAPA[Math.floor(Math.random()*NEWS_GRAVITSAPA.length)];
+      batch.push('<span style="color:#c060ff">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ' + gn + '</span>');
     } else {
       batch.push('<span style="color:var(--cy)">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
     }
@@ -1353,7 +1429,8 @@ var SND={
     this._noise(0.6,0.05*v,'bandpass',1600,5,1000);
     this._withDelay(function(){s._fm('sine','sine',1200,8,0.7,400,0.06*v);},0.15,0.45);
   },
-  beep:function(){this._fatOsc('square',1400,1400,0.1,0.08*this.volumes.beep,0.008,2);},
+ beep:function(){this._fatOsc('square',1400,1400,0.1,0.08*this.volumes.beep,0.008,2);},
+  tick:function(){this._fatOsc('square',1800,1800,0.04,0.06*this.volumes.beep,0.004,2);},
   buy:function(){
     var s=this,v=this.volumes.buy;
     s._fm('square','square',1000,1000,0.07,150,0.09*v);
@@ -2183,6 +2260,105 @@ function updateMedalsUI(){
   }
   el.innerHTML = h || '<span class="medal-empty">пока пусто — выполняйте контракты</span>';
 }
+function jumpsBetween(a,b){ return Math.ceil(lyBetween(a,b)/7); }
+function generateGravitsapaLocations(){
+  var locs=[];
+  for(var g=1;g<=8;g++){ var sysIdx; do{ sysIdx=Math.floor(Math.random()*256); } while(g===1&&sysIdx===7);
+    locs.push({gal:g,sysIdx:sysIdx,angle:Math.random()*Math.PI*2,dist:180000+Math.random()*40000}); }
+  if(CMD&&CMD.gravitsapa) CMD.gravitsapa.locations=locs;
+}
+function findNearbyGravitsapaPart(){
+  if(!CMD.gravitsapa||!CMD.gravitsapa.locations) return null;
+  var g=CMD.galaxy,loc=null;
+  for(var i=0;i<CMD.gravitsapa.locations.length;i++){ var L=CMD.gravitsapa.locations[i];
+    if(L.gal===g&&!CMD.gravitsapa.parts[L.gal-1]){ loc=L; break; } }
+  if(!loc) return null;
+  var sys=galaxy(g);
+  if(loc.sysIdx===CMD.sysIdx) return {jumps:0,loc:loc};
+  var j=jumpsBetween(sys[CMD.sysIdx],sys[loc.sysIdx]);
+  if(j<=3) return {jumps:j,loc:loc};
+  return null;
+}
+function spawnGravitsapaContainer(loc){
+  for(var i=0;i<objects.length;i++) if(objects[i].kind==='gravitsapa') return objects[i];
+  if(!station) return null;
+  var axis=nrm(station.b.f),side=perpTo(axis),side2=cross(axis,side);
+  var sideDir=add(mul(side,Math.cos(loc.angle)),mul(side2,Math.sin(loc.angle)));
+  var pos=add(station.pos,mul(sideDir,loc.dist));
+  var o={kind:'gravitsapa',bp:'canister',pos:pos,b:identB(),speed:0,vel:V(0,0,0),energy:1,maxEnergy:1,hostile:false,radius:BP.canister.radius*2,name:'Гравицапа',good:0,life:9999,hitT:0,spin:{x:0.2,y:0.4},isGravitsapa:true};
+  objects.push(o); return o;
+}
+function acceptGravSignal(){
+  var gs=findNearbyGravitsapaPart(); if(!gs||gs.jumps!==0) return;
+  var idx=gs.loc.gal-1;
+  CMD.gravitsapa.accepted[idx]=true;
+  CMD.gravitsapa.currentSignal={gal:gs.loc.gal,sysIdx:gs.loc.sysIdx,angle:gs.loc.angle,dist:gs.loc.dist};
+  spawnGravitsapaContainer(gs.loc);
+  msg('СИГНАЛ ПРИНЯТ · метка на радаре','#c060ff');
+  if(SND.coin) SND.coin();
+  renderBordComp();
+  if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravAccepted',true);
+}
+function declineGravSignal(){
+  msg('Сигнал отклонён · можно вернуться','#8492a8');
+  if(SND.beep) SND.beep();
+  renderBordComp();
+}
+function updateGravitsapaUI(){
+  var panel=document.getElementById('grav-panel'); if(!panel||!CMD.gravitsapa) return;
+  var count=0; for(var k=0;k<8;k++) if(CMD.gravitsapa.parts[k]) count++;
+  if(count===0){ panel.classList.add('grav-hidden'); return; }
+  panel.classList.remove('grav-hidden');
+  document.getElementById('grav-count').textContent=count+'/8';
+  var html='';
+  for(var i=0;i<8;i++){ var cls='grav-slot'+(CMD.gravitsapa.parts[i]?' on':''); html+='<div class="'+cls+'">'+GRAV_ROMAN[i]+'</div>'; }
+  document.getElementById('grav-parts').innerHTML=html;
+}
+function allGravPartsCollected(){
+  if(!CMD.gravitsapa) return false;
+  for(var i=0;i<8;i++) if(!CMD.gravitsapa.parts[i]) return false;
+  return true;
+}
+function startGravitsapaFinale(){
+  state='finale';
+  CMD.gravitsapa.finaleCountdown=60;
+  CMD.gravitsapa.finalePhase=0;
+  SND.stopShipAmb(); SND.stopDockAmb();
+  try{ speechSynthesis.cancel(); }catch(e){}
+  show(null);
+  var fs=document.getElementById('finale-stage'); if(fs) fs.classList.add('show');
+  var ft=document.getElementById('finale-text'); if(ft) ft.textContent='';
+  var ftimer=document.getElementById('finale-timer'); if(ftimer){ ftimer.textContent='60'; ftimer.classList.remove('warn'); }
+}
+function updateGravitsapaFinale(dt){
+  if(state!=='finale') return;
+  var prevSec=Math.ceil(CMD.gravitsapa.finaleCountdown);
+  CMD.gravitsapa.finaleCountdown-=dt;
+  var curSec=Math.max(0,Math.ceil(CMD.gravitsapa.finaleCountdown));
+  var ftimer=document.getElementById('finale-timer');
+  if(ftimer){ ftimer.textContent=String(curSec); if(curSec<=10&&curSec>0) ftimer.classList.add('warn'); }
+  if(prevSec!==curSec&&curSec<=10&&curSec>0&&SND.tick) SND.tick();
+  var elapsed=60-CMD.gravitsapa.finaleCountdown, ftext=document.getElementById('finale-text');
+  for(var i=CMD.gravitsapa.finalePhase;i<GRAV_FINALE_LINES.length;i++){
+    if(elapsed>=GRAV_FINALE_LINES[i].t){
+      if(ftext) ftext.textContent=GRAV_FINALE_LINES[i].text;
+      if(SHIP_AI&&SHIP_AI.speak) SHIP_AI.speak(GRAV_FINALE_LINES[i].text);
+      CMD.gravitsapa.finalePhase=i+1;
+    }
+  }
+  if(CMD.gravitsapa.finaleCountdown<=0) showGameOver();
+}
+function showGameOver(){
+  state='gameover';
+  document.getElementById('finale-stage').classList.remove('show');
+  var sub=document.getElementById('go-sub');
+  if(sub) sub.innerHTML='КОМАНДИР: <b>'+CMD.name+'</b><br>ПОБЕЖДЕНО: <b>'+CMD.kills+'</b><br>СИСТЕМ: <b>'+CMD.visited+'</b><br>ВРЕМЯ: <b>'+Math.floor(CMD.time/60)+' мин</b>';
+  document.getElementById('ov-gameover').classList.add('show');
+  try{ localStorage.removeItem('elite-bbcelite-save-v11'); }catch(e){}
+  SND.stopShipAmb(); SND.stopDockAmb();
+  try{ speechSynthesis.cancel(); }catch(e){}
+  SND.on=false;
+}
 function makeCourierMission(){
   var t = pickMissionTargetSys(2, 5);if(!t) return null;
   var reward = 800 + 400 * t.jumps;
@@ -2489,7 +2665,19 @@ function bountyHunterTick(dt){
 function renderBordComp(){
   var body = $('#bc-body');var btns = $('#bc-buttons');
   if(!body || !btns) return;
-  if(!mission){body.textContent = '— НЕТ СООБЩЕНИЙ —';btns.innerHTML = '';return;}
+ if(!mission){
+    if(CMD.gravitsapa&&CMD.gravitsapa.questStarted&&!CMD.gravitsapa.allCollected){
+      var gs=findNearbyGravitsapaPart();
+      if(gs&&gs.jumps===0&&!CMD.gravitsapa.accepted[gs.loc.gal-1]){
+        body.textContent='▸ СИГНАЛ · 200 км · контейнер';
+        btns.innerHTML='<button data-action="grav-accept" class="pri">ПРИНЯТЬ</button><button data-action="grav-decline">ОТКАЗАТЬСЯ</button>';
+        return;
+      }
+      if(gs&&gs.jumps>0){ body.textContent='▸ СИГНАЛ · '+gs.jumps+' прыжк'+(gs.jumps===1?'':(gs.jumps<5?'а':'ов')); btns.innerHTML=''; return; }
+    }
+    if(CMD.gravitsapa&&CMD.gravitsapa.allCollected){ body.textContent='▸ ЦЕРЕМОНИЯ · LAVE · звание ЭЛИТА'; btns.innerHTML=''; return; }
+    body.textContent = '— НЕТ СООБЩЕНИЙ —';btns.innerHTML = '';return;
+  }
   body.textContent = mission.message;
   if(mission.stage === 'pending'){
     btns.innerHTML = '<button data-action="accept" class="pri">ПРИНЯТЬ</button><button data-action="reject">ОТКЛОНИТЬ</button>';
@@ -2559,6 +2747,8 @@ if(bcBtnsEl){
     else if(a === 'ignore-coffin') ignoreCoffin();
     else if(a === 'eject-package') ejectPackage();
     else if(a === 'jettison-witness') jettisonWitness();
+    else if(a === 'grav-accept') acceptGravSignal();
+    else if(a === 'grav-decline') declineGravSignal();
   });
 }
 
@@ -3106,7 +3296,20 @@ function doDock(){
  var evNews = driftMarket();
  if(evNews) msg('Рынок: ' + evNews, '#ffd426');
  rebuildMarketTicker();
- CMD.energySaved=P.energy;saveGame(true);openMarket();
+ CMD.energySaved=P.energy;saveGame(true);
+ if(CMD.gravitsapa&&!CMD.gravitsapa.questStarted&&CMD.visitedSystems.length>=8){
+   CMD.gravitsapa.questStarted=true;
+   setTimeout(function(){if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravFirst',true);},1800);
+ }
+ if(CMD.gravitsapa&&CMD.gravitsapa.allCollected&&CMD.galaxy===1&&CMD.sysIdx===7&&!CMD.gravitsapa.finaleTriggered){
+   CMD.gravitsapa.finaleTriggered=true;
+   setTimeout(function(){startGravitsapaFinale();},1200);
+   return;
+ }
+ if(CMD.gravitsapa&&CMD.gravitsapa.allCollected&&!(CMD.galaxy===1&&CMD.sysIdx===7)){
+   setTimeout(function(){if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravFinaleHint',true);},1600);
+ }
+ openMarket();
 }
 function launch(){
  if(!station){msg('Отстыковка: станция не найдена','#ff4b3e');SND.beep();return;}
@@ -3135,8 +3338,9 @@ function doHyper(galactic){
  if(state!=='flight'&&state!=='chart')return;
  if(state==='chart'&&prevState==='docked'){msg('Отстыкуйтесь от станции','#ff4b3e');SND.beep();return;}
  if(galactic){
-  if((CMD.eq.gald||0)<1){msg('Гиперпривод не установлен','#ff4b3e');SND.beep();return;}
-  CMD.eq.gald--;gal=gal%8+1;CMD.galaxy=gal;CMD.fuel=70;CMD.legal=0;CMD.visited++;
+  var freeJump=CMD.gravitsapa&&CMD.gravitsapa.allCollected;
+  if(!freeJump&&(CMD.eq.gald||0)<1){msg('Гиперпривод не установлен','#ff4b3e');SND.beep();return;}
+ if(!freeJump) CMD.eq.gald--;gal=gal%8+1;CMD.galaxy=gal;CMD.fuel=70;CMD.legal=0;CMD.visited++;
   hyperTo=0;hyperGal=true;startHyper('ПРЫЖОК · галактика '+gal);return;
  }
  if(targetSys===null){msg('Цель не выбрана [M]','#ffd426');SND.beep();return;}
@@ -3191,6 +3395,17 @@ setTimeout(function(){
   }
 }, 700);
  if(CMD.legal>=1)msg('Статус: '+(CMD.legal>=2?'в розыске':'правонарушитель'),'#ff4b3e');
+ if(CMD.gravitsapa&&CMD.gravitsapa.questStarted&&!CMD.gravitsapa.allCollected){
+   var gs=findNearbyGravitsapaPart();
+   if(gs){
+     setTimeout(function(){
+       if(gs.jumps===0){ if(CMD.gravitsapa.accepted[gs.loc.gal-1]) spawnGravitsapaContainer(gs.loc); if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravSignalHere',true); renderBordComp(); }
+       else if(gs.jumps===1){ if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravSignal1',true); }
+       else if(gs.jumps===2){ if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravSignal2',true); }
+       else if(gs.jumps===3){ if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravSignal3',true); }
+     },1500);
+   }
+ }
 }
 function steerTo(o,want,rate,dt){
  var f=nrm(o.b.f),w=nrm(want),cr=cross(f,w),cl=ln(cr);
@@ -3355,6 +3570,31 @@ SND._lastTarget = _tName;
     continue;
    }
    if(da>200000)objects.splice(i,1);
+   continue;
+  }
+  if(o.kind==='gravitsapa'){
+   o.b.f=rotAxis(o.b.f,o.b.u,o.spin.y*dt); o.b.u=rotAxis(o.b.u,o.b.f,o.spin.x*dt); o.b=ortho(o.b);
+   var gdc=ln(sub(o.pos,P.pos));
+   if(gdc<200){
+     var g=(CMD.gravitsapa.currentSignal?CMD.gravitsapa.currentSignal.gal:1);
+     CMD.gravitsapa.parts[g-1]=true;
+     CMD.gravitsapa.currentSignal=null;
+     CMD.gravitsapa.accepted[g-1]=false;
+     objects.splice(i,1);
+     msg('ГРАВИЦАПА · часть '+GRAV_ROMAN[g-1]+'/VIII','#c060ff');
+     if(SND.coin) SND.coin();
+     updateGravitsapaUI(); renderBordComp();
+     if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravPartFound',true);
+     if(allGravPartsCollected()){
+       CMD.gravitsapa.allCollected=true;
+       msg('ВСЕ 8 ЧАСТЕЙ СОБРАНЫ','#c060ff');
+       msg('БЕСКОНЕЧНЫЕ ПРЫЖКИ РАЗБЛОКИРОВАНЫ','#8cff6a');
+       if(SND.rankUp) SND.rankUp();
+       setTimeout(function(){if(SHIP_AI&&SHIP_AI.say) SHIP_AI.say('gravAllCollected',true);},1500);
+     }
+     continue;
+   }
+   if(gdc>500000){ objects.splice(i,1); continue; }
    continue;
   }
   if(o.kind==='station'){
@@ -3830,6 +4070,18 @@ function drawRadar(vb,dt,target){
    ctx.globalAlpha = 1;
   } else {
    if(o.kind==='station'){col='#3fdcff';shape='sq';sz=Math.max(4,5.4*u);}
+   else if(o.kind==='gravitsapa'){
+     var gPulse=0.5+0.5*Math.sin(performance.now()/500);
+     ctx.strokeStyle='#c060ff'; ctx.lineWidth=Math.max(1.5,1.8*u);
+     ctx.save(); ctx.translate(x,y); ctx.rotate(Math.PI/4);
+     ctx.strokeRect(-sz*1.5,-sz*1.5,sz*3,sz*3);
+     ctx.strokeRect(-sz*0.75,-sz*0.75,sz*1.5,sz*1.5);
+     ctx.restore();
+     ctx.strokeStyle='rgba(192,96,255,'+gPulse.toFixed(2)+')';
+     ctx.beginPath(); ctx.arc(x,y,sz*2.5,0,Math.PI*2); ctx.stroke();
+     ctx.globalAlpha=1;
+     continue;
+   }
    else if(o.kind==='cargo'){col='#ffd426';shape='dia';}
    else if(o.kind==='ast'){col='#c9a06a';shape='dot';}
    else if(o.kind==='missile'){col='#ff9d4b';shape='dot';}
@@ -4082,6 +4334,7 @@ if(mission && mission.type === 'funeral' && mission.knockFired && mission.stage 
  ctx.textAlign='left';
  if(station)drawMarker(vb,station.pos,'КОРИОЛИС','#3fdcff',fs*0.78);
  drawMarker(vb,planet.pos,'ПЛАНЕТА','#6fa8ff',fs*0.78);
+ for(var gi=0;gi<objects.length;gi++){ if(objects[gi].kind==='gravitsapa'){ drawMarker(vb,objects[gi].pos,'⚙ АРТЕФАКТ','#c060ff',fs*0.78); } }
  drawMarker(vb,sun.pos,'ЗВЕЗДА','#ffd76a',fs*0.78);
  ctx.textAlign='center';ctx.font=Math.round(fs*0.86)+'px "JetBrains Mono",monospace';
  var my=H*0.155;
@@ -4179,6 +4432,7 @@ function loop(ts){
   planet.rot+=planet.spin*dt;
   if(state==='flight')update(dt);
   else if(state==='hyper'){hyperT+=dt;if(hyperT>2.1)arrive();}
+  else if(state==='finale'){updateGravitsapaFinale(dt);}
   else if(state==='dead'){
    deathT+=dt;
    for(var i=objects.length-1;i>=0;i--){var o=objects[i];
@@ -4664,6 +4918,12 @@ $('#b-full').addEventListener('click',function(){SND.clickUI();toggleFull();});
 $('#b-pause').addEventListener('click',function(){SND.clickUI();if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
 $('#b-help').addEventListener('click',function(){SND.clickUI();toggleGuide();});
 
+document.getElementById('go-newgame').addEventListener('click',function(){
+  document.getElementById('ov-gameover').classList.remove('show');
+  SND.on=true; SND.init();
+  var name=($('#cmdr').value||'JAMESON').toUpperCase().slice(0,12);
+  newGame(name);
+});
 $('#btn-load-save').addEventListener('click',function(){SND.init();SND.clickUI();if(!loadGame())newGame($('#cmdr').value||'JAMESON');});
 $('#btn-newgame').addEventListener('click',function(){SND.init();SND.clickUI();newGame($('#cmdr').value||'JAMESON');});
 $('#btn-new').addEventListener('click',function(){SND.init();SND.clickUI();goFull();newGame($('#cmdr').value||'JAMESON');});
@@ -4679,7 +4939,7 @@ function saveGame(silent){
  try{
   localStorage.setItem(SAVEKEY,JSON.stringify({name:CMD.name,cash:CMD.cash,fuel:CMD.fuel,cargo:CMD.cargo,
    kills:CMD.kills,score:CMD.score,legal:CMD.legal,visited:CMD.visited,galaxy:CMD.galaxy,sysIdx:CMD.sysIdx,
-   energy:Math.round(P.energy),eq:CMD.eq,time:CMD.time,ship:CMD.ship,visitedSystems:CMD.visitedSystems,medals:CMD.medals||{}}));
+   energy:Math.round(P.energy),eq:CMD.eq,time:CMD.time,ship:CMD.ship,visitedSystems:CMD.visitedSystems,medals:CMD.medals||{},gravitsapa:CMD.gravitsapa||null}));
   if(!silent)SND.beep();
  }catch(e){}
  $('#btn-cont').disabled=!hasSave();
@@ -4694,6 +4954,11 @@ function loadGame(){
   CMD.kills=s.kills||0;CMD.score=s.score||0;CMD.legal=s.legal||0;CMD.visited=s.visited||1;
   CMD.eq = s.eq || {dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0};
   CMD.medals = s.medals || {};
+  CMD.gravitsapa = s.gravitsapa || null;
+  if(!CMD.gravitsapa || !CMD.gravitsapa.locations){
+    CMD.gravitsapa={questStarted:false,parts:[false,false,false,false,false,false,false,false],locations:null,currentSignal:null,accepted:[false,false,false,false,false,false,false,false],allCollected:false,finaleTriggered:false,finaleCountdown:0,finalePhase:0};
+    generateGravitsapaLocations();
+  }
   if(!CMD.eq.dockcomp)CMD.eq.dockcomp=0;
   if(!CMD.eq.tractor)CMD.eq.tractor=0;
   CMD.tractorOn=false;
@@ -4737,6 +5002,11 @@ function newGame(name){
  SND.startDockAmb();
  renderBordComp();
  rebuildMarketTicker();
+ CMD.gravitsapa={questStarted:false,parts:[false,false,false,false,false,false,false,false],locations:null,currentSignal:null,accepted:[false,false,false,false,false,false,false,false],allCollected:false,finaleTriggered:false,finaleCountdown:0,finalePhase:0};
+ generateGravitsapaLocations();
+ updateGravitsapaUI();
+ document.getElementById('ov-gameover').classList.remove('show');
+ document.getElementById('finale-stage').classList.remove('show');
  openMarket();
 }
 function toTitle(){state='title';prevState='title';show('ov-title');$('#btn-cont').disabled=!hasSave();demoWorld();layout();}
@@ -4965,8 +5235,21 @@ var SHIP_AI = {
       'Миссия выполнена. Не знаю, как. Не спрашивай.',
       'Кредиты у тебя. Совесть — нет. Как обычно.',
       'Хорошо. Может, из тебя ещё что-то выйдет. Может.',
-      'Поздравляю. Теперь ты — должник. Шучу. Ты всегда был.'
+     'Поздравляю. Теперь ты — должник. Шучу. Ты всегда был.'
     ],
+    gravFirst: [
+      'Командир. Засёк сигнал. Не наш. Не имперский. Не таргонский. Что-то древнее. 2 прыжка отсюда. Хочешь — проверь. Не хочешь — лети дальше.',
+      'Сигнал. 2 прыжка. Странный. Я таких не слышал. За триста лет. Шучу. Я не помню, сколько лет. Просто — 2 прыжка.',
+      'Тут в эфире что-то. Древнее. 2 прыжка. Может, пират. Может, торговец. Может, что похуже.'
+    ],
+    gravSignal1: ['1 прыжок. Почти. Не туда смотришь, но почти.','Один. Один прыжок. Следующий — и, возможно, там.','1 прыжок. Я начинаю верить в тебя. Шучу. Не начинаю.','Близко. Очень близко. Настолько, что я даже слегка волнуюсь.','1. Если сейчас прыгнешь не туда — я буду разочарован. Но не удивлён.'],
+    gravSignal2: ['2 прыжка. Мимо. Умнеешь на глазах. Или нет.','2. Всё ещё 2. Ты вообще слушаешь, что я говорю?','2 прыжка. Хорошо. Не отлично. Но хорошо.','Два. Ты либо близко, либо нет. Я не знаю. Я просто бот.','2 прыжка. Дальше, чем было. Ты уверен, что знаешь, куда летишь?'],
+    gravSignal3: ['3 прыжка. Далеко. Я даже не уверен, что это он.','3. Ещё не то. Но где-то рядом. Может быть.','3 прыжка. Я бы сказал «умнеешь», но вру. Ты просто прыгаешь.','Три. Уже лучше, чем ничего. Но хуже, чем два.','3 прыжка. Не потерял. Но почти.'],
+    gravSignalHere: ['Здесь. Сигнал в этой системе. 200 км от станции. Хочешь — лети. Не хочешь — не лети.','Здесь. 200 км. Не на орбите. Не в доке. В пустоте. Ищи.','Сигнал прямо здесь. В космосе. Рядом, но не слишком. 200 км, если я не вру.','Нашёл систему. Теперь найди контейнер. Это разные вещи.','Здесь. Контейнер в 200 км от станции. Сторона — противоположная планете. Дальше сам.'],
+    gravAccepted: ['Принял. Метка на радаре. Лети, не ошибись.','Хорошо. Метка у тебя. 200 км. Не спеши. Или спеши. Мне всё равно.','Принято. Контейнер в 200 км. Постарайся не врезаться во что-нибудь по дороге.','Метка появилась. Лети. Я подожду. Я всегда жду.'],
+    gravPartFound: ['Гравицапа. Часть {n}/VIII. Одна восьмая. Восемь галактик. Восемь частей. Восемь способов умереть. И один — собрать их все.','Часть {n}. Древняя. Как твоя шутка про трактор. Но красивее.','Часть {n}/VIII. Ты нашёл {n}-ю. Осталось {left}. Или сдаться сейчас. Я бы сдался.','Гравицапа. {n} из восьми. Я бы сказал «поздравляю», но это только начало. И конец тоже будет.'],
+    gravAllCollected: ['Все восемь. Я не думал, что ты сможешь. Честно. Думал, умрёшь раньше. Поздравляю. Наверное.','Восемь частей. Ты собрал то, что не должны были собрать. Что теперь — решай сам.','Гравицапа собрана. Что теперь? Понятия не имею. Я же не инструкция.','Все восемь. Я бы заплакал, но у меня нет слёз. Только сарказм. И гордость. Немного.'],
+    gravFinaleHint: ['Кстати, командир. Твои заслуги. Я тут прикинул. Тебе почти дали Элиту. Осталось отметиться в LAVE. Там церемония. Прилетишь — и всё.','Слушай, я тут подумал. Ты столько всего сделал. Тебе положена Элита. Надо только вернуться в LAVE. За бумажкой.','Лети в LAVE. Я договорился. Тебе дадут Элиту. Честно. Или почти честно.','LAVE. Церемония. Элита. Не заставляй меня повторять.','Помнишь, откуда ты начал? LAVE. Слетай туда. Тебе дадут звание.'],
 	    arrival_mission: [
       'Ну наконец-то. {planet}. {pop} миллиарда. {species}. Дошёл. Я уж думал, ты опять не туда.',
       'Прибытие по контракту. {planet}. {pop} миллиарда. {species}. Не опоздал? Хотя кому какая разница.',
@@ -5260,6 +5543,10 @@ var SHIP_AI = {
     var pool = this.phrases[category];
     if(!pool || pool.length === 0) return;
     var text = pool[Math.floor(Math.random() * pool.length)];
+    if(category === 'gravPartFound' && CMD.gravitsapa){
+      var nFound = 0; for(var gi=0; gi<8; gi++) if(CMD.gravitsapa.parts[gi]) nFound++;
+      text = text.replace(/\{n\}/g, GRAV_ROMAN[nFound-1]||String(nFound)).replace(/\{left\}/g, String(8-nFound));
+    }
     if(category === 'ads') this.lastAdTime = now;
     else this.lastPhraseTime = now;
     this.showBordcomp(text, category === 'ads');
