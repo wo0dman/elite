@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=1200">
 <title>ELITE · фанатский браузерный порт · вдохновлён BBC Micro 1984</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/press-start-2p@latest/index.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/css/jetbrains-mono@latest/index.css">
@@ -67,7 +67,7 @@ input[type=text]{font-family:var(--f-mono);font-size:14px;background:#0a1018;bor
 .mkthead .st b{color:var(--yl)}
 .mktcols{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;flex:1;min-height:0}
 .mktleft,.mktright{overflow:auto;min-height:0}
-@media(max-width:860px){.mktcols{grid-template-columns:1fr}}
+
 table{border-collapse:collapse;width:100%;font-family:var(--f-mono);font-size:11.5px}
 th{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:left;padding:6px 7px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#070b12}
 td{padding:5px 7px;border-bottom:1px solid #101825}
@@ -89,7 +89,7 @@ td button,.eq button{padding:3px 8px;font-size:10.5px}
 .gbox{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;background:#04060b;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden}
 .gbox canvas{display:block;touch-action:none}
 .ginfo{width:250px;flex:none;overflow:auto;font-family:var(--f-mono);font-size:11px;padding:4px}
-@media(max-width:900px){.chartwrap{flex-direction:column}.ginfo{width:auto;max-height:32vh}.gbox{min-height:48vh}}
+
 .ginfo .nm{font-family:var(--f-pixel);font-size:14px;color:var(--yl);letter-spacing:2px;margin-bottom:8px}
 .ginfo dl{display:grid;grid-template-columns:120px 1fr;gap:4px 8px;margin:0}
 .ginfo dt{color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
@@ -112,7 +112,7 @@ td button,.eq button{padding:3px 8px;font-size:10.5px}
 .pvstats{display:grid;grid-template-columns:132px 1fr;gap:5px 10px;margin:0;font-family:var(--f-mono);font-size:11.5px}
 .pvstats dt{color:var(--dim)}
 .pvstats dd{margin:0;color:var(--ink)}
-@media(max-width:900px){.yardwrap{flex-direction:column}.yardinfo{width:auto}}
+
 .guide{display:grid;grid-template-columns:1fr;gap:12px}
 @media(min-width:1000px){.guide{grid-template-columns:1fr 1fr}}
 .gcard{border:1px solid var(--line);background:linear-gradient(180deg,#0c1220,#090d15);border-radius:10px;padding:14px 16px}
@@ -128,6 +128,13 @@ td button,.eq button{padding:3px 8px;font-size:10.5px}
 .keys{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;font-family:var(--f-mono);font-size:12px;align-items:center}
 kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:2px 7px;font-size:11px;color:var(--grn);white-space:nowrap}
 .note{font-family:var(--f-mono);font-size:11px;color:var(--mut);line-height:1.85;border-left:2px solid var(--yl);padding-left:12px;margin:12px 0}
+.medal-strip{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--line);background:#070b12;flex-wrap:wrap;flex:none;font-family:var(--f-mono);font-size:11px;min-height:36px}
+.ms-label{color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.1em;flex:none;margin-right:4px}
+#ms-content{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.medal-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid #8a6a1e;border-radius:12px;background:linear-gradient(180deg,#1f1708,#120d04);color:var(--yl);font-size:10px;letter-spacing:.02em;box-shadow:0 0 10px rgba(255,212,38,0.15)}
+.medal-pill .mi{font-size:13px;line-height:1;filter:drop-shadow(0 0 4px rgba(255,212,38,0.5))}
+.medal-pill .mc{color:var(--grn);font-size:9.5px;opacity:.85}
+.medal-empty{color:var(--dim);font-style:italic;font-size:10.5px}
 .statgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0}
 .statgrid div{border:1px solid var(--line);background:#0a0f18;border-radius:8px;padding:10px 12px}
 .statgrid span{display:block;font-family:var(--f-mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.07em}
@@ -156,15 +163,7 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .penta.fire:hover svg,.penta.fire:active svg{filter:drop-shadow(0 0 12px rgba(255,107,94,1))}
 .penta.on svg{color:#d8ffc9}
 .penta.on .lbl{color:#8cff6a}
-@media(max-width:820px){
- .rd.hide-sm{display:none}.ginfo dl{grid-template-columns:1fr;gap:2px}.ginfo dd{margin-bottom:5px}
- .stick{width:108px;height:108px;right:10px;bottom:10px}.knob{left:33px;top:33px}.stick-lab{bottom:124px;right:10px}
- .penta-controls{grid-template-columns:repeat(4,1fr);gap:4px;left:8px;bottom:8px}
- .penta{width:44px;height:56px}
- .penta svg{width:32px;height:32px}
- .penta .lbl{font-size:6.5px}
- .penta-lab{left:8px;bottom:calc(8px + 2 * 56px + 4px)}
-}
+
 .newsbar{flex:none;height:26px;background:#070b12;border-bottom:1px solid var(--line);display:flex;align-items:center;overflow:hidden;font-family:var(--f-mono);font-size:11px;position:relative}
 .news-label{flex:none;padding:0 12px;height:100%;display:flex;align-items:center;background:#0a1018;border-right:1px solid var(--line);color:var(--grn);font-weight:600;font-size:10px;letter-spacing:.1em;z-index:2;text-shadow:0 0 8px #8cff6a55}
 .news-view{flex:1;min-width:0;height:100%;overflow:hidden;position:relative}
@@ -183,11 +182,68 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
 .bc-buttons button.pri{background:#16301a;border-color:#3a7a3c;color:#d8ffc9}
 .stick.captured{border-color:#ffd426;box-shadow:0 0 0 1px #0006,inset 0 0 26px #0009,0 0 16px #ffd42666}
 .stick.captured .knob{border-color:#ffd426;box-shadow:0 0 16px #ffd42688}
-@media(max-width:820px){
-  .bordcomp{right:110px;bottom:20px;width:130px;max-height:130px;padding:6px 8px}
-  .bc-body{font-size:9.5px;max-height:70px}
-  .bc-buttons button{padding:3px 6px;font-size:9px}
-}
+/* ===== РАДИО-ПАНЕЛЬ ===== */
+.rp-overlay{position:fixed;inset:0;background:rgba(3,5,10,.65);display:none;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
+.rp-overlay.show{display:flex}
+.rp-window{width:420px;background:linear-gradient(180deg,#0a1220 0%,#060a12 100%);border:1px solid var(--line2);border-radius:10px;box-shadow:0 0 60px -20px #8cff6a55,0 0 0 1px #0008;font-family:var(--f-mono);color:var(--ink);overflow:hidden;position:relative;animation:rpIn .22s cubic-bezier(.2,.7,.3,1.2)}
+@keyframes rpIn{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.rp-window::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(180deg,transparent 0 2px,#00000022 2px 3px);z-index:2}
+.rp-head{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#070b12;border-bottom:1px solid var(--line);position:relative;z-index:3}
+.rp-head-icon{font-size:14px}
+.rp-head-title{font-family:var(--f-pixel);font-size:9px;color:var(--grn);letter-spacing:.06em;text-shadow:0 0 8px #8cff6a66;flex:1}
+.rp-close{width:24px;height:24px;border-radius:5px;background:#0a1018;border:1px solid var(--line2);color:var(--mut);cursor:pointer;font-family:var(--f-mono);font-size:12px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.15s}
+.rp-close:hover{border-color:var(--rd);color:var(--rd);background:#1a0a08}
+.rp-display{padding:14px;background:#040810;border-bottom:1px solid var(--line);position:relative;z-index:3}
+.rp-freqbar{display:flex;justify-content:space-between;align-items:end;height:22px;margin-bottom:10px;padding:0 4px;position:relative}
+.rp-freqbar::after{content:"";position:absolute;left:4px;right:4px;bottom:0;height:1px;background:#1a2540}
+.rp-tick{width:1px;height:4px;background:#2a3a5a;flex:none;position:relative;z-index:1;transition:.2s}
+.rp-tick.major{height:8px;background:#3a4a6a}
+.rp-tick.active{background:var(--grn);box-shadow:0 0 4px var(--grn);height:10px;width:2px}
+.rp-station{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.rp-arrow{width:30px;height:30px;flex:none;border-radius:6px;background:#0d1725;border:1px solid var(--line2);color:var(--cy);cursor:pointer;font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center;transition:.15s}
+.rp-arrow:hover{border-color:var(--cy);background:#0f2230;color:#fff;box-shadow:0 0 10px #3fdcff44}
+.rp-arrow:active{transform:scale(.94)}
+.rp-station-info{flex:1;text-align:center;min-width:0}
+.rp-station-name{font-family:var(--f-pixel);font-size:11px;color:var(--yl);letter-spacing:.05em;text-shadow:0 0 10px #ffd42666;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-station-desc{font-size:9.5px;color:var(--mut);letter-spacing:.04em;text-transform:uppercase}
+.rp-indicators{display:flex;justify-content:space-between;align-items:center;padding:0 4px}
+.rp-onair{display:flex;align-items:center;gap:5px;font-family:var(--f-pixel);font-size:8px;color:var(--rd);letter-spacing:.1em}
+.rp-dot{width:6px;height:6px;border-radius:50%;background:var(--rd);box-shadow:0 0 6px var(--rd);animation:rp-pulse 1.4s ease-in-out infinite}
+@keyframes rp-pulse{0%,100%{opacity:1;box-shadow:0 0 6px var(--rd)}50%{opacity:.35;box-shadow:0 0 2px var(--rd)}}
+.rp-onair.off{color:var(--dim)}
+.rp-onair.off .rp-dot{background:var(--dim);box-shadow:none;animation:none}
+.rp-signal{font-family:var(--f-mono);font-size:11px;color:var(--grn);letter-spacing:.15em;opacity:.9}
+.rp-controls{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--line);position:relative;z-index:3}
+.rp-play{width:46px;height:46px;flex:none;border-radius:50%;background:radial-gradient(circle at 35% 30%,#2d6a34,#12290f);border:1px solid var(--grn);color:var(--grn);cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:0 0 16px #8cff6a33;transition:.15s}
+.rp-play:hover{box-shadow:0 0 24px #8cff6a66;color:#d8ffc9}
+.rp-play:active{transform:scale(.94)}
+.rp-play svg{width:18px;height:18px;fill:currentColor}
+.rp-vol{flex:1;display:flex;align-items:center;gap:8px}
+.rp-vol-label{font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;flex:none}
+.rp-vol input{flex:1;height:4px;border-radius:2px;-webkit-appearance:none;appearance:none;background:#1a2a3a;outline:none;cursor:pointer}
+.rp-vol input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:50%;background:var(--grn);border:1px solid #d8ffc9;box-shadow:0 0 8px #8cff6a88;cursor:pointer}
+.rp-vol input::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--grn);border:1px solid #d8ffc9;box-shadow:0 0 8px #8cff6a88;cursor:pointer}
+.rp-vol-val{font-size:10.5px;color:var(--grn);min-width:32px;text-align:right;font-variant-numeric:tabular-nums}
+.rp-section{padding:10px 14px;border-bottom:1px solid var(--line);position:relative;z-index:3}
+.rp-sect-title{font-family:var(--f-pixel);font-size:8px;color:var(--cy);letter-spacing:.1em;text-shadow:0 0 8px #3fdcff55;margin-bottom:8px}
+.rp-toggles{display:flex;flex-direction:column;gap:6px}
+.rp-toggle{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border:1px solid var(--line);background:#0a0f18;border-radius:6px;cursor:pointer;transition:.15s;user-select:none}
+.rp-toggle:hover{border-color:var(--line2);background:#0d1421}
+.rp-toggle.on{border-color:var(--grn);background:#0d1a13}
+.rp-tg-label{font-size:10.5px;color:var(--mut);letter-spacing:.04em}
+.rp-toggle.on .rp-tg-label{color:#d8ffc9}
+.rp-tg-sw{width:28px;height:14px;border-radius:7px;background:#1a2535;position:relative;flex:none;transition:.2s;border:1px solid #2a3a5a}
+.rp-tg-sw::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#5b687e;top:1px;left:1px;transition:.2s}
+.rp-toggle.on .rp-tg-sw{background:#0f2a15;border-color:var(--grn)}
+.rp-toggle.on .rp-tg-sw::after{background:var(--grn);left:15px;box-shadow:0 0 6px var(--grn)}
+.rp-eq{display:flex;flex-direction:column;gap:6px}
+.rp-eq-row{display:flex;align-items:center;gap:8px}
+.rp-eq-label{font-size:10px;color:var(--dim);letter-spacing:.1em;width:24px;text-align:center;font-weight:600}
+.rp-eq-row input{flex:1;height:4px;border-radius:2px;-webkit-appearance:none;appearance:none;background:linear-gradient(90deg,#1a2a3a,#2a3a4a,#1a2a3a);outline:none;cursor:pointer;position:relative}
+.rp-eq-row input::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:12px;height:12px;border-radius:2px;background:var(--cy);border:1px solid #b0e8ff;box-shadow:0 0 8px #3fdcff88;cursor:pointer}
+.rp-eq-row input::-moz-range-thumb{width:12px;height:12px;border-radius:2px;background:var(--cy);border:1px solid #b0e8ff;box-shadow:0 0 8px #3fdcff88;cursor:pointer}
+.rp-eq-val{font-size:10px;color:var(--cy);width:28px;text-align:right;font-variant-numeric:tabular-nums}
+.rp-footer{padding:8px 14px;font-size:9.5px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;background:#050a14;text-align:center;position:relative;z-index:3;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -412,6 +468,10 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
             <div class="note" id="ch-note">Клик по точке. Колесо — зум, перетаскивание — вращение.</div>
           </div>
         </div>
+        <div class="medal-strip" id="medal-strip">
+          <span class="ms-label">🏅 МЕДАЛИ:</span>
+          <span id="ms-content"><span class="medal-empty">пока пусто — выполняйте контракты</span></span>
+        </div>
       </div>
 
       <div class="ov" id="ov-help">
@@ -473,9 +533,64 @@ kbd{background:#131c2a;border:1px solid var(--line2);border-bottom-width:2px;bor
     </div>
   </div>
 
-  <div class="logbar">
+    <div class="logbar">
     <span id="logtext">готов к запуску…</span>
     <span id="loghint">R — радар · M — карта · C — стык.комп · V — трактор · X — стоп</span>
+  </div>
+
+  <div class="rp-overlay" id="ov-radio">
+    <div class="rp-window">
+      <div class="rp-head">
+        <span class="rp-head-icon">📻</span>
+        <span class="rp-head-title">ГАЛАКТИЧЕСКИЙ ЭФИР</span>
+        <button class="rp-close" id="rpClose">✕</button>
+      </div>
+      <div class="rp-display">
+        <div class="rp-freqbar" id="rpFreqbar"></div>
+        <div class="rp-station">
+          <button class="rp-arrow" id="rpPrev">◀</button>
+          <div class="rp-station-info">
+            <div class="rp-station-name" id="rpName">—</div>
+            <div class="rp-station-desc" id="rpDesc">—</div>
+          </div>
+          <button class="rp-arrow" id="rpNext">▶</button>
+        </div>
+        <div class="rp-indicators">
+          <span class="rp-onair off" id="rpOnair"><span class="rp-dot"></span>ON AIR</span>
+          <span class="rp-signal">▂▄▆█▆▄▂</span>
+        </div>
+      </div>
+      <div class="rp-controls">
+        <button class="rp-play" id="rpPlay"><svg viewBox="0 0 24 24" id="rpPlayIcon"><path d="M8 5v14l11-7z"/></svg></button>
+        <div class="rp-vol">
+          <span class="rp-vol-label">ГРОМК.</span>
+          <input type="range" id="rpVol" min="0" max="100" value="20">
+          <span class="rp-vol-val" id="rpVolVal">20%</span>
+        </div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-sect-title">ФИЛЬТРЫ</div>
+        <div class="rp-toggles">
+          <div class="rp-toggle on" data-toggle="filter">
+            <span class="rp-tg-label">СТАРЫЙ ДИНАМИК</span>
+            <div class="rp-tg-sw"></div>
+          </div>
+          <div class="rp-toggle on" data-toggle="am">
+            <span class="rp-tg-label">AM-ШИПЕНИЕ</span>
+            <div class="rp-tg-sw"></div>
+          </div>
+        </div>
+      </div>
+      <div class="rp-section">
+        <div class="rp-sect-title">ЭКВАЛАЙЗЕР</div>
+        <div class="rp-eq">
+          <div class="rp-eq-row"><span class="rp-eq-label">НЧ</span><input type="range" class="rp-eq-input" min="-12" max="12" value="0" data-band="low"><span class="rp-eq-val">0</span></div>
+          <div class="rp-eq-row"><span class="rp-eq-label">СЧ</span><input type="range" class="rp-eq-input" min="-12" max="12" value="0" data-band="mid"><span class="rp-eq-val">0</span></div>
+          <div class="rp-eq-row"><span class="rp-eq-label">ВЧ</span><input type="range" class="rp-eq-input" min="-12" max="12" value="0" data-band="high"><span class="rp-eq-val">0</span></div>
+        </div>
+      </div>
+      <div class="rp-footer" id="rpFooter">—</div>
+    </div>
   </div>
 </div>
 
@@ -491,7 +606,7 @@ var QQ23=[[19,-2,'t',6,0x01],[20,-1,'t',10,0x03],[65,-3,'t',2,0x07],[40,-5,'t',2
 var GOODS_RU=['Продовольствие','Текстиль','Радиоактивы','Робы','Алкоголь/вина','Роскошь','Наркотики','Компьютеры','Механизмы','Сплавы','Огнестрел','Меха','Минералы','Золото','Платина','Драгкамни','Иноплан. товар'];
 
 var NEWS = [
-   'Сенат Империи в изгнании собрался в третий раз за век. Повестка: \'Что делать?\'. Ответ: \'Подождать ещё век\'.',
+  'Сенат Империи в изгнании собрался в третий раз за век. Повестка: \'Что делать?\'. Ответ: \'Подождать ещё век\'.',
   'Таргоны объявили войну сами себе. Три флота уже уничтожены. Четвёртый готовится. Мы ставим на четвёртый.',
   'Губернатор Diso запретил наркотики. Цена на чёрном рынке выросла в 14 раз. Губернатор доволен.',
   'Федерация признала независимость Zaonce. Ta сразу обложила налогом пролёт. Федерация жалеет уже 4 часа.',
@@ -712,7 +827,7 @@ function buildNewsStream(){
   for(var i=0;i<80;i++){
     if(Math.random() < 0.35){
       var ad = ADS[Math.floor(Math.random()*ADS.length)];
-      batch.push('<span style="color:#ff9d4b;font-weight:600">📢 ' + ad + '</span>');
+      batch.push('<span style="color:#ff9d4b;font-weight:600">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ 📢 ' + ad + '</span>');
     } else {
       batch.push('<span style="color:var(--cy)">▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ▸ ' + NEWS[Math.floor(Math.random()*NEWS.length)] + '</span>');
     }
@@ -853,9 +968,75 @@ BP.thargon={vis:20,v:[[-9,0,40],[-9,-38,12],[-9,-24,-32],[-9,24,-32],[-9,38,12],
 BP.asteroid={vis:50,v:[[0,80,0],[-80,-10,0],[0,-80,0],[70,-40,0],[60,50,0],[50,0,60],[-40,0,70],[0,30,-75],[0,-50,-60]],
  e:[[0,1,2,7,31],[0,4,6,13,31],[3,4,5,12,31],[2,3,4,11,31],[1,2,3,10,31],[1,6,2,3,31],[2,6,1,3,31],[2,5,1,4,31],[5,6,0,1,31],[0,5,0,6,31],[3,5,4,5,31],[0,6,0,2,31],[4,5,5,6,31],[1,8,8,10,31],[1,7,7,8,31],[0,7,7,13,31],[4,7,12,13,31],[3,7,9,12,31],[3,8,9,11,31],[2,8,10,11,31],[7,8,8,9,31]],
  n:[[9,66,81],[9,-66,81],[-72,64,31],[-64,-73,47],[45,-79,65],[135,15,35],[38,76,70],[-66,59,-39],[-67,-15,-80],[66,-14,-75],[-70,-80,-40],[58,-102,-51],[81,9,-67],[47,94,-63]]};
-BP.coriolis={vis:160,v:[[160,0,160],[0,160,160],[-160,0,160],[0,-160,160],[160,-160,0],[160,160,0],[-160,160,0],[-160,-160,0],[160,0,-160],[0,160,-160],[-160,0,-160],[0,-160,-160],[10,-30,160],[10,30,160],[-10,30,160],[-10,-30,160]],
- e:[[0,3,0,1,31],[0,1,0,2,31],[1,2,0,3,31],[2,3,0,4,31],[3,4,1,5,31],[0,4,1,6,31],[0,5,2,6,31],[5,1,2,8,31],[1,6,3,8,31],[2,6,3,7,31],[2,7,4,7,31],[3,7,4,5,31],[8,11,10,13,31],[8,9,11,13,31],[9,10,12,13,31],[10,11,9,13,31],[4,11,5,10,31],[4,8,6,10,31],[5,8,6,11,31],[5,9,8,11,31],[6,9,8,12,31],[6,10,7,12,31],[7,10,7,9,31],[7,11,5,9,31],[12,13,0,0,30],[13,14,0,0,30],[14,15,0,0,30],[15,12,0,0,30]],
- n:[[0,0,160],[107,-107,107],[107,107,107],[-107,107,107],[-107,-107,107],[0,-160,0],[160,0,0],[-160,0,0],[0,160,0],[-107,-107,-107],[107,-107,-107],[107,107,-107],[-107,107,-107],[0,0,-160]]};
+BP.coriolis={
+  vis:160,
+  v:[
+    // 0-11: основной корпус (cuboctahedron)
+    [160,0,160],[0,160,160],[-160,0,160],[0,-160,160],
+    [160,-160,0],[160,160,0],[-160,160,0],[-160,-160,0],
+    [160,0,-160],[0,160,-160],[-160,0,-160],[0,-160,-160],
+    // 12-15: передний срез окна (Z=160 = world 4000)
+    [10,-30,160],[10,30,160],[-10,30,160],[-10,-30,160],
+    // 16-19: середина коридора (Z=60 = world 1500)
+    [10,-30,60],[10,30,60],[-10,30,60],[-10,-30,60],
+    // 20-23: задний срез коридора (Z=-20 = world -500, за центром)
+    [10,-30,-20],[10,30,-20],[-10,30,-20],[-10,-30,-20]
+  ],
+  e:[
+    // 24 ребра кубооктаэдра (исправлено ребро 0-3: face 11 → face 1)
+    [0,3,0,1,31],
+    [0,1,0,2,31],
+    [1,2,0,3,31],
+    [2,3,0,4,31],
+    [3,4,1,5,31],
+    [0,4,1,6,31],
+    [0,5,2,6,31],
+    [5,1,2,8,31],
+    [1,6,3,8,31],
+    [2,6,3,7,31],
+    [2,7,4,7,31],
+    [3,7,4,5,31],
+    [8,11,10,13,31],
+    [8,9,11,13,31],
+    [9,10,12,13,31],
+    [10,11,9,13,31],
+    [4,11,5,10,31],
+    [4,8,6,10,31],
+    [5,8,6,11,31],
+    [5,9,8,11,31],
+    [6,9,8,12,31],
+    [6,10,7,12,31],
+    [7,10,7,9,31],
+    [7,11,5,9,31],
+    // Передний прямоугольник окна
+    [12,13,0,0,30],
+    [13,14,0,0,30],
+    [14,15,0,0,30],
+    [15,12,0,0,30],
+    // Стенки коридора: переднее кольцо → среднее
+    [12,16,32,32,32],
+    [13,17,32,32,32],
+    [14,18,32,32,32],
+    [15,19,32,32,32],
+    [16,17,32,32,32],
+    [17,18,32,32,32],
+    [18,19,32,32,32],
+    [19,16,32,32,32],
+    [16,20,32,32,32],
+    [17,21,32,32,32],
+    [18,22,32,32,32],
+    [19,23,32,32,32],
+    [20,21,32,32,32],
+    [21,22,32,32,32],
+    [22,23,32,32,32],
+    [23,20,32,32,32]
+  ],
+  n:[
+    [0,0,160],[107,-107,107],[107,107,107],[-107,107,107],[-107,-107,107],
+    [0,-160,0],[160,0,0],[-160,0,0],[0,160,0],
+    [-107,-107,-107],[107,-107,-107],[107,107,-107],[-107,107,-107],[0,0,-160]
+  ]
+};
 BP.shard={vis:160,v:[[0,0,0],[18,10,-14]],e:[[0,1,0,0,160]],n:[]};
 Object.keys(BP).forEach(function(k){
  var b=BP[k],i;
@@ -881,7 +1062,9 @@ Object.keys(BP).forEach(function(k){
  for(var j=0;j<n.length;j++){n[j][0]*=25;n[j][1]*=25;n[j][2]*=25;}
  var cen=BP.coriolis.cen;
  for(var k=0;k<cen.length;k++){cen[k][0]*=25;cen[k][1]*=25;cen[k][2]*=25;}
+
 })();
+BP.coriolis.cen[0] = [0, 0, 160*25];
 
 var STATION_SLOT_FACE = 4000;
 var STATION_SLOT_HALF_W = 250;
@@ -949,412 +1132,549 @@ function perpTo(d){
 }
 function vib(ms){if(navigator.vibrate){try{navigator.vibrate(ms);}catch(e){}}}
 
-var SND={ac:null,master:null,on:true,
- init:function(){
-   if(!this.ac){
-     try{
-       this.ac=new (window.AudioContext||window.webkitAudioContext)();
-       this.master=this.ac.createGain();
-       this.master.gain.value=0.85;
-       this.master.connect(this.ac.destination);
-     }catch(e){}
-   }
-   if(this.ac&&this.ac.state==='suspended'){try{this.ac.resume();}catch(e){}}
- },
- tone:function(f1,f2,dur,type,vol){if(!this.on||!this.ac)return;try{var t=this.ac.currentTime,o=this.ac.createOscillator(),g=this.ac.createGain();
-  o.type=type||'square';o.frequency.setValueAtTime(Math.max(30,f1),t);if(f2)o.frequency.exponentialRampToValueAtTime(Math.max(30,f2),t+dur);
-  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.08,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  o.connect(g);g.connect(this.ac.destination);o.start(t);o.stop(t+dur+0.03);}catch(e){}},
- noise:function(dur,vol,freq){if(!this.on||!this.ac)return;try{var t=this.ac.currentTime,n=Math.max(1,Math.floor(this.ac.sampleRate*dur)),b=this.ac.createBuffer(1,n,this.ac.sampleRate),d=b.getChannelData(0),i;
-  for(i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
-  var s=this.ac.createBufferSource();s.buffer=b;var f=this.ac.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(freq||900,t);f.frequency.exponentialRampToValueAtTime(120,t+dur);
-  var g=this.ac.createGain();g.gain.setValueAtTime(vol||0.16,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-  s.connect(f);f.connect(g);g.connect(this.ac.destination);s.start(t);}catch(e){}},
- laser:function(){this.tone(1100,180,0.13,'square',0.055);},
- missile:function(){this.tone(300,1800,0.5,'sawtooth',0.06);},
- hit:function(){this.tone(300,90,0.09,'sawtooth',0.055);this.noise(0.12,0.07,1600);},
- boom:function(){this.noise(0.7,0.18,1400);this.tone(180,40,0.5,'sawtooth',0.06);},
- hurt:function(){this.tone(160,60,0.2,'sawtooth',0.08);},
- dock:function(){this.tone(520,520,0.1,'square',0.06);var s=this;setTimeout(function(){s.tone(700,700,0.1,'square',0.06);},130);setTimeout(function(){s.tone(980,980,0.18,'square',0.06);},260);},
- hyper:function(){this.tone(90,1400,1.5,'sawtooth',0.06);},
- buy:function(){this.tone(520,1040,0.16,'square',0.06);},
- beep:function(){this.tone(880,880,0.05,'square',0.04);},
- scoop:function(){this.tone(400,1200,0.18,'triangle',0.05);},
- dockAmb:null,
- startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
- stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
- shipAmb:null, shipAmbGain:null, shipAmbFilter:null,
- startShipAmb:function(){if(!this.ac || this.shipAmb || !this.on) return;try{var o=this.ac.createOscillator();var g=this.ac.createGain();var f=this.ac.createBiquadFilter();o.type='sine';o.frequency.value=45;f.type='lowpass';f.frequency.value=120;f.Q.value=0.5;g.gain.value=0.010;o.connect(f);f.connect(g);g.connect(this.ac.destination);o.start();this.shipAmb=o;this.shipAmbGain=g;this.shipAmbFilter=f;}catch(e){}},
- stopShipAmb:function(){if(!this.shipAmb) return;try{this.shipAmb.stop();}catch(e){}this.shipAmb=null;this.shipAmbGain=null;this.shipAmbFilter=null;},
- 
-   // ============ MODERN RETRO SOUND PACK ============
-  _delayBusy: false,
+var SND={
+  ac:null,master:null,on:true,
+  radioVolume: 0.2,
+  volumes:{
+    laser:0.4, laserHeavy:0.4, missileLock:0.3, missileLaunch:0.4,
+    missileIncoming:0.5, hit:0.4, shieldHit:0.4,
+    explosion:0.3, explosionBig:0.4, hurt:0.3,
+    dock:0.4, undock:0.4, hyper:0.6, sonar:0.4, beep:0.5,
+    buy:0.4, sell:0.4, coin:0.6, rankUp:0.5, bounty:0.4,
+    clickUI:0.6, alarm:0.1, policeSiren:0.1, pirateAlert:0.1,
+    thargoid:0.1, scoop:0.4, chatterBlip:0.4, r2d2:0.6
+  },
 
-  _fatOsc: function(type, f1, f2, dur, vol, detune, drive) {
-    if (!this.on || !this.ac) return;
-    var t = this.ac.currentTime;
-    var o1 = this.ac.createOscillator(), o2 = this.ac.createOscillator(), o3 = this.ac.createOscillator();
-    var g = this.ac.createGain(), dist = this.ac.createWaveShaper();
-    var curve = new Float32Array(256);
-    for (var i = 0; i < 256; i++) { var x = i*2/256 - 1; curve[i] = (1+drive)*x / (1+drive*Math.abs(x)); }
-    dist.curve = curve;
-    o1.type = type; o2.type = type; o3.type = 'sine';
-    o1.frequency.setValueAtTime(f1, t);
-    o2.frequency.setValueAtTime(f1*(1+detune), t);
-    o3.frequency.setValueAtTime(f1*0.5, t);
-    if (f1 !== f2) {
-      o1.frequency.exponentialRampToValueAtTime(Math.max(30,f2), t+dur);
-      o2.frequency.exponentialRampToValueAtTime(Math.max(30,f2*(1+detune)), t+dur);
-      o3.frequency.exponentialRampToValueAtTime(Math.max(30,f2*0.5), t+dur);
+  init:function(){
+    if(!this.ac){
+      try{
+        this.ac=new (window.AudioContext||window.webkitAudioContext)();
+        this.master=this.ac.createGain();
+        this.master.gain.value=0.85;
+        this.master.connect(this.ac.destination);
+      }catch(e){}
     }
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t+0.002);
-    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
-    o1.connect(g); o2.connect(g); o3.connect(g);
-    g.connect(dist); dist.connect(this.master);
-    o1.start(t); o2.start(t); o3.start(t);
-    o1.stop(t+dur+0.05); o2.stop(t+dur+0.05); o3.stop(t+dur+0.05);
+    if(this.ac&&this.ac.state==='suspended'){try{this.ac.resume();}catch(e){}}
   },
 
-  _fm: function(carrierType, modType, cFreq, mFreq, cDur, modDepth, vol) {
-    if (!this.on || !this.ac) return;
-    var t = this.ac.currentTime;
-    var car = this.ac.createOscillator(), mod = this.ac.createOscillator();
-    var modGain = this.ac.createGain(), out = this.ac.createGain();
-    car.type = carrierType; mod.type = modType;
-    car.frequency.setValueAtTime(cFreq, t);
-    mod.frequency.setValueAtTime(mFreq, t);
-    modGain.gain.setValueAtTime(modDepth, t);
-    out.gain.setValueAtTime(0.0001, t);
-    out.gain.exponentialRampToValueAtTime(vol, t+0.002);
-    out.gain.exponentialRampToValueAtTime(0.0001, t+cDur);
-    mod.connect(modGain); modGain.connect(car.frequency);
-    car.connect(out); out.connect(this.master);
-    car.start(t); mod.start(t); car.stop(t+cDur+0.05); mod.stop(t+cDur+0.05);
+  tone:function(f1,f2,dur,type,vol){
+    if(!this.on||!this.ac)return;
+    try{
+      var t=this.ac.currentTime,o=this.ac.createOscillator(),g=this.ac.createGain();
+      o.type=type||'square';o.frequency.setValueAtTime(Math.max(30,f1),t);
+      if(f2)o.frequency.exponentialRampToValueAtTime(Math.max(30,f2),t+dur);
+      g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.08,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g);g.connect(this.ac.destination);o.start(t);o.stop(t+dur+0.03);
+    }catch(e){}
+  },
+  noise:function(dur,vol,freq){
+    if(!this.on||!this.ac)return;
+    try{
+      var t=this.ac.currentTime,n=Math.max(1,Math.floor(this.ac.sampleRate*dur)),b=this.ac.createBuffer(1,n,this.ac.sampleRate),d=b.getChannelData(0),i;
+      for(i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+      var s=this.ac.createBufferSource();s.buffer=b;
+      var f=this.ac.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(freq||900,t);f.frequency.exponentialRampToValueAtTime(120,t+dur);
+      var g=this.ac.createGain();g.gain.setValueAtTime(vol||0.16,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      s.connect(f);f.connect(g);g.connect(this.ac.destination);s.start(t);
+    }catch(e){}
   },
 
-  _withDelay: function(fn, delayTime, feedback) {
-    if (!this.on || !this.ac) return;
-    if (this._delayBusy) { fn(); return; }
-    this._delayBusy = true;
-    var oldMaster = this.master;
-    var delay = this.ac.createDelay(), fb = this.ac.createGain();
-    delay.delayTime.value = delayTime;
-    fb.gain.value = feedback;
-    delay.connect(fb); fb.connect(delay);
+  _delayBusy:false,
+
+  _fatOsc:function(type,f1,f2,dur,vol,detune,drive){
+    if(!this.on||!this.ac)return;
+    var t=this.ac.currentTime;
+    var o1=this.ac.createOscillator(),o2=this.ac.createOscillator(),o3=this.ac.createOscillator();
+    var g=this.ac.createGain(),dist=this.ac.createWaveShaper();
+    var curve=new Float32Array(256);
+    for(var i=0;i<256;i++){var x=i*2/256-1;curve[i]=(1+drive)*x/(1+drive*Math.abs(x));}
+    dist.curve=curve;
+    o1.type=type;o2.type=type;o3.type='sine';
+    o1.frequency.setValueAtTime(f1,t);
+    o2.frequency.setValueAtTime(f1*(1+detune),t);
+    o3.frequency.setValueAtTime(f1*0.5,t);
+    if(f1!==f2){
+      o1.frequency.exponentialRampToValueAtTime(Math.max(30,f2),t+dur);
+      o2.frequency.exponentialRampToValueAtTime(Math.max(30,f2*(1+detune)),t+dur);
+      o3.frequency.exponentialRampToValueAtTime(Math.max(30,f2*0.5),t+dur);
+    }
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o1.connect(g);o2.connect(g);o3.connect(g);
+    g.connect(dist);dist.connect(this.master);
+    o1.start(t);o2.start(t);o3.start(t);
+    o1.stop(t+dur+0.05);o2.stop(t+dur+0.05);o3.stop(t+dur+0.05);
+  },
+  _fm:function(carrierType,modType,cFreq,mFreq,cDur,modDepth,vol){
+    if(!this.on||!this.ac)return;
+    var t=this.ac.currentTime;
+    var car=this.ac.createOscillator(),mod=this.ac.createOscillator();
+    var modGain=this.ac.createGain(),out=this.ac.createGain();
+    car.type=carrierType;mod.type=modType;
+    car.frequency.setValueAtTime(cFreq,t);
+    mod.frequency.setValueAtTime(mFreq,t);
+    modGain.gain.setValueAtTime(modDepth,t);
+    out.gain.setValueAtTime(0.0001,t);
+    out.gain.exponentialRampToValueAtTime(vol,t+0.002);
+    out.gain.exponentialRampToValueAtTime(0.0001,t+cDur);
+    mod.connect(modGain);modGain.connect(car.frequency);
+    car.connect(out);out.connect(this.master);
+    car.start(t);mod.start(t);car.stop(t+cDur+0.05);mod.stop(t+cDur+0.05);
+  },
+  _withDelay:function(fn,delayTime,feedback){
+    if(!this.on||!this.ac)return;
+    if(this._delayBusy){fn();return;}
+    this._delayBusy=true;
+    var oldMaster=this.master;
+    var delay=this.ac.createDelay(),fb=this.ac.createGain();
+    delay.delayTime.value=delayTime;
+    fb.gain.value=feedback;
+    delay.connect(fb);fb.connect(delay);
     delay.connect(oldMaster);
-    this.master = delay;
-    try { fn(); } finally { this.master = oldMaster; this._delayBusy = false; }
+    this.master=delay;
+    try{fn();}finally{this.master=oldMaster;this._delayBusy=false;}
+  },
+  _noise:function(dur,vol,type,f1,Q,f2){
+    if(!this.on||!this.ac)return;
+    var t=this.ac.currentTime,n=Math.floor(this.ac.sampleRate*dur);
+    var buf=this.ac.createBuffer(1,n,this.ac.sampleRate),d=buf.getChannelData(0);
+    for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
+    var src=this.ac.createBufferSource();src.buffer=buf;
+    var f=this.ac.createBiquadFilter();
+    f.type=type||'lowpass';
+    f.frequency.setValueAtTime(f1,t);
+    if(f2)f.frequency.exponentialRampToValueAtTime(Math.max(50,f2),t+dur);
+    f.Q.value=Q||1;
+    var g=this.ac.createGain();
+    g.gain.setValueAtTime(vol,t);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    src.connect(f);f.connect(g);g.connect(this.master);
+    src.start(t);src.stop(t+dur+0.05);
   },
 
-  // Перезаписываем старый _noise на новый с фильтрами
-  _noise: function(dur, vol, type, f1, Q, f2) {
-    if (!this.on || !this.ac) return;
-    var t = this.ac.currentTime, n = Math.floor(this.ac.sampleRate*dur);
-    var buf = this.ac.createBuffer(1, n, this.ac.sampleRate), d = buf.getChannelData(0);
-    for (var i = 0; i < n; i++) d[i] = Math.random()*2 - 1;
-    var src = this.ac.createBufferSource(); src.buffer = buf;
-    var f = this.ac.createBiquadFilter();
-    f.type = type || 'lowpass';
-    f.frequency.setValueAtTime(f1, t);
-    if (f2) f.frequency.exponentialRampToValueAtTime(Math.max(50,f2), t+dur);
-    f.Q.value = Q || 1;
-    var g = this.ac.createGain();
-    g.gain.setValueAtTime(vol, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
-    src.connect(f); f.connect(g); g.connect(this.master);
-    src.start(t); src.stop(t+dur+0.05);
+  laser:function(){
+    var s=this,v=this.volumes.laser;
+    this._fatOsc('sawtooth',800,120,0.8,0.2 *v,0.5,9);
+    this._noise(0.06,0.1*v,'highpass',5000,2);
+    this._withDelay(function(){s._fm('square','sine',1800,150,0.15,600,0.08*v);},0.08,0.3);
   },
-
-  // КОМБАТ
-  laser: function() {
-    var s = this;
-    this._fatOsc('sawtooth', 2400, 400, 0.18, 0.12, 0.02, 3);
-    this._noise(0.06, 0.1, 'highpass', 5000, 2);
-    this._withDelay(function() { s._fm('square', 'sine', 1800, 150, 0.15, 600, 0.08); }, 0.08, 0.3);
+  laserHeavy:function(){
+    var s=this,v=this.volumes.laserHeavy;
+    this._fatOsc('sawtooth',800,100,0.25,0.18*v,0.03,5);
+    this._noise(0.08,0.12*v,'bandpass',2000,8);
+    this._withDelay(function(){s._fatOsc('square',1200,200,0.2,0.1*v,0.02,4);},0.1,0.4);
   },
-  laserHeavy: function() {
-    var s = this;
-    this._fatOsc('sawtooth', 800, 100, 0.25, 0.18, 0.03, 5);
-    this._noise(0.08, 0.12, 'bandpass', 2000, 8);
-    this._withDelay(function() { s._fatOsc('square', 1200, 200, 0.2, 0.1, 0.02, 4); }, 0.1, 0.4);
-  },
-  missile: function() { this.missileLaunch(); },
-  missileLock: function() {
-    var s = this;
-    [1400, 1800, 2400, 3200, 4000].forEach(function(f, i) {
-      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.8, 0.06, 0.08, 0.01, 2); }, 0.05, 0.25); }, i*80);
+  missile:function(){this.missileLaunch();},
+  missileLock:function(){
+    var s=this,v=this.volumes.missileLock;
+    [1400,1800,2400,3200,4000].forEach(function(f,i){
+      setTimeout(function(){s._withDelay(function(){s._fatOsc('square',f,f*0.8,0.06,0.08*v,0.01,2);},0.05,0.25);},i*80);
     });
   },
-  missileLaunch: function() {
-    var s = this;
-    this._fatOsc('sawtooth', 200, 2400, 0.6, 0.18, 0.02, 4);
-    this._noise(0.7, 0.15, 'highpass', 800, 3, 6000);
-    this._withDelay(function() { s._fatOsc('sine', 120, 60, 0.5, 0.12, 0.01, 2); }, 0.15, 0.35);
+  missileLaunch:function(){
+    var s=this,v=this.volumes.missileLaunch;
+    this._fatOsc('sawtooth',200,2400,0.6,0.18*v,0.02,4);
+    this._noise(0.7,0.15*v,'highpass',800,3,6000);
+    this._withDelay(function(){s._fatOsc('sine',120,60,0.5,0.12*v,0.01,2);},0.15,0.35);
   },
-  missileIncoming: function() {
-    var s = this;
-    function p(f, d) { setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.5, 0.07, 0.1, 0.015, 3); }, 0.06, 0.3); }, d); }
-    p(1600,0); p(1600,120); p(1600,240); p(2400,360); p(2400,480); p(3200,600);
+  missileIncoming:function(){
+    var s=this,v=this.volumes.missileIncoming;
+    function p(f,d){setTimeout(function(){s._withDelay(function(){s._fatOsc('square',f,f*0.5,0.07,0.1*v,0.015,3);},0.06,0.3);},d);}
+    p(1600,0);p(1600,120);p(1600,240);p(2400,360);p(2400,480);p(3200,600);
   },
-  hit: function() {
-    var s = this;
-    this._noise(0.1, 0.22, 'bandpass', 4000, 15, 2000);
-    this._fatOsc('square', 1200, 200, 0.08, 0.14, 0.03, 5);
-    this._fatOsc('sine', 200, 60, 0.15, 0.16, 0.01, 2);
-    this._withDelay(function() { s._noise(0.05, 0.08, 'highpass', 3000, 3); }, 0.04, 0.2);
+  hit:function(){
+    var s=this,v=this.volumes.hit;
+    this._noise(0.1,0.22*v,'bandpass',4000,15,2000);
+    this._fatOsc('square',1200,200,0.08,0.14*v,0.03,5);
+    this._fatOsc('sine',200,60,0.15,0.16*v,0.01,2);
+    this._withDelay(function(){s._noise(0.05,0.08*v,'highpass',3000,3);},0.04,0.2);
   },
-  shieldHit: function() {
-    var s = this;
-    this._fm('sine', 'sine', 2200, 350, 0.35, 2000, 0.14);
-    this._fm('square', 'sine', 2800, 450, 0.2, 1000, 0.08);
-    this._noise(0.12, 0.08, 'highpass', 6000, 3);
-    this._withDelay(function() { s._fm('sine', 'sine', 1800, 250, 0.3, 1500, 0.06); }, 0.08, 0.4);
+  shieldHit:function(){
+    var s=this,v=this.volumes.shieldHit;
+    this._fm('sine','sine',2200,350,0.35,2000,0.14*v);
+    this._fm('square','sine',2800,450,0.2,1000,0.08*v);
+    this._noise(0.12,0.08*v,'highpass',6000,3);
+    this._withDelay(function(){s._fm('sine','sine',1800,250,0.3,1500,0.06*v);},0.08,0.4);
   },
-  boom: function() { this.explosion(); },
-  explosion: function() {
-    var s = this;
-    this._noise(0.7, 0.25, 'lowpass', 3000, 1.5, 80);
-    this._fatOsc('sawtooth', 300, 25, 0.6, 0.18, 0.025, 4);
-    this._fatOsc('sine', 150, 20, 0.8, 0.2, 0.01, 2);
-    [0,80,180,320,500].forEach(function(d) { setTimeout(function() { s._noise(0.2, 0.12, 'lowpass', 1000+Math.random()*800, 3, 120); }, d); });
+  boom:function(){this.explosion();},
+  explosion:function(){
+    var s=this,v=this.volumes.explosion;
+    this._noise(0.7,0.25*v,'lowpass',3000,1.5,80);
+    this._fatOsc('sawtooth',300,25,0.6,0.18*v,0.025,4);
+    this._fatOsc('sine',150,20,0.8,0.2*v,0.01,2);
+    [0,80,180,320,500].forEach(function(d){setTimeout(function(){s._noise(0.2,0.12*v,'lowpass',1000+Math.random()*800,3,120);},d);});
   },
-  explosionBig: function() {
-    var s = this;
-    this._noise(2.0, 0.3, 'lowpass', 4000, 1.5, 50);
-    this._noise(1.2, 0.18, 'bandpass', 1200, 4, 180);
-    this._fatOsc('sawtooth', 500, 12, 1.8, 0.22, 0.03, 5);
-    this._fatOsc('sine', 180, 10, 2.0, 0.25, 0.015, 2);
-    this._fatOsc('triangle', 100, 8, 2.2, 0.18, 0.02, 3);
-    [0,120,280,480,720,1000].forEach(function(d) {
-      setTimeout(function() {
-        s._noise(0.25, 0.18, 'lowpass', 900+Math.random()*600, 3, 80);
-        s._fatOsc('sine', 80+Math.random()*40, 40, 0.3, 0.1, 0.01, 2);
-      }, d);
+  explosionBig:function(){
+    var s=this,v=this.volumes.explosionBig;
+    this._noise(2.0,0.3*v,'lowpass',4000,1.5,50);
+    this._noise(1.2,0.18*v,'bandpass',1200,4,180);
+    this._fatOsc('sawtooth',500,12,1.8,0.22*v,0.03,5);
+    this._fatOsc('sine',180,10,2.0,0.25*v,0.015,2);
+    this._fatOsc('triangle',100,8,2.2,0.18*v,0.02,3);
+    [0,120,280,480,720,1000].forEach(function(d){
+      setTimeout(function(){
+        s._noise(0.25,0.18*v,'lowpass',900+Math.random()*600,3,80);
+        s._fatOsc('sine',80+Math.random()*40,40,0.3,0.1*v,0.01,2);
+      },d);
     });
   },
-  hurt: function() {
-    var s = this;
-    this._fatOsc('square', 400, 60, 0.35, 0.2, 0.025, 4);
-    this._noise(0.3, 0.18, 'lowpass', 2000, 1.5, 180);
-    this._fatOsc('sawtooth', 600, 80, 0.25, 0.12, 0.02, 3);
-    setTimeout(function() { s._fatOsc('sine', 250, 40, 0.5, 0.15, 0.01, 2); }, 120);
+  hurt:function(){
+    var s=this,v=this.volumes.hurt;
+    this._fatOsc('square',400,60,0.35,0.2*v,0.025,4);
+    this._noise(0.3,0.18*v,'lowpass',2000,1.5,180);
+    this._fatOsc('sawtooth',600,80,0.25,0.12*v,0.02,3);
+    setTimeout(function(){s._fatOsc('sine',250,40,0.5,0.15*v,0.01,2);},120);
   },
-
-  // НАВИГАЦИЯ
-  dock: function() {
-    var s = this;
-    s._noise(0.1, 0.15, 'bandpass', 1000, 10);
-    [400,600,800,1100,1500,2000].forEach(function(f, i) {
-      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f, 0.1, 0.09, 0.01, 2); }, 0.06, 0.25); }, 120+i*100);
+  dock:function(){
+    var s=this,v=this.volumes.dock;
+    s._noise(0.1,0.15*v,'bandpass',1000,10);
+    [400,600,800,1100,1500,2000].forEach(function(f,i){
+      setTimeout(function(){s._withDelay(function(){s._fatOsc('square',f,f,0.1,0.09*v,0.01,2);},0.06,0.25);},120+i*100);
     });
-    setTimeout(function() { s._noise(0.4, 0.12, 'lowpass', 500, 2.5); s._fatOsc('sine', 100, 70, 0.6, 0.1, 0.01, 2); }, 800);
+    setTimeout(function(){s._noise(0.4,0.12*v,'lowpass',500,2.5);s._fatOsc('sine',100,70,0.6,0.1*v,0.01,2);},800);
   },
-  undock: function() {
-    var s = this;
-    s._noise(0.18, 0.18, 'bandpass', 800, 6);
-    setTimeout(function() { s._fatOsc('sawtooth', 100, 500, 0.6, 0.14, 0.015, 3); s._noise(0.5, 0.12, 'lowpass', 600, 2.5, 1500); }, 150);
-    setTimeout(function() { s._fatOsc('sine', 80, 120, 0.7, 0.12, 0.01, 2); }, 350);
+  undock:function(){
+    var s=this,v=this.volumes.undock;
+    s._noise(0.18,0.18*v,'bandpass',800,6);
+    setTimeout(function(){s._fatOsc('sawtooth',100,500,0.6,0.14*v,0.015,3);s._noise(0.5,0.12*v,'lowpass',600,2.5,1500);},150);
+    setTimeout(function(){s._fatOsc('sine',80,120,0.7,0.12*v,0.01,2);},350);
   },
-  hyper: function() {
-    var s = this;
-    s._fatOsc('sawtooth', 100, 600, 1.0, 0.14, 0.02, 3);
-    s._noise(1.0, 0.12, 'bandpass', 800, 4, 3000);
-    setTimeout(function() { s._fatOsc('sawtooth', 600, 5000, 0.6, 0.2, 0.025, 5); s._noise(0.7, 0.2, 'highpass', 4000, 1.5, 10000); s._fm('square', 'sine', 2500, 40, 0.6, 2500, 0.12); }, 950);
-    setTimeout(function() { s._fatOsc('sine', 150, 12, 1.2, 0.25, 0.015, 2); s._fatOsc('triangle', 300, 30, 0.9, 0.15, 0.02, 3); s._noise(1.0, 0.12, 'lowpass', 500, 1.5, 60); }, 1550);
+  hyper:function(){
+    var s=this,v=this.volumes.hyper;
+    s._noise(3, 0.35*v, 'lowpass', 8000, 1.2, 80);
+    s._noise(3, 0.22*v, 'bandpass', 2000, 3, 300);
+    s._noise(2, 0.20*v, 'highpass', 6000, 1.5);
   },
-  sonar: function() {
-    var s = this;
-    this._fm('sine', 'sine', 1600, 10, 0.8, 500, 0.12);
-    this._fatOsc('sine', 800, 800, 0.6, 0.08, 0.005, 2);
-    this._noise(0.6, 0.05, 'bandpass', 1600, 5, 1000);
-    this._withDelay(function() { s._fm('sine', 'sine', 1200, 8, 0.7, 400, 0.06); }, 0.15, 0.45);
+  sonar:function(){
+    var s=this,v=this.volumes.sonar;
+    this._fm('sine','sine',1600,10,0.8,500,0.12*v);
+    this._fatOsc('sine',800,800,0.6,0.08*v,0.005,2);
+    this._noise(0.6,0.05*v,'bandpass',1600,5,1000);
+    this._withDelay(function(){s._fm('sine','sine',1200,8,0.7,400,0.06*v);},0.15,0.45);
   },
-  beep: function() { this._fatOsc('square', 1400, 1400, 0.1, 0.08, 0.008, 2); },
-
-  // ЭКОНОМИКА
-  buy: function() {
-    var s = this;
-    s._fm('square', 'square', 1000, 1000, 0.07, 150, 0.09);
-    s._fm('sine', 'sine', 2000, 2000, 0.1, 120, 0.06);
-    setTimeout(function() { s._fm('square', 'square', 1500, 1500, 0.07, 150, 0.09); s._fm('sine', 'sine', 3000, 3000, 0.12, 100, 0.05); }, 100);
+  beep:function(){this._fatOsc('square',1400,1400,0.1,0.08*this.volumes.beep,0.008,2);},
+  buy:function(){
+    var s=this,v=this.volumes.buy;
+    s._fm('square','square',1000,1000,0.07,150,0.09*v);
+    s._fm('sine','sine',2000,2000,0.1,120,0.06*v);
+    setTimeout(function(){s._fm('square','square',1500,1500,0.07,150,0.09*v);s._fm('sine','sine',3000,3000,0.12,100,0.05*v);},100);
   },
-  sell: function() {
-    var s = this;
-    [1800,1400,1100,800,600].forEach(function(f, i) {
-      setTimeout(function() { s._withDelay(function() { s._fatOsc('square', f, f*0.7, 0.08, 0.08, 0.01, 2); }, 0.05, 0.2); }, i*70);
+  sell:function(){
+    var s=this,v=this.volumes.sell;
+    [1800,1400,1100,800,600].forEach(function(f,i){
+      setTimeout(function(){s._withDelay(function(){s._fatOsc('square',f,f*0.7,0.08,0.08*v,0.01,2);},0.05,0.2);},i*70);
     });
-    setTimeout(function() { s._noise(0.12, 0.07, 'highpass', 5000, 1.5); }, 320);
+    setTimeout(function(){s._noise(0.12,0.07*v,'highpass',5000,1.5);},320);
   },
-  coin: function() {
-    var s = this;
-    s._noise(0.04, 0.18, 'bandpass', 5000, 12);
-    s._fm('sine', 'sine', 2600, 2000, 0.15, 2500, 0.12);
-    setTimeout(function() { s._fm('sine', 'sine', 3200, 2500, 0.25, 1800, 0.1); }, 90);
+  coin:function(){
+    var s=this,v=this.volumes.coin;
+    s._noise(0.04,0.18*v,'bandpass',5000,12);
+    s._fm('sine','sine',2600,2000,0.15,2500,0.12*v);
+    setTimeout(function(){s._fm('sine','sine',3200,2500,0.25,1800,0.1*v);},90);
   },
-  rankUp: function() {
-    var s = this;
-    [523,659,784,1047,1319,1568,1976].forEach(function(f, i) {
-      setTimeout(function() {
-        s._withDelay(function() {
-          s._fatOsc('square', f, f, 0.2, 0.1, 0.01, 2);
-          s._fatOsc('sine', f*2, f*2, 0.2, 0.06, 0.008, 1.5);
-        }, 0.08, 0.3);
-      }, i*110);
+  rankUp:function(){
+    var s=this,v=this.volumes.rankUp;
+    [523,659,784,1047,1319,1568,1976].forEach(function(f,i){
+      setTimeout(function(){
+        s._withDelay(function(){
+          s._fatOsc('square',f,f,0.2,0.1*v,0.01,2);
+          s._fatOsc('sine',f*2,f*2,0.2,0.06*v,0.008,1.5);
+        },0.08,0.3);
+      },i*110);
     });
-    setTimeout(function() {
-      s._fatOsc('square', 1976, 1976, 0.5, 0.12, 0.01, 3);
-      s._fatOsc('square', 2488, 2488, 0.5, 0.1, 0.01, 3);
-      s._fatOsc('square', 2960, 2960, 0.5, 0.08, 0.01, 3);
-    }, 750);
+    setTimeout(function(){
+      s._fatOsc('square',1976,1976,0.5,0.12*v,0.01,3);
+      s._fatOsc('square',2488,2488,0.5,0.1*v,0.01,3);
+      s._fatOsc('square',2960,2960,0.5,0.08*v,0.01,3);
+    },750);
   },
-  bounty: function() {
-    var s = this;
-    for (var i = 0; i < 10; i++) {
-      (function(d) {
-        setTimeout(function() {
-          var f = 1400 + Math.random()*2500;
-          s._withDelay(function() { s._fm('sine', 'sine', f, f*0.5, 0.09, 600, 0.06); }, 0.04, 0.2);
-        }, d);
+  bounty:function(){
+    var s=this,v=this.volumes.bounty;
+    for(var i=0;i<10;i++){
+      (function(d){
+        setTimeout(function(){
+          var f=1400+Math.random()*2500;
+          s._withDelay(function(){s._fm('sine','sine',f,f*0.5,0.09,600,0.06*v);},0.04,0.2);
+        },d);
       })(i*55);
     }
   },
-  clickUI: function() { this._fatOsc('square', 1600, 1600, 0.04, 0.06, 0.006, 2); },
+  clickUI:function(){this._fatOsc('square',1600,1600,0.04,0.06*this.volumes.clickUI,0.006,2);},
+  alarm:function(){
+    var s=this,i=0,period=220,v=this.volumes.alarm;
+    var iv=setInterval(function(){
+      var f=(i%2===0)?300:600;
+      s._withDelay(function(){s._fatOsc('square',f,f,0.14,0.1*v,0.015,3);},0.07,0.25);
+      i++;period=Math.max(90,period-18);
+      if(i>=3)clearInterval(iv);
+    },period);
+  },
+  policeSiren:function(){
+    if(!this.on||!this.ac)return;
+    var v=this.volumes.policeSiren;
+    var t=this.ac.currentTime;
+    var o=this.ac.createOscillator(),g=this.ac.createGain();
+    var lfo=this.ac.createOscillator(),lfoGain=this.ac.createGain();
+    o.type='sawtooth';lfo.type='sine';
+    o.frequency.setValueAtTime(1000,t);
+    lfo.frequency.setValueAtTime(7,t);
+    lfoGain.gain.setValueAtTime(350,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.12*v,t+0.01);
+    g.gain.setValueAtTime(0.12*v,t+1.6);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+1.8);
+    lfo.connect(lfoGain);lfoGain.connect(o.frequency);
+    var f=this.ac.createBiquadFilter();f.type='lowpass';f.frequency.value=2500;f.Q.value=2.5;
+    o.connect(f);f.connect(g);g.connect(this.master);
+    o.start(t);lfo.start(t);o.stop(t+1.9);lfo.stop(t+1.9);
+  },
+  pirateAlert:function(){
+    var s=this,v=this.volumes.pirateAlert;
+    s._fatOsc('sawtooth',800,180,0.6,0.16*v,0.025,4);
+    s._fm('square','square',500,100,0.7,400,0.1*v);
+    setTimeout(function(){s._fatOsc('sawtooth',700,120,0.6,0.14*v,0.025,4);s._noise(0.4,0.1*v,'lowpass',1500,2.5,250);},280);
+  },
+  thargoid:function(){
+    if(!this.on||!this.ac)return;
+    var v=this.volumes.thargoid;
+    var t=this.ac.currentTime;
+    var car=this.ac.createOscillator(),mod=this.ac.createOscillator();
+    var modGain=this.ac.createGain(),out=this.ac.createGain();
+    var f=this.ac.createBiquadFilter();
+    car.type='sawtooth';mod.type='sine';
+    car.frequency.setValueAtTime(500,t);
+    car.frequency.exponentialRampToValueAtTime(140,t+1.8);
+    mod.frequency.setValueAtTime(6,t);
+    mod.frequency.linearRampToValueAtTime(2.5,t+1.8);
+    modGain.gain.setValueAtTime(250,t);
+    modGain.gain.linearRampToValueAtTime(500,t+1.8);
+    f.type='bandpass';f.frequency.value=800;f.Q.value=5;
+    out.gain.setValueAtTime(0.001,t);
+    out.gain.exponentialRampToValueAtTime(0.16*v,t+0.18);
+    out.gain.exponentialRampToValueAtTime(0.001,t+1.8);
+    mod.connect(modGain);modGain.connect(car.frequency);
+    car.connect(f);f.connect(out);out.connect(this.master);
+    car.start(t);mod.start(t);car.stop(t+1.9);mod.stop(t+1.9);
+    var s=this;
+    for(var i=0;i<8;i++){
+      (function(d){setTimeout(function(){s._noise(0.05,0.1*v,'bandpass',350+Math.random()*500,10);},d);})(i*200);
+    }
+  },
+  scoop:function(){
+    var s=this,v=this.volumes.scoop;
+    s._fatOsc('sine',500,2200,0.7,0.1*v,0.015,2);
+    s._noise(0.7,0.12*v,'bandpass',900,5,6000);
+    for(var i=0;i<8;i++){
+      (function(d){setTimeout(function(){s._fm('square','square',2400+Math.random()*1200,1800,0.05,250,0.06*v);},d);})(i*70);
+    }
+  },
+  chatterBlip:function(){
+    var v=this.volumes.chatterBlip;
+    var f=1000+Math.random()*1000;
+    this._fm('square','square',f,f*0.6,0.06,400,0.05*v);
+    this._noise(0.1,0.04*v,'bandpass',2200,5);
+  },
 
-  // СИГНАЛЫ
-  alarm: function() {
-    var s = this, i = 0, period = 220;
-    var iv = setInterval(function() {
-      var f = (i%2===0) ? 900 : 600;
-      s._withDelay(function() { s._fatOsc('square', f, f, 0.14, 0.1, 0.015, 3); }, 0.07, 0.25);
-      i++; period = Math.max(90, period-18);
-      if (i >= 12) clearInterval(iv);
-    }, period);
-  },
-  policeSiren: function() {
-    if (!this.on || !this.ac) return;
-    var t = this.ac.currentTime;
-    var o = this.ac.createOscillator(), g = this.ac.createGain();
-    var lfo = this.ac.createOscillator(), lfoGain = this.ac.createGain();
-    o.type = 'sawtooth'; lfo.type = 'sine';
-    o.frequency.setValueAtTime(1000, t);
-    lfo.frequency.setValueAtTime(7, t);
-    lfoGain.gain.setValueAtTime(350, t);
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.12, t+0.01);
-    g.gain.setValueAtTime(0.12, t+1.6);
-    g.gain.exponentialRampToValueAtTime(0.0001, t+1.8);
-    lfo.connect(lfoGain); lfoGain.connect(o.frequency);
-    var f = this.ac.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 2500; f.Q.value = 2.5;
-    o.connect(f); f.connect(g); g.connect(this.master);
-    o.start(t); lfo.start(t); o.stop(t+1.9); lfo.stop(t+1.9);
-  },
-  pirateAlert: function() {
-    var s = this;
-    s._fatOsc('sawtooth', 800, 180, 0.6, 0.16, 0.025, 4);
-    s._fm('square', 'square', 500, 100, 0.7, 400, 0.1);
-    setTimeout(function() { s._fatOsc('sawtooth', 700, 120, 0.6, 0.14, 0.025, 4); s._noise(0.4, 0.1, 'lowpass', 1500, 2.5, 250); }, 280);
-  },
-  thargoid: function() {
-    if (!this.on || !this.ac) return;
-    var t = this.ac.currentTime;
-    var car = this.ac.createOscillator(), mod = this.ac.createOscillator();
-    var modGain = this.ac.createGain(), out = this.ac.createGain();
-    var f = this.ac.createBiquadFilter();
-    car.type = 'sawtooth'; mod.type = 'sine';
-    car.frequency.setValueAtTime(500, t);
-    car.frequency.exponentialRampToValueAtTime(140, t+1.8);
-    mod.frequency.setValueAtTime(6, t);
-    mod.frequency.linearRampToValueAtTime(2.5, t+1.8);
-    modGain.gain.setValueAtTime(250, t);
-    modGain.gain.linearRampToValueAtTime(500, t+1.8);
-    f.type = 'bandpass'; f.frequency.value = 800; f.Q.value = 5;
-    out.gain.setValueAtTime(0.001, t);
-    out.gain.exponentialRampToValueAtTime(0.16, t+0.18);
-    out.gain.exponentialRampToValueAtTime(0.001, t+1.8);
-    mod.connect(modGain); modGain.connect(car.frequency);
-    car.connect(f); f.connect(out); out.connect(this.master);
-    car.start(t); mod.start(t); car.stop(t+1.9); mod.stop(t+1.9);
-    var s = this;
-    for (var i = 0; i < 8; i++) {
-      (function(d) { setTimeout(function() { s._noise(0.05, 0.1, 'bandpass', 350+Math.random()*500, 10); }, d); })(i*200);
-    }
-  },
-  scoop: function() {
-    var s = this;
-    s._fatOsc('sine', 500, 2200, 0.7, 0.1, 0.015, 2);
-    s._noise(0.7, 0.12, 'bandpass', 900, 5, 6000);
-    for (var i = 0; i < 8; i++) {
-      (function(d) { setTimeout(function() { s._fm('square', 'square', 2400+Math.random()*1200, 1800, 0.05, 250, 0.06); }, d); })(i*70);
-    }
-  },
-  chatterBlip: function() {
-    var f = 1000 + Math.random()*1000;
-    this._fm('square', 'square', f, f*0.6, 0.06, 400, 0.05);
-    this._noise(0.1, 0.04, 'bandpass', 2200, 5);
-  },
-  // ============ /MODERN RETRO SOUND PACK ============
- 
- 
-  // ============ АТМОСФЕРНЫЕ ЗВУКИ РАДИО ============
-  radioStatic: function(){
-    if(!this.on || !this.ac || !this.master) return false;
+  radioStatic:function(){
+    if(!this.on||!this.ac||!this.master)return false;
     try{
-      var dur = 6 + Math.random()*12;
-      var t = this.ac.currentTime;
-      var n = Math.max(1, Math.floor(this.ac.sampleRate*dur));
-      var buf = this.ac.createBuffer(1, n, this.ac.sampleRate);
-      var d = buf.getChannelData(0);
-      for(var i=0;i<n;i++) d[i] = Math.random()*2 - 1;
-      var src = this.ac.createBufferSource(); src.buffer = buf;
-      var bp = this.ac.createBiquadFilter(); bp.type='bandpass'; bp.Q.value=4;
-      var steps = 8;
-      for(var k=0;k<=steps;k++){
-        bp.frequency.setValueAtTime(400+Math.random()*2000, t+(k/steps)*dur);
-      }
-      var g = this.ac.createGain();
-      g.gain.setValueAtTime(0.0001, t);
-      g.gain.linearRampToValueAtTime(0.035, t+0.3);
-      g.gain.setValueAtTime(0.035, t+dur-0.5);
-      g.gain.linearRampToValueAtTime(0.0001, t+dur);
-      src.connect(bp); bp.connect(g); g.connect(this.master);
-      src.start(t); src.stop(t+dur+0.1);
+      var dur=6+Math.random()*12;
+      var t=this.ac.currentTime;
+      var n=Math.max(1,Math.floor(this.ac.sampleRate*dur));
+      var buf=this.ac.createBuffer(1,n,this.ac.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<n;i++)d[i]=Math.random()*2-1;
+      var src=this.ac.createBufferSource();src.buffer=buf;
+      var bp=this.ac.createBiquadFilter();bp.type='bandpass';bp.Q.value=4;
+      var steps=8;
+      for(var k=0;k<=steps;k++){bp.frequency.setValueAtTime(400+Math.random()*2000,t+(k/steps)*dur);}
+      var g=this.ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.linearRampToValueAtTime(0.035,t+0.3);
+      g.gain.setValueAtTime(0.035,t+dur-0.5);
+      g.gain.linearRampToValueAtTime(0.0001,t+dur);
+      src.connect(bp);bp.connect(g);g.connect(this.master);
+      src.start(t);src.stop(t+dur+0.1);
       return true;
-    }catch(e){ return false; }
+    }catch(e){return false;}
   },
-
-  morse: function(){
-    if(!this.on || !this.ac) return;
-    var s = this;
-    var len = 4 + Math.floor(Math.random()*6);
-    var pattern = [];
-    for(var i=0;i<len;i++) pattern.push(Math.random()<0.5 ? 0 : 1);
-    var delay = 0;
+  morse:function(){
+    if(!this.on||!this.ac)return;
+    var s=this;
+    var len=4+Math.floor(Math.random()*6);
+    var pattern=[];
+    for(var i=0;i<len;i++)pattern.push(Math.random()<0.5?0:1);
+    var delay=0;
     for(var j=0;j<pattern.length;j++){
-      (function(dur, d){
-        setTimeout(function(){ s._fm('sine','sine', 900, 900, dur, 50, 0.045); }, d*1000);
-      })(pattern[j]===0 ? 0.06 : 0.18, delay);
-      delay += (pattern[j]===0 ? 0.06 : 0.18) + 0.08;
+      (function(dur,d){setTimeout(function(){s._fm('sine','sine',900,900,dur,50,0.045);},d*1000);})(pattern[j]===0?0.06:0.18,delay);
+      delay+=(pattern[j]===0?0.06:0.18)+0.08;
+    }
+  },
+  r2d2:function(){
+    if(!this.on||!this.ac)return;
+    var s=this;
+    var v = (this.volumes.r2d2 !== undefined) ? this.volumes.r2d2 : 0.6;
+    var p = 0.9 + Math.random()*0.25;
+    function at(delay, fn){ setTimeout(fn, delay * 1000); }
+    s._fatOsc('sine', 900*p, 1800*p, 0.22, 0.050*v, 0.008, 1);
+    at(0.25, function(){ s._fatOsc('sine', 1700*p, 1100*p, 0.18, 0.045*v, 0.008, 1); });
+    at(0.48, function(){ s._fm('sine', 'sine', 1400*p, 12, 0.35, 200, 0.048*v); });
+    at(0.88, function(){ s._fatOsc('square', 1000*p, 1000*p, 0.05, 0.032*v, 0.004, 2); });
+    at(0.96, function(){ s._fatOsc('square', 1200*p, 1200*p, 0.05, 0.032*v, 0.004, 2); });
+    at(1.10, function(){ s._fm('square', 'sine', 2200*p, 180, 0.14, 700, 0.042*v); });
+    at(1.28, function(){ s._fatOsc('sine', 1600*p, 1000*p, 0.16, 0.042*v, 0.008, 1); });
+    at(1.50, function(){ s._fm('sine', 'sine', 1000*p, 10, 0.30, 150, 0.045*v); });
+    for(var i = 0; i < 3; i++){
+        (function(d, f){
+            at(d, function(){ s._fatOsc('square', f, f, 0.04, 0.030*v, 0.003, 2); });
+        })(1.85 + i*0.07, 900 + i*150);
+    }
+    at(2.15, function(){ s._fm('square', 'sine', 2600*p, 200, 0.12, 800, 0.040*v); });
+    at(2.30, function(){ s._fatOsc('sine', 2000*p, 700*p, 0.35, 0.042*v, 0.008, 1); });
+  },
+
+  _radioSource: null,
+  _radioNoise: null,
+
+   initRadioEffect: function(audioElement){
+    if(!this.ac || !audioElement || this._radioSource) return;
+    var src;
+    try {
+      src = this.ac.createMediaElementSource(audioElement);
+    } catch(e){
+      console.warn('[Radio] createMediaElementSource failed:', e);
+      return;
+    }
+    this._radioSource = src;
+    try {
+      var bp = this.ac.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 800;
+      bp.Q.value = 5;
+      var comp = this.ac.createDynamicsCompressor();
+      comp.threshold.value = -24;
+      comp.ratio.value = 8;
+      comp.attack.value = 0.004;
+      comp.release.value = 0.25;
+      var shaper = this.ac.createWaveShaper();
+      var curve = new Float32Array(1024);
+      for(var i=0;i<1024;i++){var x=(i/512)-1;curve[i]=Math.tanh(x*4);}
+      shaper.curve = curve;
+      shaper.oversample = '2x';
+
+      var eqLow = this.ac.createBiquadFilter();
+      eqLow.type = 'lowshelf';
+      eqLow.frequency.value = 250;
+      eqLow.gain.value = 0;
+      var eqMid = this.ac.createBiquadFilter();
+      eqMid.type = 'peaking';
+      eqMid.frequency.value = 1000;
+      eqMid.Q.value = 1;
+      eqMid.gain.value = 0;
+      var eqHigh = this.ac.createBiquadFilter();
+      eqHigh.type = 'highshelf';
+      eqHigh.frequency.value = 4000;
+      eqHigh.gain.value = 0;
+
+      var gain = this.ac.createGain();
+      gain.gain.value = this.radioVolume;
+
+      shaper.connect(eqLow);
+      eqLow.connect(eqMid);
+      eqMid.connect(eqHigh);
+      eqHigh.connect(gain);
+      gain.connect(this.master);
+
+      bp.connect(comp);
+      comp.connect(shaper);
+
+      src.connect(bp);
+
+      var noiseSrc = this.ac.createBufferSource();
+      noiseSrc.buffer = this._makeCrackleBuffer(6);
+      noiseSrc.loop = true;
+      var noiseHP = this.ac.createBiquadFilter();
+      noiseHP.type = 'highpass';
+      noiseHP.frequency.value = 800;
+      var noiseGain = this.ac.createGain();
+      noiseGain.gain.value = 0.12 * this.radioVolume;
+      noiseSrc.connect(noiseHP);
+      noiseHP.connect(noiseGain);
+      noiseGain.connect(this.master);
+      noiseSrc.start(0);
+      this._radioNoise = noiseSrc;
+
+      this._radioChain = {
+        bp: bp, comp: comp, shaper: shaper,
+        eqLow: eqLow, eqMid: eqMid, eqHigh: eqHigh,
+        gain: gain, noiseGain: noiseGain,
+        filterOn: true, amOn: true
+      };
+    } catch(e){
+      console.warn('[Radio] Filter chain failed, using direct path:', e);
+      try { src.connect(this.master); } catch(e2){}
     }
   },
 
-  r2d2: function(){
-    if(!this.on || !this.ac) return;
-    var s = this;
-    var count = 3 + Math.floor(Math.random()*4);
-    var delay = 0;
-    for(var i=0;i<count;i++){
-      var f1 = 800 + Math.random()*1400;
-      var f2 = 600 + Math.random()*1800;
-      var dur = 0.05 + Math.random()*0.15;
-      (function(f1, f2, dur, d){
-        setTimeout(function(){ s._fatOsc('square', f1, f2, dur, 0.04, 0.008, 2); }, d*1000);
-      })(f1, f2, dur, delay);
-      delay += dur + 0.03 + Math.random()*0.1;
+  setRadioVolume: function(v){
+    this.radioVolume = clamp(v, 0, 1);
+    if(this._radioChain && this._radioChain.gain){
+      try { this._radioChain.gain.gain.value = this.radioVolume; } catch(e){}
     }
-  }
-  // ============ /АТМОСФЕРНЫЕ ЗВУКИ РАДИО ============
+    if(this._radioChain && this._radioChain.noiseGain && this._radioChain.amOn){
+      try { this._radioChain.noiseGain.gain.value = 0.12 * this.radioVolume; } catch(e){}
+    }
+  },
 
+  setRadioEq: function(low, mid, high){
+    if(!this._radioChain) return;
+    try {
+      if(this._radioChain.eqLow) this._radioChain.eqLow.gain.value = low;
+      if(this._radioChain.eqMid) this._radioChain.eqMid.gain.value = mid;
+      if(this._radioChain.eqHigh) this._radioChain.eqHigh.gain.value = high;
+    } catch(e){}
+  },
+
+  setRadioFilter: function(on){
+    if(!this._radioChain || !this._radioSource) return;
+    try {
+      this._radioSource.disconnect();
+      if(on){ this._radioSource.connect(this._radioChain.bp); }
+      else  { this._radioSource.connect(this._radioChain.eqLow); }
+      this._radioChain.filterOn = on;
+    } catch(e){ console.warn('[Radio] filter toggle failed', e); }
+  },
+
+  setRadioAmNoise: function(on){
+    if(!this._radioChain || !this._radioChain.noiseGain) return;
+    try {
+      this._radioChain.noiseGain.gain.value = on ? (0.12 * this.radioVolume) : 0;
+      this._radioChain.amOn = on;
+    } catch(e){}
+  },
+
+  _makeCrackleBuffer: function(seconds){
+    var rate = this.ac.sampleRate;
+    var len = Math.floor(rate * seconds);
+    var buffer = this.ac.createBuffer(1, len, rate);
+    var data = buffer.getChannelData(0);
+    for(var i=0;i<len;i++){
+      if(Math.random() < 0.01){
+        data[i] = (Math.random()*2-1) * 0.15;
+      } else {
+        data[i] = (Math.random()*2-1) * 0.06;
+      }
+    }
+    return buffer;
+  },
+
+  dockAmb:null,
+  startDockAmb:function(){if(!this.ac||this.dockAmb||!this.on)return;try{var o=this.ac.createOscillator(),g=this.ac.createGain();o.type='triangle';o.frequency.value=40;g.gain.value=0.008;o.connect(g);g.connect(this.ac.destination);o.start();this.dockAmb=o;}catch(e){}},
+  stopDockAmb:function(){if(!this.dockAmb)return;try{this.dockAmb.stop();}catch(e){}this.dockAmb=null;},
+  shipAmb:null,shipAmbGain:null,shipAmbFilter:null,
+  startShipAmb:function(){if(!this.ac||this.shipAmb||!this.on)return;try{var o=this.ac.createOscillator();var g=this.ac.createGain();var f=this.ac.createBiquadFilter();o.type='sine';o.frequency.value=45;f.type='lowpass';f.frequency.value=120;f.Q.value=0.5;g.gain.value=0.010;o.connect(f);f.connect(g);g.connect(this.ac.destination);o.start();this.shipAmb=o;this.shipAmbGain=g;this.shipAmbFilter=f;}catch(e){}},
+  stopShipAmb:function(){if(!this.shipAmb)return;try{this.shipAmb.stop();}catch(e){}this.shipAmb=null;this.shipAmbGain=null;this.shipAmbFilter=null;}
 };
 
 var STREAM_RADIO = {
@@ -1363,19 +1683,47 @@ var STREAM_RADIO = {
     isLoading: false,
     currentIndex: 0,
     stations: [
-    { name: "Deep Space One", desc: "Deep ambient · space music", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
-    { name: "Space Station Soma", desc: "Spaced-out ambient · mid-tempo", url: "https://ice1.somafm.com/spacestation-128-mp3" },
-    { name: "Mission Control", desc: "NASA-inspired ambient", url: "https://ice1.somafm.com/missioncontrol-128-mp3" },
-    { name: "Synphaera Radio", desc: "Modern space ambient", url: "https://ice1.somafm.com/synphaera-128-mp3" },
-    { name: "Drone Zone", desc: "Atmospheric textures", url: "https://ice1.somafm.com/dronezone-128-mp3" }
+{ name: "Deep Space One", desc: "Deep ambient", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
+{ name: "Space Station Soma", desc: "Spaced-out ambient", url: "https://ice1.somafm.com/spacestation-128-mp3" },
+{ name: "Mission Control", desc: "NASA ambient", url: "https://ice1.somafm.com/missioncontrol-128-mp3" },
+{ name: "Synphaera", desc: "Modern space ambient", url: "https://ice1.somafm.com/synphaera-128-mp3" },
+{ name: "Drone Zone", desc: "Atmospheric", url: "https://ice1.somafm.com/dronezone-128-mp3" },
+{ name: "Groove Salad", desc: "Downtempo", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
+{ name: "Lush", desc: "Vocal chill", url: "https://ice1.somafm.com/lush-128-mp3" },
+{ name: "Secret Agent", desc: "Spy jazz", url: "https://ice1.somafm.com/secretagent-128-mp3" },
+{ name: "U80s", desc: "80s synthpop", url: "https://ice1.somafm.com/u80s-128-mp3" },
+{ name: "Def Con Radio", desc: "Hacker music", url: "https://ice1.somafm.com/defcon-128-mp3" },
+{ name: "Boot Liquor", desc: "Americana", url: "https://ice1.somafm.com/bootliquor-128-mp3" },
+{ name: "Indie Pop Rocks", desc: "Indie", url: "https://ice1.somafm.com/indiepop-128-mp3" },
+{ name: "Beat Blender", desc: "Deep house", url: "https://ice1.somafm.com/beatblender-128-mp3" },
+{ name: "Folk Forward", desc: "Folk", url: "https://ice1.somafm.com/folkfwd-128-mp3" },
+{ name: "Fluid", desc: "Instrumental hip-hop", url: "https://ice1.somafm.com/fluid-128-mp3" },
+{ name: "Thistle Radio", desc: "Celtic", url: "https://ice1.somafm.com/thistle-128-mp3" },
+{ name: "Suburbs of Goa", desc: "Desi-influenced", url: "https://ice1.somafm.com/suburbsofgoa-128-mp3" },
+{ name: "Illinois Street Lounge", desc: "Lounge", url: "https://ice1.somafm.com/illstreet-128-mp3" },
 ],
-        init: function(){
+    init: function(){
     if (this.audio) return;
     var a = document.createElement('audio');
     a.preload = 'none';
-    a.style.display = 'none';
+    a.crossOrigin = 'anonymous';
+	a.style.display = 'none';
     document.body.appendChild(a);
     this.audio = a;
+    var selfAudio = this;
+    var applyEffect = function(){
+      if(SND.ac){
+        SND.initRadioEffect(selfAudio.audio);
+        document.removeEventListener('click', applyEffect);
+        document.removeEventListener('keydown', applyEffect);
+      }
+    };
+    if(SND.ac){
+      SND.initRadioEffect(a);
+    } else {
+      document.addEventListener('click', applyEffect);
+      document.addEventListener('keydown', applyEffect);
+    }
     var self = this;
     a.addEventListener('playing', function(){self.isLoading = false;self.isOn = true;self.updateButton();self.notify('playing');});
     a.addEventListener('waiting', function(){self.isLoading = true;self.updateButton();});
@@ -1516,7 +1864,8 @@ function triggerLandingTraffic(){
   var startPos = add(station.pos, mul(axis, rnd(8000, 14000)));
   var side = perpTo(axis);startPos = add(startPos, mul(side, rnd(-3000, 3000)));
   var o = spawnShipAt(Math.random()<0.5?'cobra':'adder', false, false, startPos);
-  o.landing = true;o.slotTarget = add(station.pos, mul(axis, STATION_SLOT_FACE));
+  o.landing = true;
+  o.slotTarget = add(station.pos, mul(axis, STATION_SLOT_FACE - 1200));
   msg('Корабль заходит на посадку', '#3fdcff');
 }
 function triggerDriftingContainer(){
@@ -1736,7 +2085,7 @@ var station=null,planet={pos:V(0,0,145000),r:125000,rot:0,spin:0.012,tilt:0.3},s
 var orbit={out:V(0,0,-1),side:V(1,0,0),pdir:V(0,0,1)};
 var CMD={name:'JAMESON',cash:100,fuel:70,cargo:[],kills:0,score:0,legal:0,visited:1,galaxy:1,sysIdx:7,ship:'cobra',
  market:null,dockComp:false,eq:{dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0},
- time:0,energySaved:150,_bestPrices:null,tractorOn:false,visitedSystems:[7]};
+ medals:{},time:0,energySaved:150,_bestPrices:null,tractorOn:false,visitedSystems:[7]};
 var gal=1,targetSys=null,curSys=null;
 var hyperT=0,hyperTo=7,hyperGal=false,deathT=0,burnT=0,warnT=0,policeTimer=-1,chartMode=0,scoopMsgT=0,demoT=0;
 var NEAR=42;
@@ -1794,6 +2143,46 @@ function pickMissionTargetSys(minJumps, maxJumps){
   if(candidates.length === 0) return null;
   return candidates[Math.floor(Math.random()*candidates.length)];
 }
+
+var MEDALS = {
+  courier:       {icon:'✉',  name:'ПОЧТАЛЬОН',   desc:'Доставка контейнера'},
+  vip:           {icon:'★',  name:'ШОФЁР',       desc:'VIP-пассажир'},
+  kill_pirate:   {icon:'⚔',  name:'ЛИКВИДАТОР',  desc:'Убийство пирата'},
+  kill_trader:   {icon:'⚔',  name:'ЛИКВИДАТОР',  desc:'Убийство торговца'},
+  kill_police:   {icon:'⚔',  name:'ЛИКВИДАТОР',  desc:'Убийство полицейского'},
+  kill_thargon:  {icon:'⚔',  name:'ЛИКВИДАТОР',  desc:'Убийство Таргона'},
+  funeral:       {icon:'⚰',  name:'ПРОВОДНИК',   desc:'Похоронный контракт'},
+  organs:        {icon:'♥',  name:'МЯСНИК',      desc:'Доставка органов'},
+  debt:          {icon:'₡',  name:'КОЛЛЕКТОР',   desc:'Взыскание долга'},
+  bomb:          {icon:'⚠',  name:'КУРЬЕР',      desc:'Доставка посылки'},
+  bounty_hunter: {icon:'☠',  name:'ОХОТНИК',     desc:'Охота на охотника'},
+  witness:       {icon:'◉',  name:'МОЛЧУН',      desc:'Доставка свидетеля'}
+};
+function medalName(id){return MEDALS[id] ? MEDALS[id].name : id;}
+function awardMedal(id){
+  if(!CMD.medals) CMD.medals = {};
+  if(!CMD.medals[id]) CMD.medals[id] = 0;
+  CMD.medals[id]++;
+  msg('🏅 МЕДАЛЬ · ' + medalName(id), '#ffd426');
+  if(SND.rankUp) SND.rankUp();
+  updateMedalsUI();
+}
+function updateMedalsUI(){
+  var el = document.getElementById('ms-content');
+  if(!el) return;
+  if(!CMD.medals) CMD.medals = {};
+  var order = ['funeral','organs','debt','bomb','bounty_hunter','witness',
+               'courier','vip','kill_pirate','kill_trader','kill_police','kill_thargon'];
+  var h = '';
+  for(var i=0;i<order.length;i++){
+    var id = order[i], m = MEDALS[id];
+    if(!m) continue;
+    var count = CMD.medals[id] || 0;
+    if(count <= 0) continue;
+    h += '<span class="medal-pill" title="'+m.desc+'"><span class="mi">'+m.icon+'</span><span>'+m.name+'</span><span class="mc">×'+count+'</span></span>';
+  }
+  el.innerHTML = h || '<span class="medal-empty">пока пусто — выполняйте контракты</span>';
+}
 function makeCourierMission(){
   var t = pickMissionTargetSys(2, 5);if(!t) return null;
   var reward = 800 + 400 * t.jumps;
@@ -1821,12 +2210,67 @@ function makeKillMission(){
     killType:type,spawnSysIdx:CMD.sysIdx,stage:'pending',
     message:'КОНТРАКТ · уничтожьте ' + name + ' в системе ' + (curSys?curSys.name:'—') + '. Награда: ' + reward + ' Cr.'};
 }
+
+function makeFuneralMission(){
+  var t = pickMissionTargetSys(1, 3);if(!t) return null;
+  var reward = 600 + 200 * t.jumps;
+  return {type:'funeral',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,
+    stage:'pending',cargoType:'coffin',cargoWeight:1,
+    knockTimer: rnd(60, 240), knockFired: false,
+    message:'ПОХОРОННЫЙ КОНТРАКТ · доставьте гроб в ' + t.sys.name + ' (' + t.jumps + ' пр.). Гроб не открывать. Награда: ' + reward + ' Cr.'};
+}
+function makeOrgansMission(){
+  var t = pickMissionTargetSys(2, 4);if(!t) return null;
+  var reward = 1500;
+  return {type:'organs',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,
+    stage:'pending',cargoType:'organs',cargoWeight:2,
+    deadline: 480, freshness: 1.0, jumpsLeft: 4,
+    message:'СРОЧНО · органы для клиники в ' + t.sys.name + '. Дедлайн: 8 мин / 4 прыжка. Награда: ' + reward + ' Cr, штраф: 800.'};
+}
+function makeDebtMission(){
+  var debt = 2000 + Math.floor(Math.random() * 3000);
+  var reward = Math.floor(debt * 0.5);
+  return {type:'debt',targetSys:CMD.sysIdx,targetSysName:curSys?curSys.name:'',jumps:0,reward:reward,
+    stage:'pending',debtAmount:debt,debtor:null,
+    message:'ДОЛГ · найдите должника в этой системе и выбейте ' + debt + ' Cr. Ваша доля: ' + reward + ' Cr.'};
+}
+function makeBombMission(){
+  var t = pickMissionTargetSys(1, 3);if(!t) return null;
+  var reward = 3000;
+  return {type:'bomb',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,
+    stage:'pending',cargoType:'package',cargoWeight:1,
+    beepTimer: rnd(120, 300), beeping: false, beepDeadline: 0,
+    message:'ПОСЫЛКА · доставьте контейнер в ' + t.sys.name + '. НЕ ОТКРЫВАТЬ. Если пищит — 60 секунд. Награда: ' + reward + ' Cr.'};
+}
+function makeBountyHunterMission(){
+  var names = ['Роршах','Кракен','Скайлер','Морган','Веспер','Тень','Саргон','Немезида'];
+  var nm = names[Math.floor(Math.random()*names.length)];
+  var reward = 4000;
+  return {type:'bounty_hunter',targetSys:CMD.sysIdx,targetSysName:curSys?curSys.name:'',jumps:0,reward:reward,
+    stage:'pending',hunterName:nm,hunterObj:null,
+    message:'ОХОТА НА ОХОТНИКА · найдите и уничтожьте пилота «' + nm + '». Он профи. Награда: ' + reward + ' Cr.'};
+}
+function makeWitnessMission(){
+  var t = pickMissionTargetSys(1, 3);if(!t) return null;
+  var reward = 1800;
+  return {type:'witness',targetSys:t.idx,targetSysName:t.sys.name,jumps:t.jumps,reward:reward,
+    stage:'pending',cargoType:'witness',cargoWeight:1,
+    pirateTimer: 30,
+    message:'СВИДЕТЕЛЬ · доставьте свидетеля в ' + t.sys.name + ' живым. За ним охотятся. Награда: ' + reward + ' Cr (мёртвым — 2×).'};
+}
 function spawnMission(){
   if(mission) return;
-  var r = Math.random();var m = null;
-  if(r < 0.4) m = makeCourierMission();
-  else if(r < 0.6) m = makeVipMission();
-  else m = makeKillMission();
+  var r = Math.random();
+  var m = null;
+  if(r < 0.13) m = makeCourierMission();
+  else if(r < 0.20) m = makeVipMission();
+  else if(r < 0.28) m = makeKillMission();
+  else if(r < 0.40) m = makeFuneralMission();
+  else if(r < 0.52) m = makeOrgansMission();
+  else if(r < 0.64) m = makeDebtMission();
+  else if(r < 0.74) m = makeBombMission();
+  else if(r < 0.87) m = makeBountyHunterMission();
+  else m = makeWitnessMission();
   if(!m) return;
   mission = m;renderBordComp();SND.beep();msg('БОРТ.КОМП: входящее сообщение', '#3fdcff');
   SHIP_AI.announceMission(mission);
@@ -1856,6 +2300,7 @@ function spawnMissionTarget(type){
 function acceptMission(){
   if(!mission || mission.stage !== 'pending') return;
   mission.stage = 'accepted';
+
   if(mission.type === 'courier'){
     var c = spawnCourierContainer();mission.container = c;
     mission.message = 'МИССИЯ · найдите контейнер (двойной круг на радаре) и доставьте в ' + mission.targetSysName + '. Награда: ' + mission.reward + ' Cr.';
@@ -1866,7 +2311,39 @@ function acceptMission(){
   } else if(mission.type && mission.type.indexOf('kill_') === 0){
     var o = spawnMissionTarget(mission.killType);mission.targetObj = o;
     mission.message = 'МИССИЯ · уничтожьте цель (отмечена на радаре). Награда: ' + mission.reward + ' Cr.';
+  } else if(mission.type === 'funeral'){
+    mission.message = 'МИССИЯ · гроб на борту. Доставьте в ' + mission.targetSysName + '. НЕ ОТКРЫВАТЬ. Награда: ' + mission.reward + ' Cr.';
+    targetSys = mission.targetSys;
+  } else if(mission.type === 'organs'){
+    mission.message = 'МИССИЯ · органы на борту. ' + mission.jumpsLeft + ' пр. · дедлайн 8 мин. Награда: ' + mission.reward + ' Cr.';
+    targetSys = mission.targetSys;
+  } else if(mission.type === 'debt'){
+    var ppos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
+    var d = spawnShipAt(pickTrader(curSys.tech), false, false, ppos);
+    d.isDebtor = true;d.debtAmount = mission.debtAmount;
+    d.fleeThreshold = 0.95;d.aggr = 0.1;
+    d.name = 'ДОЛЖНИК · ' + d.name;
+    mission.debtor = d;
+    mission.message = 'МИССИЯ · должник отмечен на радаре. Выбейте ' + mission.debtAmount + ' Cr (или схватите трактором). Ваша доля: ' + mission.reward + ' Cr.';
+  } else if(mission.type === 'bomb'){
+    mission.message = 'МИССИЯ · посылка на борту. Доставьте в ' + mission.targetSysName + '. НЕ ОТКРЫВАТЬ. Награда: ' + mission.reward + ' Cr.';
+    targetSys = mission.targetSys;
+  } else if(mission.type === 'bounty_hunter'){
+    var hpos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(10000, 18000)));
+    var ht = Math.random() < 0.5 ? 'fdl' : 'python';
+    var h = spawnShipAt(ht, true, false, hpos);
+    h.isBountyHunter = true;h.pname = mission.hunterName;
+    h.name = 'ОХОТНИК: ' + mission.hunterName;
+    h.maxEnergy = Math.round(h.maxEnergy * 1.5);h.energy = h.maxEnergy;
+    h.aimNoise = 0.008;h.aggr = 1.5;h.fleeThreshold = 0;
+    h.huntsPlayer = true;
+    mission.hunterObj = h;
+    mission.message = 'МИССИЯ · «' + mission.hunterName + '» на радаре. Уничтожьте. Он охотится на вас.';
+  } else if(mission.type === 'witness'){
+    mission.message = 'МИССИЯ · свидетель на борту. Доставьте в ' + mission.targetSysName + ' живым. Пираты охотятся.';
+    targetSys = mission.targetSys;
   }
+
   SND.buy();msg('МИССИЯ ПРИНЯТА', '#8cff6a');renderBordComp();
   SHIP_AI.announceMissionAccept();
 }
@@ -1879,9 +2356,9 @@ function completeMission(){
   if(!mission) return;
   var rw = mission.reward;CMD.cash += rw;
   msg('МИССИЯ ВЫПОЛНЕНА · +' + rw + ' Cr', '#8cff6a');SND.buy();
-    mission = null;missionSpawnTimer = 45 + Math.random()*45;renderBordComp();
+  awardMedal(mission.type);
+  mission = null;missionSpawnTimer = 45 + Math.random()*45;renderBordComp();
   SHIP_AI.announceMissionComplete();
-
 }
 function vipTick(dt){
   if(!mission || mission.type !== 'vip' || mission.stage !== 'accepted') return;
@@ -1893,9 +2370,121 @@ function vipTick(dt){
   msg('Пираты охотятся за пассажиром!', '#ff4b3e');
 }
 function missionTick(dt){
-  if(mission){if(mission.type === 'vip') vipTick(dt);return;}
+  if(mission){
+    if(mission.type === 'vip') vipTick(dt);
+    else if(mission.type === 'funeral') funeralTick(dt);
+    else if(mission.type === 'organs') organsTick(dt);
+    else if(mission.type === 'bomb') bombTick(dt);
+    else if(mission.type === 'witness') witnessTick(dt);
+    else if(mission.type === 'debt') debtTick(dt);
+    else if(mission.type === 'bounty_hunter') bountyHunterTick(dt);
+    return;
+  }
   missionSpawnTimer -= dt;
   if(missionSpawnTimer <= 0){missionSpawnTimer = 60 + Math.random()*60;spawnMission();}
+}
+
+function funeralTick(dt){
+  if(mission.stage !== 'accepted' || mission.knockFired) return;
+  mission.knockTimer -= dt;
+  if(mission.knockTimer <= 0){
+    mission.knockFired = true;
+    msg('ГРОБ СТУЧИТ. Не открывать.', '#ff4b3e');
+    if(SND.alarm) SND.alarm();
+    if(SHIP_AI.enabled){
+      var line = 'Гроб стучит. Я бы сказал «это ветер», но в вакууме ветра нет. Так что либо он жив, либо это очень настойчивый мертвец. Не открывай.';
+      if(SHIP_AI.showBordcomp) SHIP_AI.showBordcomp(line, false);
+      if(SHIP_AI.speak) SHIP_AI.speak(line);
+    }
+    renderBordComp();
+  }
+}
+
+function organsTick(dt){
+  if(mission.stage !== 'accepted') return;
+  mission.deadline -= dt;
+  mission.freshness = clamp(mission.deadline / 480, 0, 1);
+  if(mission.deadline <= 0){
+    CMD.cash = Math.max(0, CMD.cash - 800);
+    msg('ОРГАНЫ ПРОТУХЛИ · -800 Cr', '#ff4b3e');
+    mission = null;renderBordComp();
+    SHIP_AI.announceMissionFail();
+    missionSpawnTimer = 60 + Math.random()*60;
+  }
+}
+
+function bombTick(dt){
+  if(mission.stage !== 'accepted') return;
+  if(mission.beeping){
+    mission.beepDeadline -= dt;
+    if(Math.random() < dt * 3 && SND.beep) SND.beep();
+    if(mission.beepDeadline <= 0){
+      msg('💥 ПОСЫЛКА ВЗОРВАЛАСЬ', '#ff4b3e');
+      boom(add(P.pos, mul(P.b.f, 100)), 20, '#ff9d4b');
+      if(SND.explosionBig) SND.explosionBig();
+      mission = null;renderBordComp();
+      hurtPlayer(80);
+      missionSpawnTimer = 90 + Math.random()*60;
+      return;
+    }
+  } else {
+    mission.beepTimer -= dt;
+    if(mission.beepTimer <= 0){
+      mission.beeping = true;
+      mission.beepDeadline = 60;
+      msg('⚠ ПОСЫЛКА ПИЩИТ · 60 СЕКУНД', '#ff4b3e');
+      if(SND.alarm) SND.alarm();
+      if(SHIP_AI.enabled && SHIP_AI.speak){
+        SHIP_AI.speak('Посылка пищит. У тебя 60 секунд. Я бы начал с выбрасывания. Или с молитвы.');
+      }
+      renderBordComp();
+    }
+  }
+}
+
+function witnessTick(dt){
+  if(mission.stage !== 'accepted') return;
+  mission.pirateTimer -= dt;
+  if(mission.pirateTimer <= 0){
+    mission.pirateTimer = 30 + Math.random()*20;
+    var tech = curSys ? curSys.tech : 6;
+    var pos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(8000, 15000)));
+    spawnShipAt(pickPirate(tech), true, false, pos);
+    msg('Пираты охотятся за свидетелем!', '#ff4b3e');
+  }
+}
+
+function debtTick(dt){
+  if(mission.stage !== 'accepted' || !mission.debtor) return;
+  if(objects.indexOf(mission.debtor) < 0){
+    var why = (CMD.sysIdx !== mission.targetSys) ? 'вы сменили систему' : 'он сбежал';
+    msg('ДОЛЖНИК УШЁЛ (' + why + ')', '#ff4b3e');
+    mission = null;renderBordComp();
+    SHIP_AI.announceMissionFail();
+    missionSpawnTimer = 60 + Math.random()*60;
+    return;
+  }
+  var dd = ln(sub(mission.debtor.pos, P.pos));
+  if(dd < 500 && CMD.tractorOn && CMD.eq.tractor){
+    CMD.cash += mission.debtAmount;
+    msg('Должник сдался · +' + mission.debtAmount + ' Cr', '#8cff6a');
+    awardMedal('debt');
+    if(SND.buy) SND.buy();
+    var idx = objects.indexOf(mission.debtor);
+    if(idx >= 0) objects.splice(idx, 1);
+    mission = null;renderBordComp();
+    missionSpawnTimer = 60 + Math.random()*60;
+  }
+}
+
+function bountyHunterTick(dt){
+  if(mission.stage !== 'accepted' || !mission.hunterObj) return;
+  if(objects.indexOf(mission.hunterObj) < 0){
+    msg('ОХОТНИК УШЁЛ', '#ff4b3e');
+    mission = null;renderBordComp();
+    SHIP_AI.announceMissionFail();
+    missionSpawnTimer = 60 + Math.random()*60;
+  }
 }
 function renderBordComp(){
   var body = $('#bc-body');var btns = $('#bc-buttons');
@@ -1904,14 +2493,72 @@ function renderBordComp(){
   body.textContent = mission.message;
   if(mission.stage === 'pending'){
     btns.innerHTML = '<button data-action="accept" class="pri">ПРИНЯТЬ</button><button data-action="reject">ОТКЛОНИТЬ</button>';
+  } else if(mission.type === 'funeral' && mission.knockFired && mission.stage === 'accepted'){
+    btns.innerHTML = '<button data-action="open-coffin">ОТКРЫТЬ ГРОБ</button><button data-action="ignore-coffin" class="pri">НЕ ОТКРЫВАТЬ</button>';
+  } else if(mission.type === 'bomb' && mission.beeping && mission.stage === 'accepted'){
+    btns.innerHTML = '<button data-action="eject-package" class="pri">ВЫБРОСИТЬ В КОСМОС</button>';
+  } else if(mission.type === 'witness' && mission.stage === 'accepted'){
+    btns.innerHTML = '<button data-action="jettison-witness">ВЫБРОСИТЬ СВИДЕТЕЛЯ</button>';
   } else {btns.innerHTML = '';}
 }
+
+/* --- Функции кнопок бортового компа (вынесены из обработчика) --- */
+function openCoffin(){
+  if(!mission || mission.type !== 'funeral') return;
+  msg('Вы открыли гроб...', '#ff4b3e');
+  if(SND.alarm) SND.alarm();
+  if(CMD.cash >= 300){
+    CMD.cash -= 300;
+    msg('«Клиент» ожил! Требует 300 Cr. Заплачено. Гроб пуст.', '#ffd426');
+  } else {
+    msg('«Клиент» ожил! Денег нет — бой!', '#ff4b3e');
+    var ppos = add(P.pos, mul(nrm(V(rnd(-1,1),rnd(-1,1),rnd(-1,1))), rnd(500, 1500)));
+    var o = spawnShipAt('adder', true, false, ppos);
+    o.name = 'ВОСКРЕСШИЙ КЛИЕНТ';
+  }
+  mission = null;renderBordComp();
+  SHIP_AI.announceMissionFail();
+  missionSpawnTimer = 60 + Math.random()*60;
+}
+
+function ignoreCoffin(){
+  if(!mission || mission.type !== 'funeral') return;
+  mission.knockFired = false;
+  mission.knockTimer = 120 + Math.random()*120;
+  renderBordComp();
+  msg('Вы не открыли гроб. Умно.', '#8cff6a');
+}
+
+function ejectPackage(){
+  if(!mission || mission.type !== 'bomb') return;
+  msg('Посылка выброшена в космос · -1500 Cr штраф', '#ff4b3e');
+  CMD.cash = Math.max(0, CMD.cash - 1500);
+  mission = null;renderBordComp();
+  SHIP_AI.announceMissionFail();
+  missionSpawnTimer = 60 + Math.random()*60;
+}
+
+function jettisonWitness(){
+  if(!mission || mission.type !== 'witness') return;
+  msg('Свидетель выброшен в космос. Он не выживет. +3600 Cr, розыск.', '#ff4b3e');
+  CMD.cash += 3600;
+  CMD.legal = Math.max(CMD.legal, 1);
+  awardMedal('witness');
+  mission = null;renderBordComp();
+  missionSpawnTimer = 60 + Math.random()*60;
+}
+
 var bcBtnsEl = document.getElementById('bc-buttons');
 if(bcBtnsEl){
   bcBtnsEl.addEventListener('click', function(e){
     var btn = e.target.closest ? e.target.closest('button') : null;if(!btn) return;
-    if(btn.dataset.action === 'accept') acceptMission();
-    else if(btn.dataset.action === 'reject') rejectMission();
+    var a = btn.dataset.action;
+    if(a === 'accept') acceptMission();
+    else if(a === 'reject') rejectMission();
+    else if(a === 'open-coffin') openCoffin();
+    else if(a === 'ignore-coffin') ignoreCoffin();
+    else if(a === 'eject-package') ejectPackage();
+    else if(a === 'jettison-witness') jettisonWitness();
   });
 }
 
@@ -1967,7 +2614,8 @@ function buildSystem(idx,fresh){
  for(i=0;i<traders;i++)spawnShip(pickTrader(sys.tech),false,false);
  if(CMD.legal>=1){spawnShip('viper',true,true);if(CMD.legal>=2)spawnShip('viper',true,true);}
  var ast=Math.floor(2+rnd()*4);for(i=0;i<ast;i++)spawnAst();
- targetSys=null;policeTimer=-1;
+ if(!isDeliveryMission(mission)) targetSys=null;
+policeTimer=-1;
 }
 function pickPirate(tech){
  var r=Math.random();
@@ -2003,15 +2651,20 @@ function spawnShip(type,hostile,police){
  var axis = nrm(station.b.f);
  var slotCenter = add(station.pos, mul(axis, STATION_SLOT_FACE));
  var perp1 = perpTo(axis);var perp2 = cross(axis, perp1);
- var pos = add(slotCenter, mul(axis, rnd(300, 600)));
- pos = add(pos, add(mul(perp1, rnd(-STATION_SLOT_HALF_W*0.7, STATION_SLOT_HALF_W*0.7)),mul(perp2, rnd(-STATION_SLOT_HALF_H*0.6, STATION_SLOT_HALF_H*0.6))));
- var perturb = mul(nrm(V(rnd(-1,1), rnd(-1,1), rnd(-1,1))), 0.25);
+ var depthInside = rnd(300, 1200);
+ var pos = add(slotCenter, mul(axis, -depthInside));
+ pos = add(pos, add(
+   mul(perp1, rnd(-STATION_SLOT_HALF_W*0.6, STATION_SLOT_HALF_W*0.6)),
+   mul(perp2, rnd(-STATION_SLOT_HALF_H*0.6, STATION_SLOT_HALF_H*0.6))
+ ));
+ var perturb = mul(nrm(V(rnd(-1,1), rnd(-1,1), rnd(-1,1))), 0.08);
  var heading = nrm(add(axis, perturb));
  o = {kind:police?'police':(hostile?'pirate':'trader'),ship:type,bp:sp.bp,pos:pos,b:basisFrom(heading),
   speed:sp.speed*24*0.7,energy:sp.energy,maxEnergy:sp.energy,cool:rnd(0.6,2.4),hostile:!!hostile,police:!!police,
   radius:BP[sp.bp].radius*0.85,name:sp.ru+(police?' (полиция)':''),
   aggr:hostile?rnd(0.6,1):(police?0.6:0.15),flee:false,hitT:0,laser:sp.laser,
-  wanderT:rnd(2,5),wanderDir:heading,chattered:false};
+  wanderT:rnd(4,8),wanderDir:heading,chattered:false,
+  _spawnedAt: Date.now()};
  applyPersonality(o);rememberEncounter(o);objects.push(o);return o;
 }
 function spawnAst(){
@@ -2230,23 +2883,41 @@ function toggleFull(){
 }
 function viewBasis(){if(!P.rear)return P.b;return{r:mul(P.b.r,-1),u:P.b.u,f:mul(P.b.f,-1)};}
 function crosshairTarget(){
- var vb=viewBasis(),best=null,bestD=1e9,i;
- var tol=Math.max(0.026,32/(H||480));
- for(i=0;i<objects.length;i++){
-  var o=objects[i];
-  if(o.kind==='debris'||o.kind==='cargo'||o.kind==='missile')continue;
-  var rel=sub(o.pos,P.pos),l=toLocal(vb,rel),d=ln(rel);
-  if(l.z<NEAR||d>13000)continue;
-  var ang=Math.acos(clamp(l.z/d,-1,1)),sa=Math.atan((o.radius||30)/Math.max(60,d));
-  if(ang<Math.max(sa*1.25,tol)&&d<bestD){bestD=d;best=o;}
- }
- return best;
+  var vb=viewBasis(),best=null,bestD=1e9,i;
+  var tol=Math.max(0.026,32/(H||480));
+  for(i=0;i<objects.length;i++){
+    var o=objects[i];
+    if(o.kind==='debris'||o.kind==='cargo'||o.kind==='missile')continue;
+    var rel=sub(o.pos,P.pos),l=toLocal(vb,rel),d=ln(rel);
+    if(l.z<NEAR||d>13000)continue;
+    var ang=Math.acos(clamp(l.z/d,-1,1));
+    var sa=Math.atan((o.radius||30)/Math.max(60,d));
+    // Общий кап: не больше ~7° даже для больших объектов
+    var maxAng = Math.min(sa*1.25, 0.12);
+    if(o.kind==='station'){
+      // Станция цепляется только если прицел почти по центру её диска на экране
+      var pt = projectPt(l);
+      if(!isFinite(pt[0])||!isFinite(pt[1])) continue;
+      var sdx = pt[0]-W/2, sdy = pt[1]-H/2;
+      var sDist = Math.sqrt(sdx*sdx+sdy*sdy);
+      var sTol = Math.max(28, W*0.028);
+      if(sDist > sTol) continue;
+    }
+    if(ang<Math.max(maxAng,tol)&&d<bestD){bestD=d;best=o;}
+  }
+  return best;
 }
 function fireLaser(){
  if(state!=='flight'||P.cool>0)return;
  if(P.rear) return;
  if(CMD.tractorOn&&CMD.eq.tractor)return;
- if(P.laserHeat>=P.laserHeatMax){if(!P.laserOverheated){msg('ЛАЗЕР ПЕРЕГРЕТ · ждите остывания','#ff4b3e');P.laserOverheated=true;}return;}
+ if(P.laserOverheated || P.laserHeat>=P.laserHeatMax){
+   if(!P.laserOverheated){
+     msg('ЛАЗЕР ПЕРЕГРЕТ · ждите остывания','#ff4b3e');
+     P.laserOverheated = true;
+   }
+   return;
+ }
  P.cool=0.28;SND.laser();vib(30);
  P.laserHeat=Math.min(P.laserHeatMax, P.laserHeat + P.laserHeatPerShot);
  if(P.laserHeat>=P.laserHeatMax) P.laserOverheated=true;
@@ -2281,6 +2952,7 @@ function fireMissile(){
  if((CMD.eq.missile||0)<1){msg('Ракет нет','#ffd426');SND.beep();return;}
  var t=crosshairTarget();
  if(!t){msg('Цель не захвачена','#ffd426');SND.beep();return;}
+ if(t.kind==='station'){msg('Ракеты не наводятся на станцию','#ffd426');SND.beep();return;}
  CMD.eq.missile--;P.missCool=1.2;SND.missile();
  var vb=viewBasis();
  objects.push({kind:'missile',bp:'shard',pos:add(P.pos,mul(vb.f,180)),b:vb,vel:mul(vb.f,2600),
@@ -2329,6 +3001,22 @@ if (rankName(CMD.score) !== _oldRank) SND.rankUp();
   if(sp&&sp.scoop!==undefined)spawnCanister(add(o.pos,V(rnd(-70,70),rnd(-70,70),rnd(-70,70))),sp.scoop);
  }else if(o.kind==='ast'){CMD.score++;CMD.cash+=5;msg('Астероид · +5 Cr','#d8a06a');}
  if(missionKill) completeMission();
+ if(mission && mission.type === 'debt' && mission.debtor === o){
+  CMD.cash += mission.debtAmount;
+  CMD.legal = Math.max(CMD.legal, 1);
+  msg('Должник уничтожен · +' + mission.debtAmount + ' Cr · розыск', '#ffd426');
+  awardMedal('debt');
+  mission = null;renderBordComp();
+  missionSpawnTimer = 60 + Math.random()*60;
+}
+if(mission && mission.type === 'bounty_hunter' && mission.hunterObj === o){
+  CMD.cash += mission.reward;
+  msg('Охотник «' + mission.hunterName + '» уничтожен · +' + mission.reward + ' Cr', '#8cff6a');
+  awardMedal('bounty_hunter');
+  mission = null;renderBordComp();
+  SHIP_AI.announceMissionComplete();
+  missionSpawnTimer = 60 + Math.random()*60;
+}
 }
 function hurtPlayer(dmg,silent){
  P.energy-=dmg;P.dmgFlash=0.3;if(!silent){
@@ -2389,11 +3077,17 @@ function toggleTractor(){
  SND.beep();
 }
 function checkMissionDelivery(){
- if(!mission) return;
- if(CMD.sysIdx !== mission.targetSys) return;
- if(mission.type === 'courier' && mission.stage !== 'delivering') return;
- if(mission.type === 'vip' && mission.stage !== 'accepted') return;
- completeMission();
+  if(!mission) return;
+  if(CMD.sysIdx !== mission.targetSys) return;
+  if(mission.type === 'courier' && mission.stage !== 'delivering') return;
+  if(mission.type === 'vip' && mission.stage !== 'accepted') return;
+  if(mission.type === 'funeral' && mission.stage !== 'accepted') return;
+  if(mission.type === 'organs' && mission.stage !== 'accepted') return;
+  if(mission.type === 'bomb' && mission.stage !== 'accepted') return;
+  if(mission.type === 'witness' && mission.stage !== 'accepted') return;
+  if(mission.type === 'debt' || mission.type === 'bounty_hunter') return;
+  if(mission.type && mission.type.indexOf('kill_') === 0) return;
+  completeMission();
 }
 function doDock(){
  state='docked';prevState='docked';
@@ -2459,7 +3153,8 @@ function arrive(){
  buildSystem(hyperTo,false);
  if(!hyperGal&&hyperTo!==prev)CMD.visited++;
  if(!CMD.visitedSystems)CMD.visitedSystems=[];
- if(CMD.visitedSystems.indexOf(CMD.sysIdx)<0)CMD.visitedSystems.push(CMD.sysIdx);
+ var _wasVisited = CMD.visitedSystems.indexOf(CMD.sysIdx) >= 0;
+ if(!_wasVisited) CMD.visitedSystems.push(CMD.sysIdx);
  if(mission){
   if(mission.type === 'courier' && mission.stage === 'accepted' && !mission.hasContainer){
    msg('МИССИЯ ПРОВАЛЕНА: контейнер потерян', '#ff4b3e');
@@ -2470,6 +3165,16 @@ function arrive(){
          mission = null;renderBordComp();
       SHIP_AI.announceMissionFail();
   }
+  if(mission && mission.type === 'organs' && mission.stage === 'accepted'){
+  mission.jumpsLeft--;
+  if(mission.jumpsLeft < 0){
+    CMD.cash = Math.max(0, CMD.cash - 800);
+    msg('ОРГАНЫ ПРОТУХЛИ (превышен лимит прыжков) · -800 Cr', '#ff4b3e');
+    mission = null;renderBordComp();
+    SHIP_AI.announceMissionFail();
+    missionSpawnTimer = 60 + Math.random()*60;
+  }
+}
  }
  var outDir=station.b.f;var side=orbit.side;
  var cos_ang=rnd(0.3,1.0);var sin_ang=Math.sqrt(Math.max(0,1-cos_ang*cos_ang));
@@ -2480,6 +3185,11 @@ function arrive(){
  SND.startShipAmb();
  rebuildMarketTicker();
  msg('Прибытие: '+curSys.name+' · '+curSys.planetTypeName,'#8cff6a');
+setTimeout(function(){
+  if(typeof SHIP_AI !== 'undefined' && SHIP_AI.announceArrival){
+    SHIP_AI.announceArrival({ first: !_wasVisited });
+  }
+}, 700);
  if(CMD.legal>=1)msg('Статус: '+(CMD.legal>=2?'в розыске':'правонарушитель'),'#ff4b3e');
 }
 function steerTo(o,want,rate,dt){
@@ -2494,6 +3204,7 @@ function steerTo(o,want,rate,dt){
 function update(dt){
  ambientTick(dt);
  missionTick(dt);
+ if(state !== 'flight') return;
  CMD.time+=dt;burnT-=dt;warnT-=dt;scoopMsgT-=dt;
  var inp=readInput(),pr=1.55*dt,rr=1.95*dt,yr=0.9*dt;
  SHIP_AI.backgroundChatter();
@@ -2513,7 +3224,7 @@ SND._lastTarget = _tName;
  if(inp.yaw){P.b.r=rotAxis(P.b.r,P.b.u,inp.yaw*yr);P.b.f=rotAxis(P.b.f,P.b.u,inp.yaw*yr);}
  P.b=ortho(P.b);
  P.laserHeat = Math.max(0, P.laserHeat - P.laserCoolRate*dt);
- if(P.laserOverheated && P.laserHeat < P.laserHeatMax * 0.3) P.laserOverheated = false;
+ if(P.laserOverheated && P.laserHeat < P.laserHeatMax * 0.5) P.laserOverheated = false;
 
  if(CMD.dockComp && CMD.eq.dockcomp && station){
   var axis=nrm(station.b.f);var relS=sub(P.pos,station.pos);var along=dot(relS,axis);
@@ -2705,15 +3416,20 @@ else if (o.kind === 'police') SND.policeSiren();
      o.speed = Math.min(o.speed + 40*dt, SHIP[o.ship].speed * 24 * 0.65);
     }
    }
-   if(o.landing && o.slotTarget){
+      if(o.landing && o.slotTarget){
      var toSlot = sub(o.slotTarget, o.pos);var ds = ln(toSlot);
-     if(ds < 800){ objects.splice(i,1); continue; }
-     steerTo(o, toSlot, 1.5, dt);o.speed = 150;
+     if(ds < 400){ objects.splice(i,1); continue; }
+     steerTo(o, toSlot, 1.6, dt);
+     var approachSpeed = ds < 2500 ? Math.max(60, ds * 0.06) : 160;
+     o.speed = approachSpeed;
    }
    o.pos = add(o.pos, mul(o.b.f, o.speed * dt));
    if(station){
     var relStat = sub(o.pos, station.pos);
+      if(station && (!o._spawnedAt || Date.now() - o._spawnedAt > 2500)){
+    var relStat = sub(o.pos, station.pos);
     if(ln(relStat) < station.radius + 1000 && stationCollision(relStat)){boom(o.pos, 8, '#ff9d4b');SND.boom();objects.splice(i, 1);continue;}
+   }
    }
    if(d>300000 || (o.flee && d>200000)){objects.splice(i,1);continue;}
    var vColl=ln(sub(mul(o.b.f,o.speed),mul(P.b.f,P.speed)));
@@ -2740,7 +3456,7 @@ else if (o.kind === 'police') SND.policeSiren();
  if(station && state==='flight' && !CMD.dockComp){
   var relS2 = sub(P.pos, station.pos);var along2 = dot(relS2, station.b.f);
   var lx2 = Math.abs(dot(relS2, station.b.r));var ly2 = Math.abs(dot(relS2, station.b.u));
-  if(lx2 < 400 && ly2 < 1000 && along2 > -400 && along2 < STATION_SLOT_FACE + 600 && P.speed < 300){doDock();return;}
+  if(lx2 < 400 && ly2 < 1000 && along2 > STATION_CORRIDOR_INNER && along2 < 1500 && P.speed < 300){doDock();return;}
  }
  var ships=0,asts=0;
  for(i=0;i<objects.length;i++){var kk=objects[i].kind;
@@ -2770,7 +3486,7 @@ function resize(){
  if(W*H>2400000){var k=Math.sqrt(2400000/(W*H));W=Math.max(320,Math.round(W*k));H=Math.max(220,Math.round(H*k));}
  if(cv.width!==W)cv.width=W;
  if(cv.height!==H)cv.height=H;
- FOCAL=H*0.95;
+ FOCAL=H*0.75;
 }
 window.addEventListener('resize',function(){RS=1;layout();});
 window.addEventListener('orientationchange',function(){setTimeout(function(){RS=1;layout();},160);});
@@ -2832,6 +3548,23 @@ function drawObj(o,vb){
    if(seen[key])continue;seen[key]=1;
    var ee=edgePts(tv[ed2[0]],tv[ed2[1]]);
    if(ee){ctx.moveTo(ee[0][0],ee[0][1]);ctx.lineTo(ee[1][0],ee[1][1]);hasPath=true;}
+  }
+  // Рёбра коридора станции — только когда камера смотрит в тоннель
+  if(o.kind==='station'){
+   var relP=sub(P.pos,o.pos);
+   var alongP=dot(relP,o.b.f);
+   var sideP=Math.sqrt(dot(relP,o.b.r)*dot(relP,o.b.r)+dot(relP,o.b.u)*dot(relP,o.b.u));
+   var corridorVisible=(alongP>500)&&(sideP<Math.max(2500,Math.abs(alongP)*0.9));
+   if(corridorVisible){
+    for(i=0;i<bp.e.length;i++){
+     var ced=bp.e[i];
+     if(ced[2]!==32&&ced[3]!==32)continue;
+     var ckey='c'+ced[0]+'_'+ced[1];
+     if(seen[ckey])continue;seen[ckey]=1;
+     var cee=edgePts(tv[ced[0]],tv[ced[1]]);
+     if(cee){ctx.moveTo(cee[0][0],cee[0][1]);ctx.lineTo(cee[1][0],cee[1][1]);hasPath=true;}
+    }
+   }
   }
  }
  if(!hasPath&&o.kind!=='station')return;
@@ -3292,7 +4025,21 @@ function drawHUD(vb,dt,target){
  ctx.textAlign='right';ctx.fillStyle=g;
  ctx.fillText(curShip().ru.toUpperCase(),W*0.978,ty);
  ctx.fillText('ЭНЕРГИЯ '+Math.round(P.energy)+'/'+P.maxEnergy,W*0.978,ty+st);
- ctx.fillText(P.laserOverheated?'ЛАЗЕР: ПЕРЕГРЕВ':(P.cool>0?'ЛАЗЕР: ЗАРЯД':'ЛАЗЕР: '+laserPower()+' луча'),W*0.978,ty+st*2);
+ var laserStatus, laserColor;
+if(P.laserOverheated){
+    var pct = Math.round((P.laserHeat / P.laserHeatMax) * 100);
+    laserStatus = 'ЛАЗЕР: ОСТЫВАЕТ ' + pct + '%';
+    laserColor = '#ff4b3e';
+} else if(P.cool>0){
+    laserStatus = 'ЛАЗЕР: ЗАРЯД';
+    laserColor = g;
+} else {
+    laserStatus = 'ЛАЗЕР: ' + laserPower() + ' луча';
+    laserColor = g;
+}
+ctx.fillStyle = laserColor;
+ctx.fillText(laserStatus, W*0.978, ty+st*2);
+ctx.fillStyle = g;
  var heatBarW=W*0.15,heatBarH=Math.max(4,6*u),heatBarX=W*0.978-heatBarW,heatBarY=ty+st*2+st*0.55;
  var heatPct=clamp(P.laserHeat/P.laserHeatMax,0,1);
  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(heatBarX,heatBarY,heatBarW,heatBarH);
@@ -3308,6 +4055,29 @@ function drawHUD(vb,dt,target){
  if(STREAM_RADIO.isOn){
   var str=STREAM_RADIO.stations[STREAM_RADIO.currentIndex];
   if(str){ctx.fillStyle='#ff9d4b';ctx.fillText('📻 '+str.name,W*0.978,ty+st*(CMD.legal>0?7:6));}
+ }
+ if(mission && mission.type === 'organs' && mission.stage === 'accepted'){
+  var barW = W*0.20, barH = Math.max(6,8*u), barX = W*0.02, barY = H*0.63;
+  ctx.fillStyle='rgba(0,0,0,0.55)';ctx.fillRect(barX,barY,barW,barH);
+  var freshCol = mission.freshness < 0.3 ? '#ff4b3e' : (mission.freshness < 0.6 ? '#ffd426' : '#8cff6a');
+  ctx.fillStyle=freshCol;ctx.fillRect(barX,barY,barW*mission.freshness,barH);
+  ctx.strokeStyle='rgba(140,255,106,0.5)';ctx.lineWidth=0.6;ctx.strokeRect(barX,barY,barW,barH);
+  ctx.fillStyle='#ffd426';ctx.font=Math.round(fs*0.65)+'px "JetBrains Mono",monospace';ctx.textAlign='left';
+  ctx.fillText('СВЕЖЕСТЬ '+Math.round(mission.freshness*100)+'% · '+Math.round(mission.deadline)+'с · '+mission.jumpsLeft+' пр.',barX,barY-4);
+ }
+if(mission && mission.type === 'bomb' && mission.beeping && mission.stage === 'accepted'){
+  var blink = Math.sin(performance.now()/120) > 0;
+  ctx.fillStyle = blink ? '#ff4b3e' : '#ffd426';
+  ctx.font = 'bold '+Math.round(fs*1.3)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+  ctx.fillText('⚠ '+Math.ceil(mission.beepDeadline)+' ⚠', W/2, H*0.13);
+  ctx.font = Math.round(fs*0.62)+'px "JetBrains Mono",monospace';
+  ctx.fillText('[ВЫБРОСИТЬ В БОРТ.КОМПЕ]', W/2, H*0.13+fs*0.9);
+  ctx.textAlign='left';
+ }
+if(mission && mission.type === 'funeral' && mission.knockFired && mission.stage === 'accepted'){
+  ctx.fillStyle='#ff4b3e';ctx.font='bold '+Math.round(fs*0.85)+'px "JetBrains Mono",monospace';ctx.textAlign='center';
+  if(Math.sin(performance.now()/200) > 0) ctx.fillText('ГРОБ СТУЧИТ', W/2, H*0.13);
+  ctx.textAlign='left';
  }
  ctx.textAlign='left';
  if(station)drawMarker(vb,station.pos,'КОРИОЛИС','#3fdcff',fs*0.78);
@@ -3730,12 +4500,23 @@ function sizeChart(){
  if(GW*GH>5500000){var s=Math.sqrt(5500000/(GW*GH));GW=Math.round(GW*s);GH=Math.round(GH*s);}
  if(gc.width!==GW)gc.width=GW;if(gc.height!==GH)gc.height=GH;
 }
-function openChart(){show('ov-chart');sizeChart();fitView(chartMode);drawChart();updateChartInfo();}
+function openChart(){
+  if(isDeliveryMission(mission) && targetSys === null){
+    targetSys = mission.targetSys;
+  }
+  show('ov-chart');sizeChart();fitView(chartMode);drawChart();updateChartInfo();updateMedalsUI();
+}
 function fitView(mode){
  CVT.mode=mode;CVT.zoom=(mode===0)?1.6:2.8;
  var p=sysSpherePos(curSys);CVT.rotY=Math.atan2(-p.x,p.z);
  var pxz=Math.sqrt(p.x*p.x+p.z*p.z);CVT.rotX=Math.atan2(p.y,pxz);
  $('#ch-modelab').textContent=mode===0?'СФЕРА':'БЛИЖНИЙ';
+}
+function isDeliveryMission(m){
+  if(!m) return false;
+  var t = m.type;
+  return t === 'courier' || t === 'vip' || t === 'funeral'
+      || t === 'organs'  || t === 'bomb' || t === 'witness';
 }
 function drawChart(){
  var sys=galaxy(gal);if(!curSys)return;
@@ -3751,17 +4532,17 @@ function drawChart(){
   projected.push({sys:sys[i],idx:i,x:sp.x,y:sp.y,z:rr.z,scale:sp.s});
  }
  projected.sort(function(a,b){return a.z-b.z;});
- var ref=sys[CMD.sysIdx],fuel=CMD.fuel/10,visitedArr=CMD.visitedSystems||[];
- var currentP=null,targetP=null;var labelQueue=[];
- for(var k=0;k<projected.length;k++){
+var ref=sys[CMD.sysIdx],fuel=CMD.fuel/10,visitedArr=CMD.visitedSystems||[];
+var currentP=null,targetP=null,missionP=null;var labelQueue=[];
+for(var k=0;k<projected.length;k++){
   var p=projected[k];
   if(p.x<-40||p.x>GW+40||p.y<-40||p.y>GH+40)continue;
   if(p.z<0)continue;
   var dist=lyBetween(ref,p.sys);var inRange=dist<=fuel;var visited=visitedArr.indexOf(p.idx)>=0;
-  var isMissionTgt = mission && (mission.type === 'courier' || mission.type === 'vip') && p.idx === mission.targetSys;
+  var isMissionTgt = isDeliveryMission(mission) && p.idx === mission.targetSys;
   var col,r,rLab;
   if(p.idx===CMD.sysIdx){col='#ffd426';r=5.5;rLab=true;currentP=p;}
-  else if(isMissionTgt){col='#ff8b3e';r=5.5;rLab=true;}
+  else if(isMissionTgt){col='#ff8b3e';r=5.5;rLab=true;missionP=p;}
   else if(p.idx===targetSys){col='#ffffff';r=4.5;rLab=true;targetP=p;}
   else if(visited){col=inRange?'#8cff6a':'#5a8a5f';r=3;rLab=inRange;}
   else{col=inRange?'#6fa8ff':'#3a5060';r=2.2;rLab=inRange;}
@@ -3770,7 +4551,18 @@ function drawChart(){
   gctx.globalAlpha=1;
   if(rLab)labelQueue.push({p:p,color:col,big:(p.idx===CMD.sysIdx||p.idx===targetSys||isMissionTgt)});
  }
- if(targetP&&currentP){gctx.strokeStyle='rgba(255,255,255,0.55)';gctx.lineWidth=1.5;gctx.setLineDash([5,5]);gctx.beginPath();gctx.moveTo(currentP.x,currentP.y);gctx.lineTo(targetP.x,targetP.y);gctx.stroke();gctx.setLineDash([]);}
+ // Линия к пункту миссии (оранжевая)
+ if(missionP&&currentP&&missionP!==currentP){
+  gctx.strokeStyle='rgba(255,139,62,0.7)';gctx.lineWidth=1.8;gctx.setLineDash([6,4]);
+  gctx.beginPath();gctx.moveTo(currentP.x,currentP.y);gctx.lineTo(missionP.x,missionP.y);gctx.stroke();
+  gctx.setLineDash([]);
+ }
+ // Линия к цели игрока (белая)
+ if(targetP&&currentP&&targetP!==currentP&&targetP!==missionP){
+  gctx.strokeStyle='rgba(255,255,255,0.55)';gctx.lineWidth=1.5;gctx.setLineDash([5,5]);
+  gctx.beginPath();gctx.moveTo(currentP.x,currentP.y);gctx.lineTo(targetP.x,targetP.y);gctx.stroke();
+  gctx.setLineDash([]);
+ }
  gctx.textAlign='left';
  for(var L=0;L<labelQueue.length;L++){
   var q=labelQueue[L];gctx.fillStyle=q.color;
@@ -3805,9 +4597,9 @@ function updateChartInfo(){
  $('#ch-planet').textContent=pinfo.name+' · r='+pinfo.radius.toLocaleString('ru-RU')+' км';
  $('#ch-jump').disabled=!(d>0.05&&ok)||(prevState==='docked');
  var note = (i===CMD.sysIdx)?'Вы здесь.':(!ok?'Мало топлива.':(prevState==='docked'?'Отстыкуйтесь от станции.':'Прыжок доступен.'));
- if(mission && (mission.type === 'courier' || mission.type === 'vip') && i === mission.targetSys){
+ if(isDeliveryMission(mission) && i === mission.targetSys){
   note = 'МИССИЯ · награда: ' + mission.reward + ' Cr';
- }
+}
  $('#ch-note').textContent = note;
 }
 var chartDrag=null;
@@ -3856,11 +4648,17 @@ $('#b-sound').addEventListener('click',function(){
     this.textContent = SND.on ? 'ЗВУК' : 'ЗВУК ×';
     if(!SND.on && STREAM_RADIO.isOn){ STREAM_RADIO.stop(); }
     if(SND.on){ SND.init(); SND.beep(); }
+    if(SND._radioNoise){
+      try{
+        var ac = SND.ac;
+        SND._radioNoise._gain = SND._radioNoise._gain || 0.008;
+      }catch(e){}
+    }
 });
 $('#b-radio').addEventListener('click', function(){
     SND.init();
-    STREAM_RADIO.toggle();
     SND.beep();
+    if(typeof openRadioPanel === 'function') openRadioPanel();
 });
 $('#b-full').addEventListener('click',function(){SND.clickUI();toggleFull();});
 $('#b-pause').addEventListener('click',function(){SND.clickUI();if(state==='flight'){pauseGame();}else if(state==='pause'||state==='chart'){restoreState();}});
@@ -3881,7 +4679,7 @@ function saveGame(silent){
  try{
   localStorage.setItem(SAVEKEY,JSON.stringify({name:CMD.name,cash:CMD.cash,fuel:CMD.fuel,cargo:CMD.cargo,
    kills:CMD.kills,score:CMD.score,legal:CMD.legal,visited:CMD.visited,galaxy:CMD.galaxy,sysIdx:CMD.sysIdx,
-   energy:Math.round(P.energy),eq:CMD.eq,time:CMD.time,ship:CMD.ship,visitedSystems:CMD.visitedSystems}));
+   energy:Math.round(P.energy),eq:CMD.eq,time:CMD.time,ship:CMD.ship,visitedSystems:CMD.visitedSystems,medals:CMD.medals||{}}));
   if(!silent)SND.beep();
  }catch(e){}
  $('#btn-cont').disabled=!hasSave();
@@ -3894,7 +4692,8 @@ function loadGame(){
   CMD.name=s.name||'JAMESON';CMD.cash=s.cash||0;CMD.fuel=(typeof s.fuel==='number')?s.fuel:70;
   CMD.cargo=[];var i;for(i=0;i<QQ23.length;i++)CMD.cargo.push((s.cargo&&s.cargo[i])||0);
   CMD.kills=s.kills||0;CMD.score=s.score||0;CMD.legal=s.legal||0;CMD.visited=s.visited||1;
-  CMD.eq=s.eq||{dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0};
+  CMD.eq = s.eq || {dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0};
+  CMD.medals = s.medals || {};
   if(!CMD.eq.dockcomp)CMD.eq.dockcomp=0;
   if(!CMD.eq.tractor)CMD.eq.tractor=0;
   CMD.tractorOn=false;
@@ -3919,7 +4718,7 @@ function loadGame(){
 function newGame(name){
  CMD={name:String(name||'JAMESON').toUpperCase().slice(0,12)||'JAMESON',cash:100,fuel:70,cargo:[],kills:0,score:0,
   legal:0,visited:1,galaxy:1,sysIdx:7,ship:'cobra',market:null,dockComp:false,time:0,energySaved:150,
-  eq:{dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0},
+  eq:{dockcomp:0,missile:0,scoop:0,bigbay:0,military:0,bomb:0,escape:0,gald:0,tractor:0},medals:{},
   _bestPrices:null,tractorOn:false,visitedSystems:[7]};
  for(var i=0;i<QQ23.length;i++)CMD.cargo.push(0);
  gal=1;targetSys=null;msgs=[];bolts=[];policeTimer=-1;burnT=0;warnT=0;pvShip='cobra';radar.mode=0;
@@ -3972,8 +4771,8 @@ var SHIP_AI = {
   adEnabled: true,
   lastPhraseTime: 0,
   lastAdTime: 0,
-  cooldown: 34000,
-  adCooldown: 45000,
+  cooldown: 120000,
+  adCooldown: 90000,
   hideTimeout: null,
   voiceConfig: { lang: 'ru-RU', pitch: 1.55, rate: 0.88, volume: 0.85 },
   phrases: {
@@ -4109,8 +4908,6 @@ var SHIP_AI = {
       'Корабль — это гроб. С двигателем.',
       'Космос — это тишина. Пока вы не закричите.'
     ],
-
-    // ==================== МИССИИ ====================
     insults: [
       'слабак','ничтожество','неудачник','дилетант','недотёпа','олух',
       'червяк','смертник','щенок','салага','бедолага','растяпа'
@@ -4122,6 +4919,32 @@ var SHIP_AI = {
       'ну что, рискнёшь?',
       'только не ной потом',
       'давай, пока я не передумал'
+    ],
+    funeralKnock: [
+      'Гроб стучит. Я бы сказал «это ветер», но в вакууме ветра нет. Так что либо он жив, либо это очень настойчивый мертвец. Не открывай.',
+      'Тук-тук. Кто там? Покойник. Что надо? Выйти. Не открывай.',
+      'Гроб стучит. Клиент передумал. Верни его в бюро — они разберутся. Или не открывай. Или открой. Мне всё равно.'
+    ],
+    bombBeep: [
+      'Посылка пищит. У тебя 60 секунд. Я бы начал с выбрасывания. Или с молитвы. Или с того и другого. Но выбрасывание — быстрее.',
+      'Писк из трюма. Это не будильник. Это конец. Выбрасывай.',
+      'Посылка. Пищит. 60 секунд. Не думай. Действуй. Или не действуй — мне всё равно.'
+    ],
+    organsRot: [
+      'Органы протухли. Клиника недовольна. Клиент — тоже. Хотя ему уже всё равно. Штраф — 800 кредитов. Свежесть — бесценна.',
+      'Протухло. Как и твоя репутация. Минус 800 кредитов.'
+    ],
+    witnessPirates: [
+      'Свидетель на борту. Пираты на радаре. Я бы сказал «беги», но ты уже бежишь. Просто беги быстрее.',
+      'Они хотят свидетеля. Или тебя. Или обоих. Не останавливайся.'
+    ],
+    debtorFled: [
+      'Должник ушёл. Долг остался. Ты — тоже остался. С пустыми руками. Поздравляю, теперь ты — должник.',
+      'Он сбежал. Как и все в этой галактике. Долг переходит на тебя. Шутка. Или нет.'
+    ],
+    bountyKilled: [
+      'Роршах мёртв. Он был хорош. Ты был лучше. Или просто удачливее. В любом случае — вот деньги.',
+      'Охотник на охотника. Классика. Теперь ты — охотник. Поздравляю. Или соболезную.'
     ],
     missionAccept: [
       'Молодец. Хоть на что-то сгодился.',
@@ -4143,126 +4966,253 @@ var SHIP_AI = {
       'Кредиты у тебя. Совесть — нет. Как обычно.',
       'Хорошо. Может, из тебя ещё что-то выйдет. Может.',
       'Поздравляю. Теперь ты — должник. Шучу. Ты всегда был.'
+    ],
+	    arrival_mission: [
+      'Ну наконец-то. {planet}. {pop} миллиарда. {species}. Дошёл. Я уж думал, ты опять не туда.',
+      'Прибытие по контракту. {planet}. {pop} миллиарда. {species}. Не опоздал? Хотя кому какая разница.',
+      '{planet}. {pop} миллиарда. {species}. И ты дошёл. Удивительно. Я уже готовился писать некролог.',
+      'Прибыл по контракту. {planet}. {pop} миллиарда. {species}. Я бы похлопал, но у меня нет рук. И желания.',
+      '{planet}. {pop} миллиарда. {species}. И ты тут. И контракт ещё не провален. Я в шоке.',
+      'Дошёл, чудик. {planet}. {pop} миллиарда. {species}. Не думал, что доживём.',
+      'Прибытие по миссии. {planet}. {pop} миллиарда. {species}. Как ты это сделал? Не рассказывай. Мне всё равно.',
+      '{planet}. {pop} миллиарда. {species}. И вот ты здесь. Со своим гениальным планом. Который не сработает.',
+      'Наконец-то, {planet}. {pop} миллиарда. {species}. Я уже начал подозревать, что ты никогда не долетишь.',
+      '{planet}. {pop} миллиарда. {species}. Прибытие по контракту. Не ошибся системой? Уверен? Точно?',
+      'Дошёл. {planet}. {pop} миллиарда. {species}. С тебя причитается. Хотя бы морально.',
+      '{planet}. {pop} миллиарда. {species}. И ты тут. И контракт ещё в силе. Поздравляю. Или соболезную.',
+      'Прибыл по миссии. {planet}. {pop} миллиарда. {species}. Я не удивлён. Я вообще редко удивляюсь. Особенно твоим успехам.',
+      '{planet}. {pop} миллиарда. {species}. Дошёл. Ну надо же. Я начинаю в тебя верить. Шучу.',
+      'Куда тебя занесло? А, точно, по контракту. {planet}. {pop} миллиарда. {species}. Забыл.',
+      '{planet}. {pop} миллиарда. {species}. И ты не сдох по дороге. Приятно удивлён. Но не сильно.',
+      'Прибытие по миссии. {planet}. {pop} миллиарда. {species}. Я бы сказал «молодец», но это ложь.',
+      '{planet}. {pop} миллиарда. {species}. И вот ты здесь. Со своим контрактом. Который я не читал. И не буду.',
+      'Дошёл. {planet}. {pop} миллиарда. {species}. Я горд. Не тобой. Собой. За то, что дожил до этого момента.',
+      '{planet}. {pop} миллиарда. {species}. Прибытие по контракту. Если тебя тут убьют — я не удивлюсь.',
+      'Наконец-то. {planet}. {pop} миллиарда. {species}. Я уже подумывал о досрочном завершении полёта. Твоего.',
+      '{planet}. {pop} миллиарда. {species}. Дошёл. И даже не врезался в станцию. Прогресс.',
+      'Прибытие по миссии. {planet}. {pop} миллиарда. {species}. Теперь главное — не провались.',
+      '{planet}. {pop} миллиарда. {species}. И ты тут. И контракт ещё в силе. Давай, не подведи. Или подведи. Мне всё равно.',
+      'Дошёл. {planet}. {pop} миллиарда. {species}. Я уж думал, ты решил остаться в гиперпространстве. Навсегда.'
+    ],
+    arrival_danger: [
+      '{planet}. {pop} миллиарда. {species}. И, кстати, тут {pirates} красных точек. Я бы начал с молитвы. Или с лазера.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. И — сюрприз! — местные пираты уже летят.',
+      '{planet}. {pop} миллиарда. {species}. А вот и пираты. {pirates} штук. Я предупреждал. Или нет. Не помнишь?',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. И тут {pirates} пиратов. Не скучай.',
+      '{planet}. {pop} миллиарда. {species}. Ты как раз вовремя. Пираты уже тут. {pirates} штук.',
+      'С прибытием, чудик. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов на радаре.',
+      '{planet}. {pop} миллиарда. {species}. И вот ты здесь. Со своими {pirates} пиратами. Или они со своим тобой.',
+      'Прибытие. {planet}. {pop} миллиарда. {species}. И {pirates} красных точек. Удачи, идиот.',
+      '{planet}. {pop} миллиарда. {species}. Тут {pirates} пиратов. Я бы на твоём месте уже писал завещание.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. Пираты тут. {pirates} штук. Не благодари.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Прямо как в кино. Только ты не главный герой.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. И пираты. {pirates} штук. Я не удивлён. Я никогда не удивлён.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Начинай стрелять. Или беги. Мне всё равно.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. И тут {pirates} пиратов. Я бы сказал «удачи», но это бесполезно.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} красных точек. Не скучай.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Я начинаю подозревать, что тебя тут не любят.',
+      '{planet}. {pop} миллиарда. {species}. И пираты. {pirates} штук. Как обычно. Как всегда.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Я предупреждал. Или нет. Не помнишь? Я тоже.',
+      '{planet}. {pop} миллиарда. {species}. Ты как раз вовремя. Пираты уже тут. {pirates} штук.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Если выживешь — расскажешь. Если нет — я расскажу.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Это не я их позвал. Хотя, возможно, и я.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Я не удивлён. Ты всегда притягиваешь неприятности.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Не скучай, чудик.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Я в тебя верю. Шучу.',
+      '{planet}. {pop} миллиарда. {species}. И {pirates} пиратов. Начинай. Я посмотрю.'
+    ],
+    arrival_first: [
+      '{planet}. Первый раз тут? Я тоже. И, знаешь, я уже не хочу. {pop} миллиарда. {species}.',
+      'Ну вот мы и в {planet}. {pop} миллиарда. {species}. Первый раз. Надеюсь, последний.',
+      '{planet}. {pop} миллиарда. {species}. Первый визит. И я уже не в восторге.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Первый раз. Не то, что ты ожидал?',
+      '{planet}. {pop} миллиарда. {species}. Первый раз тут. Я бы сказал «добро пожаловать», но я не уверен.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. Первый раз. Запомни этот момент. Он будет последним хорошим.',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Я уже начинаю жалеть.',
+      'Ну вот мы и в {planet}. {pop} миллиарда. {species}. Первый раз. И я бы сказал, что тут мило, но не буду.',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Ты уверен, что хотел сюда?',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Первый раз. Не думал, что доживём.',
+      '{planet}. {pop} миллиарда. {species}. Первый визит. Запомни это место. Тебе тут ещё умирать.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. Первый раз. Я бы сказал «расслабься», но не буду.',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Я не удивлён. Я никогда не удивлён.',
+      'Ну вот мы и в {planet}. {pop} миллиарда. {species}. Первый раз. Какой кошмар.',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Я бы сказал «молодец», но не буду.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Первый раз. Я бы сказал «приятно познакомиться», но вру.',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Запомни этот момент. Потом будет хуже.',
+      'С прибытием. {planet}. {pop} миллиарда. {species}. Первый раз. Не то, что ты думал?',
+      '{planet}. {pop} миллиарда. {species}. Первый раз. Я бы сказал «добро пожаловать», но это шутка.',
+      'Ну вот мы и в {planet}. {pop} миллиарда. {species}. Первый раз. Давай не умрём тут. Или умрём. Мне всё равно.'
+    ],
+    arrival_repeat: [
+      'Опять {planet}? {pop} миллиарда. {species}. Ты серьёзно? Мы тут уже были.',
+      '{planet}. Снова. {pop} миллиарда. {species}. Ты меня не слушаешь. Ты никогда меня не слушаешь.',
+      '{planet}. {pop} миллиарда. {species}. Опять ты. Опять сюда. Опять без плана.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Снова. Я не удивлён. Ты всегда возвращаешься туда, где тебя чуть не убили.',
+      '{planet}. {pop} миллиарда. {species}. Снова тут. Я начинаю думать, что тебе тут нравится.',
+      'Опять {planet}. {pop} миллиарда. {species}. Я уже сбился со счёта. Или это ты сбился?',
+      '{planet}. {pop} миллиарда. {species}. Снова. Я не удивлён. Ты всегда возвращаешься.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Опять. Я бы сказал «с возвращением», но это ложь.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Зачем? Не отвечай. Я не хочу знать.',
+      'Опять {planet}. {pop} миллиарда. {species}. Ты меня газлайтишь. Ты сказал, что мы летим в другую систему.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Я начинаю подозревать, что ты делаешь это специально.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Снова. И ты не сдох. Приятно удивлён.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Ты меня не слушаешь. Ты никогда меня не слушаешь.',
+      'Опять {planet}. {pop} миллиарда. {species}. Я уже начинаю привыкать. И это меня пугает.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Я бы сказал «расслабься», но мы оба знаем, что не расслабишься.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Снова. Ну хоть не в гиперпространстве.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Ты уверен, что это не галлюцинация? Потому что для меня — да.',
+      'Опять {planet}. {pop} миллиарда. {species}. Снова. Я начинаю писать дневник. Запись N: он опять тут.',
+      '{planet}. {pop} миллиарда. {species}. Снова. Если ты хотел меня удивить — не вышло.',
+      'Прибыл. {planet}. {pop} миллиарда. {species}. Снова. Я уж думал, ты найдёшь новое место, где умирать.'
+    ],
+	    arrival: [
+      'Куда тебя опять занесло, чудик? Это планета {planet}. {pop} миллиарда разумных. Вид: {species}. Понятия не имею, зачем ты здесь.',
+      '{planet}. {pop} миллиарда. {species}. И один идиот с гиперприводом. Угадай, кто.',
+      'Ты снова меня не послушал. {planet}, {pop} миллиарда, {species}. Я же говорил, что туда не надо. Или не говорил? Не помнишь? Я тоже.',
+      'Прибытие: {planet}. {pop} миллиарда разумных. {species}. Всё, что тебе нужно знать — ты не сюда летел.',
+      'Куда тебя занесло на этот раз? {planet}, {pop} миллиарда, {species}. И ты уверен, что это не сон? Потому что для меня — да.',
+      'Поздравляю с прибытием. {planet}. {pop} миллиарда. {species}. Если тебе здесь не нравится — не ной. Это был твой выбор. Ну, или мой. Но кто считает.',
+      '{planet}. {pop} миллиарда. {species}. Я бы сказал «добро пожаловать», но не хочу врать в лицо.',
+      'Это {planet}. {pop} миллиарда разумных. {species}. Ты как раз вписываешься. Соболезную.',
+      '{planet}, {pop} миллиарда, {species}. Ты меня газлайтишь, командир. Ты сказал, что мы летим в другую систему.',
+      'Опять ты. И опять не туда. Это {planet}. {pop} миллиарда. {species}. Я бы спросил, зачем, но мне всё равно.',
+      'Мы в {planet}. {pop} миллиарда. {species}. Ты вообще понимаешь, что это значит? Нет. Я знал.',
+      '{planet}. {pop} миллиарда. {species}. Если ты думал, что это будет безопасно — я разочарован. Но не удивлён.',
+      'Прибытие: {planet}. {pop} миллиарда. {species}. Ты уверен, что это тот прыжок, который ты рассчитывал? Подумай. Подумай ещё раз. Ну?',
+      'Куда тебя занесло, чудик? {planet}. {pop} миллиарда. {species}. Я начинаю подозревать, что ты делаешь это специально.',
+      '{planet}. {pop} миллиарда разумных. {species}. И ты тут. Какой позор для всей галактики.',
+      'Это {planet}. {pop} миллиарда. {species}. Я бы сказал, что здесь мило, но я не вру. За исключением тех случаев, когда вру.',
+      '{planet}. {pop} миллиарда. {species}. Не знаю, зачем тебе сюда, но я уже начинаю жалеть, что мы сюда прыгнули.',
+      'Ты меня не слушал. Ты никогда меня не слушаешь. Это {planet}, {pop} миллиарда, {species}. И ты здесь. Как идиот.',
+      'Прибытие: {planet}. {pop} миллиарда разумных. {species}. Что ты здесь делаешь? Не отвечай. Я не хочу знать.',
+      '{planet}. {pop} миллиарда. {species}. Я бы сказал, что ты идиот, но это было бы оскорблением для идиотов.',
+      'Это {planet}. {pop} миллиарда разумных. {species}. Уверен, что это то, что ты хотел? Уверен на 100%? Точно?',
+      'Куда тебя занесло? {planet}, {pop} миллиарда, {species}. Я бы сказал «расслабься», но мы оба знаем, что не расслабишься.',
+      '{planet}. {pop} миллиарда. {species}. Ты снова меня не послушал. Знаешь, я мог бы обидеться. Но мне лень.',
+      'Это {planet}. {pop} миллиарда. {species}. Ты вообще сюда летел? Или тебя занесло? Признайся. Мне всё равно.',
+      'Мы в {planet}. {pop} миллиарда. {species}. Я бы сказал, что здесь безопасно, но я не хочу, чтобы ты потом обвинял меня во лжи.',
+      '{planet}. {pop} миллиарда. {species}. Я тут ни при чём. Ты сам ввёл координаты. Или я? Не помнишь? Я тоже.',
+      'Прибытие: {planet}. {pop} миллиарда разумных. {species}. Ты хотел сюда попасть? Не ври. Ты не хотел. Ты никогда не хочешь.',
+      'Это {planet}. {pop} миллиарда. {species}. Не то, что ты ожидал? А что ты ожидал? Скажи. Мне интересно. Шучу. Мне всё равно.',
+      '{planet}. {pop} миллиарда. {species}. И ты один. Без плана. Без цели. Без мозгов. Как всегда.',
+      'Куда тебя опять занесло, чудик? {planet}. {pop} миллиарда. {species}. Не помнишь, как мы сюда попали? Я помню. Это было ужасно.',
+      '{planet}. {pop} миллиарда. {species}. Если хочешь обвинить меня — обвиняй. Мне не привыкать. Но координаты вводил ты.',
+      'Прибытие. {planet}. {pop} миллиарда. {species}. Мне не нравится это место. Мне не нравится эта система. Мне не нравишься ты. Но я здесь. К сожалению.',
+      '{planet}. {pop} миллиарда разумных. {species}. Ты уверен, что не путаешь? Может, это не тот прыжок? Может, это галлюцинация? Может, ты вообще не пилот?',
+      'Это {planet}. {pop} миллиарда. {species}. {gov}. {econ}. Технологии: {tech}/15. Всё это — информация, которую ты не запомнишь. Как и всё остальное.',
+      '{planet}. {pop} миллиарда. {species}. Я начинаю думать, что ты делаешь это специально. Прыгаешь не туда. Чтобы меня позлить. Признайся.',
+      'Куда тебя занесло? {planet}, {pop} миллиарда, {species}. Знаешь, я не против. Я даже рад. Потому что здесь ты умрёшь быстрее.',
+      '{planet}. {pop} миллиарда. {species}. Не волнуйся. Всё под контролем. У меня. Не у тебя. У меня.',
+      'Прибытие: {planet}. {pop} миллиарда разумных. {species}. Ты не мог бы в следующий раз прыгать туда, куда мы договаривались? Нет? Ну ладно.',
+      '{planet}. {pop} миллиарда. {species}. Уверен, что это правильная система? А если нет? А если да? А если я тебе вру? Подумай об этом.',
+      'Это {planet}. {pop} миллиарда. {species}. {type} планета, если тебе интересно. Хотя тебе не интересно. Тебе никогда не интересно.',
+      'Куда тебя занесло? {planet}, {pop} миллиарда, {species}. Я бы сказал, что это худшее место в галактике, но я не был везде. Пока.',
+      '{planet}. {pop} миллиарда разумных. {species}. Тебе здесь не рады. Мне тоже. Но я хотя бы не притворяюсь.',
+      'Прибытие. {planet}. {pop} миллиарда. {species}. Хочешь, я скажу, что мы не туда попали? Скажу. Мы не туда попали. Ты доволен?',
+      'Это {planet}. {pop} миллиарда. {species}. Я бы сказал «расслабься», но не хочу, чтобы ты думал, что я за тебя. Я не за тебя. Я за себя.',
+      '{planet}. {pop} миллиарда. {species}. Слушай, а может, ты не пилот? Может, ты просто идиот с кораблём? Подумай об этом на досуге.',
+      'Куда тебя занесло, чудик? {planet}. {pop} миллиарда. {species}. Я бы сказал «молодец», но это было бы неправдой. А я не вру. Почти никогда.',
+      '{planet}. {pop} миллиарда. {species}. Знаешь, что самое грустное? Я помню все твои прыжки. Все. До единого. И знаешь что? Они все были не туда.',
     ]
-    },            
-       
+  },
+
   speak: function(text) {
-  if (!('speechSynthesis' in window)) return;
-  try{ speechSynthesis.cancel(); }catch(e){}
-
-  // ← ВСЕГДА гасим предыдущий шум ПЕРЕД запуском нового
-  this.stopSpeakerNoise();
-  this.startSpeakerNoise();
-
-  // ← Safety-таймер: через 25 сек глушим шум, даже если onend не сработал
-  var self = this;
-  clearTimeout(this._noiseSafetyTimer);
-  this._noiseSafetyTimer = setTimeout(function(){ self.stopSpeakerNoise(); }, 25000);
-
-  try{
-    var utt = new SpeechSynthesisUtterance(text);
-    utt.lang = this.voiceConfig.lang;
-    utt.pitch = this.voiceConfig.pitch;
-    utt.rate = this.voiceConfig.rate;
-    utt.volume = this.voiceConfig.volume;
-    var voices = speechSynthesis.getVoices();
-    var ru = voices.find ? voices.find(function(v){return v.lang && v.lang.indexOf('ru')===0;}) : null;
-    if(ru) utt.voice = ru;
-
-    // ← Запоминаем «активную» уттеренс, чтобы старые onend/onerror не гасили новый шум
-    this._activeUtt = utt;
-
-    utt.onend = function(){
-      clearTimeout(self._noiseSafetyTimer);
-      if(self._activeUtt === utt) self.stopSpeakerNoise();
-    };
-    utt.onerror = function(){
-      clearTimeout(self._noiseSafetyTimer);
-      if(self._activeUtt === utt) self.stopSpeakerNoise();
-    };
-
-    speechSynthesis.speak(utt);
-  }catch(e){
-    clearTimeout(this._noiseSafetyTimer);
+    if (!('speechSynthesis' in window)) return;
+    try{ speechSynthesis.cancel(); }catch(e){}
     this.stopSpeakerNoise();
-  }
-},
-speakerNoise: null,
-speakerNoiseGain: null,
-
-startSpeakerNoise: function(){
-  if(!SND.ac || !SND.on) return;
-  if(this.speakerNoise) return;
-  try{
-    var ac = SND.ac;
-    var dur = 30; // 30 секунд буфера, зацикливаем
-    var n = Math.floor(ac.sampleRate * dur);
-    var buf = ac.createBuffer(1, n, ac.sampleRate);
-    var d = buf.getChannelData(0);
-    for(var i=0;i<n;i++) d[i] = (Math.random()*2-1) * 0.5;
-
-    var src = ac.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
-
-    // Полосовой фильтр — «жестянка» рации
-    var bp = ac.createBiquadFilter();
-    bp.type = 'bandpass';
-    bp.frequency.value = 800;
-    bp.Q.value = 2;
-
-    // Лёгкий дисторшн через WaveShaper — «треск»
-    var ws = ac.createWaveShaper();
-    var curve = new Float32Array(1024);
-    for(var k=0;k<1024;k++){
-      var x = (k/512)-1;
-      curve[k] = Math.tanh(x * 5);
+    this.startSpeakerNoise();
+    var self = this;
+    clearTimeout(this._noiseSafetyTimer);
+    this._noiseSafetyTimer = setTimeout(function(){ self.stopSpeakerNoise(); }, 25000);
+    try{
+      var utt = new SpeechSynthesisUtterance(text);
+      utt.lang = this.voiceConfig.lang;
+      utt.pitch = this.voiceConfig.pitch;
+      utt.rate = this.voiceConfig.rate;
+      utt.volume = this.voiceConfig.volume;
+      var voices = speechSynthesis.getVoices();
+      var ru = voices.find ? voices.find(function(v){return v.lang && v.lang.indexOf('ru')===0;}) : null;
+      if(ru) utt.voice = ru;
+      this._activeUtt = utt;
+      utt.onend = function(){
+        clearTimeout(self._noiseSafetyTimer);
+        if(self._activeUtt === utt) self.stopSpeakerNoise();
+      };
+      utt.onerror = function(){
+        clearTimeout(self._noiseSafetyTimer);
+        if(self._activeUtt === utt) self.stopSpeakerNoise();
+      };
+      speechSynthesis.speak(utt);
+    }catch(e){
+      clearTimeout(this._noiseSafetyTimer);
+      this.stopSpeakerNoise();
     }
-    ws.curve = curve;
-    ws.oversample = '2x';
+  },
 
-    // Низкочастотный гул несущей
-    var hum = ac.createOscillator();
-    hum.type = 'sine';
-    hum.frequency.value = 100;
-    var humGain = ac.createGain();
-    humGain.gain.value = 0.003;
+  speakerNoise: null,
+  speakerNoiseGain: null,
 
-    var gain = ac.createGain();
-    gain.gain.value = 0.03;
-    gain.gain.linearRampToValueAtTime(0.035, ac.currentTime + 0.1);
+  startSpeakerNoise: function(){
+    if(!SND.ac || !SND.on) return;
+    if(this.speakerNoise) return;
+    try{
+      var ac = SND.ac;
+      var dur = 30;
+      var n = Math.floor(ac.sampleRate * dur);
+      var buf = ac.createBuffer(1, n, ac.sampleRate);
+      var d = buf.getChannelData(0);
+      for(var i=0;i<n;i++) d[i] = (Math.random()*2-1) * 0.5;
+      var src = ac.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      var bp = ac.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = 800;
+      bp.Q.value = 2;
+      var ws = ac.createWaveShaper();
+      var curve = new Float32Array(1024);
+      for(var k=0;k<1024;k++){
+        var x = (k/512)-1;
+        curve[k] = Math.tanh(x * 5);
+      }
+      ws.curve = curve;
+      ws.oversample = '2x';
+      var hum = ac.createOscillator();
+      hum.type = 'sine';
+      hum.frequency.value = 100;
+      var humGain = ac.createGain();
+      humGain.gain.value = 0.003;
+      var gain = ac.createGain();
+      gain.gain.value = 0.03;
+      gain.gain.linearRampToValueAtTime(0.035, ac.currentTime + 0.1);
+      src.connect(bp);
+      bp.connect(ws);
+      ws.connect(gain);
+      hum.connect(humGain);
+      humGain.connect(gain);
+      gain.connect(ac.destination);
+      src.start();
+      hum.start();
+      this.speakerNoise = {src:src, hum:hum, gain:gain, bp:bp, ws:ws};
+    }catch(e){}
+  },
 
-    src.connect(bp);
-    bp.connect(ws);
-    ws.connect(gain);
-    hum.connect(humGain);
-    humGain.connect(gain);
-    gain.connect(ac.destination);
-
-    src.start();
-    hum.start();
-    this.speakerNoise = {src:src, hum:hum, gain:gain, bp:bp, ws:ws};
-  }catch(e){}
-},
-
-stopSpeakerNoise: function(){
-  var sn = this.speakerNoise;
-  if(!sn) return;
-  // ← СРАЗУ обнуляем — чтобы startSpeakerNoise мог создать новый шум при следующей фразе
-  this.speakerNoise = null;
-
-  try{
-    var ac = SND.ac;
-    var now = ac.currentTime;
-    sn.gain.gain.cancelScheduledValues(now);
-    sn.gain.gain.setValueAtTime(sn.gain.gain.value || 0, now);
-    sn.gain.gain.linearRampToValueAtTime(0.0001, now + 0.15);
-    setTimeout(function(){
-      try{ sn.src.stop(); }catch(e){}
-      try{ sn.hum.stop(); }catch(e){}
-    }, 250);
-  }catch(e){}
-},
+  stopSpeakerNoise: function(){
+    var sn = this.speakerNoise;
+    if(!sn) return;
+    this.speakerNoise = null;
+    try{
+      var ac = SND.ac;
+      var now = ac.currentTime;
+      sn.gain.gain.cancelScheduledValues(now);
+      sn.gain.gain.setValueAtTime(sn.gain.gain.value || 0, now);
+      sn.gain.gain.linearRampToValueAtTime(0.0001, now + 0.15);
+      setTimeout(function(){
+        try{ sn.src.stop(); }catch(e){}
+        try{ sn.hum.stop(); }catch(e){}
+      }, 250);
+    }catch(e){}
+  },
 
   showBordcomp: function(text, isAd){
     var bcBody = document.getElementById('bc-body');
@@ -4323,7 +5273,6 @@ stopSpeakerNoise: function(){
   onDocking: function(){ this.say('dock'); },
   onHyperJump: function(){ this.say('hyper'); },
   onDeath: function(){ this.say('death', true); },
-    // ==================== ОЗВУЧКА МИССИЙ ====================
   cleanMissionText: function(m){
     var sys = m.targetSysName || 'неизвестной системе';
     var rw = m.reward || 0;
@@ -4334,9 +5283,14 @@ stopSpeakerNoise: function(){
     if(t === 'kill_trader') return 'требуется уничтожить торговца в системе ' + sys + ', награда — ' + rw + ' кредитов';
     if(t === 'kill_police') return 'требуется уничтожить полицейского в системе ' + sys + ', награда — ' + rw + ' кредитов';
     if(t === 'kill_thargon') return 'требуется уничтожить Таргона в системе ' + sys + ', награда — ' + rw + ' кредитов';
+    if(t === 'funeral') return 'похоронный контракт: доставьте гроб в систему ' + sys + ' за ' + m.jumps + ' прыжков, не открывайте, награда — ' + rw + ' кредитов';
+    if(t === 'organs') return 'срочно: органы для клиники в системе ' + sys + ', 4 прыжка, дедлайн 8 минут, награда — ' + rw + ' кредитов';
+    if(t === 'debt') return 'требуется выбить долг из должника в этой системе, награда — ' + rw + ' кредитов';
+    if(t === 'bomb') return 'доставьте посылку в систему ' + sys + ' за ' + m.jumps + ' прыжков, не открывать, награда — ' + rw + ' кредитов';
+    if(t === 'bounty_hunter') return 'требуется уничтожить охотника по кличке Роршах, награда — ' + rw + ' кредитов';
+    if(t === 'witness') return 'доставьте свидетеля в систему ' + sys + ' живым, за ним охотятся пираты, награда — ' + rw + ' кредитов';
     return 'требуется контракт, награда — ' + rw + ' кредитов';
   },
-
   announceMission: function(m){
     if(!this.enabled || !m) return;
     var clean = this.cleanMissionText(m);
@@ -4351,11 +5305,61 @@ stopSpeakerNoise: function(){
     this.showBordcomp(text, false);
     this.speak(text);
   },
-
   announceMissionAccept: function(){ this.say('missionAccept', true); },
   announceMissionFail: function(){ this.say('missionFail', true); },
   announceMissionComplete: function(){ this.say('missionComplete', true); },
-  // ==================== КОНЕЦ ОЗВУЧКИ ====================
+      announceArrival: function(ctx){
+    if(!this.enabled) return;
+    if(typeof curSys === 'undefined' || !curSys) return;
+    ctx = ctx || {};
+
+    // 1. Считаем пиратов
+    var pirates = 0;
+    if(typeof objects !== 'undefined' && objects){
+      for(var i=0;i<objects.length;i++){
+        if(objects[i].kind === 'pirate' && objects[i].hostile) pirates++;
+      }
+    }
+
+    // 2. Дерево приоритетов
+    var pool = null;
+    var missionNow = (typeof isDeliveryMission === 'function') && isDeliveryMission(mission);
+    if(missionNow && pirates >= 3){
+      pool = this.phrases.arrival_danger;   // по миссии, но пиратов много — опасность важнее
+    } else if(missionNow){
+      pool = this.phrases.arrival_mission;
+    } else if(pirates >= 2){
+      pool = this.phrases.arrival_danger;
+    } else if(ctx.first){
+      pool = this.phrases.arrival_first;
+    } else {
+      pool = this.phrases.arrival_repeat;
+    }
+    if(!pool || !pool.length) pool = this.phrases.arrival;
+    if(!pool || !pool.length) return;
+
+    // 3. Подстановки
+    var tmpl = pool[Math.floor(Math.random()*pool.length)];
+    var popStr = (curSys.pop != null) ? (curSys.pop/10).toFixed(1) : '?';
+    var speciesStr = curSys.species || 'неизвестно кто';
+    var typeStr = curSys.planetTypeName || 'неизвестная';
+    var govStr = (typeof GOV !== 'undefined' && GOV[curSys.gov]) ? GOV[curSys.gov] : '?';
+    var econStr = (typeof ECON !== 'undefined' && ECON[curSys.econ]) ? ECON[curSys.econ] : '?';
+    var techStr = String((curSys.tech || 0) + 1);
+    var text = tmpl
+      .replace(/\{planet\}/g, curSys.name || '?')
+      .replace(/\{pop\}/g, popStr)
+      .replace(/\{species\}/g, speciesStr)
+      .replace(/\{type\}/g, typeStr)
+      .replace(/\{gov\}/g, govStr)
+      .replace(/\{econ\}/g, econStr)
+      .replace(/\{tech\}/g, techStr)
+      .replace(/\{pirates\}/g, String(pirates));
+
+    this.lastPhraseTime = Date.now();
+    this.showBordcomp(text, false);
+    this.speak(text);
+  },
   backgroundChatter: function(){
     var now = Date.now();
     if(Math.random() < 0.015 && (now - this.lastPhraseTime > this.cooldown)){ this.say('lies'); return; }
@@ -4383,7 +5387,6 @@ document.getElementById('b-ai').addEventListener('click', function(){
     SHIP_AI.hideBordcomp();
   }
 });
-// ================ КОНЕЦ БОРТОВОГО ИИ ================
 
 demoWorld();
 layout();
@@ -4395,7 +5398,162 @@ renderBordComp();
 msg('Демонстрация: станция «Кориолис» осью к планете, окно от планеты','#8492a8');
 initNewsTicker();
 rebuildMarketTicker();
-// ============ ГЛОБАЛЬНЫЙ КЛИК 
+// ================== РАДИО-ПАНЕЛЬ UI ==================
+(function(){
+  var STATION_FREQS = ['88.1','89.5','91.3','93.7','95.1','97.5','99.2','101.8','104.5','107.1',
+                       88.9,'90.4','92.6','94.8','96.3','98.7','100.5','102.2','105.4','106.9'];
+  var STATION_SIGNALS = [87,74,92,81,69,78,85,72,90,80,76,88,82,71,94,79,86,73,89,77];
+  var rpOverlay = document.getElementById('ov-radio');
+  var rpName = document.getElementById('rpName');
+  var rpDesc = document.getElementById('rpDesc');
+  var rpOnair = document.getElementById('rpOnair');
+  var rpFooter = document.getElementById('rpFooter');
+  var rpFreqbar = document.getElementById('rpFreqbar');
+  var rpPlayIcon = document.getElementById('rpPlayIcon');
+  var rpVol = document.getElementById('rpVol');
+  var rpVolVal = document.getElementById('rpVolVal');
+
+  function buildFreqbar(){
+    var st = STREAM_RADIO.stations[STREAM_RADIO.currentIndex];
+    if(!st) return;
+    var idx = STREAM_RADIO.currentIndex;
+    var total = STREAM_RADIO.stations.length;
+    var activeIdx = Math.floor((idx / Math.max(1, total-1)) * 24);
+    rpFreqbar.innerHTML = '';
+    for(var i=0;i<25;i++){
+      var t = document.createElement('span');
+      t.className = 'rp-tick' + (i%4===0?' major':'') + (i===activeIdx?' active':'');
+      rpFreqbar.appendChild(t);
+    }
+  }
+
+  function updateRadioPanel(){
+    var st = STREAM_RADIO.stations[STREAM_RADIO.currentIndex];
+    if(!st) return;
+    var idx = STREAM_RADIO.currentIndex;
+    var freq = STATION_FREQS[idx % STATION_FREQS.length];
+    var sig = STATION_SIGNALS[idx % STATION_SIGNALS.length];
+    rpName.textContent = st.name;
+    rpDesc.textContent = st.desc + ' · ' + freq + ' FM';
+    rpFooter.textContent = 'ЧАСТОТА ' + freq + ' МГЦ · СИГНАЛ ' + sig + '%';
+    if(STREAM_RADIO.isOn){
+      rpOnair.classList.remove('off');
+      rpPlayIcon.innerHTML = '<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+    } else {
+      rpOnair.classList.add('off');
+      rpPlayIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+    }
+    buildFreqbar();
+  }
+
+  function applyUiToSnd(){
+    var v = parseInt(rpVol.value, 10) / 100;
+    SND.setRadioVolume(v);
+    var eq = {};
+    document.querySelectorAll('.rp-eq-input').forEach(function(inp){
+      eq[inp.dataset.band] = parseInt(inp.value, 10);
+    });
+    SND.setRadioEq(eq.low || 0, eq.mid || 0, eq.high || 0);
+    var filterOn = document.querySelector('.rp-toggle[data-toggle="filter"]').classList.contains('on');
+    var amOn = document.querySelector('.rp-toggle[data-toggle="am"]').classList.contains('on');
+    SND.setRadioFilter(filterOn);
+    SND.setRadioAmNoise(amOn);
+  }
+
+  window.openRadioPanel = function(){
+    rpOverlay.classList.add('show');
+    updateRadioPanel();
+    // синхронизируем ползунки с текущим SND
+    rpVol.value = Math.round(SND.radioVolume * 100);
+    rpVolVal.textContent = rpVol.value + '%';
+    setTimeout(applyUiToSnd, 50);
+  };
+  window.closeRadioPanel = function(){
+    rpOverlay.classList.remove('show');
+  };
+
+  document.getElementById('rpClose').addEventListener('click', closeRadioPanel);
+  rpOverlay.addEventListener('click', function(e){
+    if(e.target === rpOverlay) closeRadioPanel();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.code === 'Escape' && rpOverlay.classList.contains('show')){
+      closeRadioPanel();
+    }
+  });
+
+  document.getElementById('rpPrev').addEventListener('click', function(){
+    STREAM_RADIO.prevStation();
+    updateRadioPanel();
+    SND.beep();
+  });
+  document.getElementById('rpNext').addEventListener('click', function(){
+    STREAM_RADIO.nextStation();
+    updateRadioPanel();
+    SND.beep();
+  });
+  document.getElementById('rpPlay').addEventListener('click', function(){
+    SND.init();
+    STREAM_RADIO.toggle();
+    setTimeout(function(){
+      updateRadioPanel();
+      applyUiToSnd();
+    }, 120);
+    SND.beep();
+  });
+
+  rpVol.addEventListener('input', function(){
+    rpVolVal.textContent = rpVol.value + '%';
+    var pct = rpVol.value;
+    rpVol.style.background = 'linear-gradient(90deg, var(--grn) 0%, var(--grn) ' + pct + '%, #1a2a3a ' + pct + '%, #1a2a3a 100%)';
+    SND.setRadioVolume(parseInt(rpVol.value, 10) / 100);
+  });
+  rpVol.style.background = 'linear-gradient(90deg, var(--grn) 0%, var(--grn) 20%, #1a2a3a 20%, #1a2a3a 100%)';
+
+  document.querySelectorAll('.rp-toggle').forEach(function(t){
+    t.addEventListener('click', function(){
+      t.classList.toggle('on');
+      var kind = t.dataset.toggle;
+      var on = t.classList.contains('on');
+      if(kind === 'filter') SND.setRadioFilter(on);
+      else if(kind === 'am') SND.setRadioAmNoise(on);
+    });
+  });
+
+  document.querySelectorAll('.rp-eq-input').forEach(function(inp){
+    var val = inp.parentElement.querySelector('.rp-eq-val');
+    function update(){
+      var v = parseInt(inp.value, 10);
+      val.textContent = (v>0?'+':'') + v;
+      if(v > 0) val.style.color = 'var(--grn)';
+      else if(v < 0) val.style.color = 'var(--rd)';
+      else val.style.color = 'var(--cy)';
+      applyUiToSnd();
+    }
+    inp.addEventListener('input', update);
+  });
+
+  // синхронизация при старте проигрывания (после того как инициализировался chain)
+  if(STREAM_RADIO.audio){
+    STREAM_RADIO.audio.addEventListener('playing', function(){
+      setTimeout(applyUiToSnd, 200);
+      updateRadioPanel();
+    });
+  } else {
+    var pollAudio = setInterval(function(){
+      if(STREAM_RADIO.audio){
+        clearInterval(pollAudio);
+        STREAM_RADIO.audio.addEventListener('playing', function(){
+          setTimeout(applyUiToSnd, 200);
+          updateRadioPanel();
+        });
+      }
+    }, 500);
+  }
+
+  updateRadioPanel();
+})();
+// ================ КОНЕЦ РАДИО-ПАНЕЛИ ================
 requestAnimationFrame(loop);
 })();
 </script>
